@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Auluxa.Models
+﻿namespace Auluxa.Models
 {
-	class ShadeSetting
+	public class ShadeSetting : ApplianceSetting
 	{
-		public int ClosedPercent { get; }	//Seems cannot be set manually, slide 37
+		public int ClosedPercent { get; set; }	// Seems cannot be set manually, slide 37
 	}
 }

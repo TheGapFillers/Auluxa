@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Auluxa.Models
 {
@@ -12,6 +8,6 @@ namespace Auluxa.Models
         public string Name { get; set; }
         public Sequence Sequence { get; set; }
         public Schedule Schedule { get; set; }
-        public List<ApplianceSetting> ApplianceSettings { get; set; }
+        public List<Appliance> Appliances { get; set; }
     }
 }

@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Auluxa.Models")]
+[assembly: AssemblyTitle("Auluxa.WebApi")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Auluxa.Models")]
+[assembly: AssemblyProduct("Auluxa.WebApi")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cb945e29-650a-44fb-b7a0-3f4f6278561d")]
+[assembly: Guid("4b93bef1-c1ae-492e-95bd-7e169fefca4f")]
 
 // Version information for an assembly consists of the following four values:
 //
