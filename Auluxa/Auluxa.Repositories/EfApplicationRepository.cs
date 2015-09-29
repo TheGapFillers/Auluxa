@@ -14,9 +14,21 @@ namespace Auluxa.Repositories
 
         public async Task<IEnumerable<Scene>> GetScenesAsync(IEnumerable<int> ids = null)
         {
-            IQueryable<Scene> query = Context.Scenes.Where(s => ids.Contains(s.Id));
+            List<int> idList = ids?.ToList();
+            IQueryable<Scene> query;
 
-            IEnumerable<Scene> scenes = await query.ToListAsync();
+            if (idList == null)
+                query = Context.Scenes;
+            else
+                query = Context.Scenes.Where(s => idList.Contains(s.Id));
+
+            IEnumerable<Scene> scenes = await query
+                .Include(q => q.ApplianceSettings)
+                .Include(q => q.ApplianceSettings.Select(s => s.Appliance))
+                .Include(q => q.ApplianceSettings.Select(s => s.Appliance).Select(a => a.Zone))
+                .Include(q => q.Sequence)
+                .Include(q => q.Schedule)
+                .ToListAsync();
 
             return scenes;
         }
@@ -27,14 +39,16 @@ namespace Auluxa.Repositories
 
             if (sceneToUpsert == null) // Insert
             {
+                if (scene.Schedule == null) scene.Schedule = new Schedule();
+                if (scene.Sequence == null) scene.Sequence = new Sequence();
                 sceneToUpsert = Context.Scenes.Add(scene);
             }
             else // Update
             {         
-                sceneToUpsert.Appliances = scene.Appliances;
+                sceneToUpsert.ApplianceSettings = scene.ApplianceSettings;
                 sceneToUpsert.Name = scene.Name;
-                sceneToUpsert.Schedule = scene.Schedule;
-                sceneToUpsert.Sequence = scene.Sequence;
+                sceneToUpsert.Schedule = scene.Schedule ?? new Schedule();
+                sceneToUpsert.Sequence = scene.Sequence ?? new Sequence();
             }
 
             await SaveAsync();
@@ -44,8 +58,12 @@ namespace Auluxa.Repositories
         public async Task<Scene> DeleteSceneAsync(int id)
         {
             Scene alreadyExistScene = (await GetScenesAsync(new List<int> { id })).SingleOrDefault();
+            if (alreadyExistScene == null)
+                return null;
 
-            return Context.Scenes.Remove(alreadyExistScene);
+            Scene deletedScene = Context.Scenes.Remove(alreadyExistScene);
+            await SaveAsync();
+            return deletedScene;
         }
 
         public async Task<int> SaveAsync()

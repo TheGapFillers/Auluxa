@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using Auluxa.Models;
 using Auluxa.Repositories.Mappers;
+using System.Collections.Generic;
 
 namespace Auluxa.Repositories.Contexts
 {
@@ -11,7 +12,7 @@ namespace Auluxa.Repositories.Contexts
             : base("ApplicationConnection")
         {
             Configuration.LazyLoadingEnabled = false;                           // Disable lazy loading for all db sets.
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());     // No code first initialisation.
+            Database.SetInitializer(new ApplicationDbContextInitializer());     // No code first initialisation.
         }
 
         public DbSet<Scene> Scenes { get; set; }
@@ -35,6 +36,68 @@ namespace Auluxa.Repositories.Contexts
             modelBuilder.Configurations.Add(new SequenceMap());
             modelBuilder.Configurations.Add(new TriggerMap());
             modelBuilder.Configurations.Add(new ZoneMap());
+        }
+
+        public class ApplicationDbContextInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
+        {
+            protected override void Seed(ApplicationDbContext context)
+            {
+                var appliances = new List<Appliance>
+                {
+                    new Appliance
+                    {
+                        Category = Category.Climate,
+                        Name = "Appliance1"
+                    },
+                    new Appliance
+                    {
+                        Category = Category.Light,
+                        Name = "Appliance2"
+                    },
+                };
+                context.Appliances.AddRange(appliances);
+                context.SaveChanges();
+
+                var zones = new List<Zone>
+                {
+                    new Zone { Name = "Zone1", Appliances = appliances }
+                };
+                context.Zones.AddRange(zones);
+                context.SaveChanges();
+
+                var scenes = new List<Scene>
+                {
+                    new Scene
+                    {
+                        Name = "EmptyScene",
+                        Schedule = new Schedule(),
+                        Sequence = new Sequence()
+                    },
+                    new Scene
+                    {
+                        Name = "Scene1",
+                        ApplianceSettings = new List<ApplianceSetting>
+                        {
+                            new ClimateSetting { Appliance = context.Appliances.SingleAsync(a => a.Name == "Appliance1").Result },
+                            new LightSetting { Appliance = context.Appliances.SingleAsync(a => a.Name == "Appliance2").Result }
+                        },
+                        Schedule = new Schedule(),
+                        Sequence = new Sequence()
+                    }
+                };
+                context.Scenes.AddRange(scenes);
+                context.SaveChanges();
+
+                //Scene sceneToUpdate = context.Scenes.SingleAsync(s => s.Name == "Scene1").Result;
+                //sceneToUpdate.ApplianceSettings = new List<ApplianceSetting>
+                //{
+                //    new ClimateSetting { Appliance = appliances.Find(a => a.ApplianceId == 0) },
+                //    new LightSetting { Appliance = appliances.Find(a => a.ApplianceId == 1) }
+                //};
+                //context.SaveChanges();
+
+                base.Seed(context);
+            }
         }
     }
 }

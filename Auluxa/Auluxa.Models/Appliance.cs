@@ -1,11 +1,15 @@
-﻿namespace Auluxa.Models
+﻿using Newtonsoft.Json;
+
+namespace Auluxa.Models
 {
     public class Appliance
     {
-        public int Id { get; set; }
+        public int ApplianceId { get; set; }
         public string Name { get; set; }
         public Category Category { get; set; }
+        public string ZoneName { get { return Zone?.Name; } }
+        [JsonIgnore]
         public Zone Zone { get; set; }
-        public ApplianceSetting Setting { get; set; }
+        public ApplianceSetting CurrentSetting { get; set; }
     }
 }

@@ -66,7 +66,7 @@ namespace Auluxa.WebApi.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route()]
+        [Route("{id}")]
         public async Task<IHttpActionResult> Delete(int id)
         {
             Scene deletedScene = await _sceneRepository.DeleteSceneAsync(id);

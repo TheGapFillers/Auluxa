@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity.ModelConfiguration;
 using Auluxa.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Auluxa.Repositories.Mappers
 {
@@ -9,6 +10,7 @@ namespace Auluxa.Repositories.Mappers
         {
             ToTable("Zones", "Auluxa");
             HasKey(z => z.Id);
+            Property(s => s.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
     }
 }

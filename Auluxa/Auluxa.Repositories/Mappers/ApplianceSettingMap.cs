@@ -8,12 +8,15 @@ namespace Auluxa.Repositories.Mappers
     {
         public ApplianceSettingMap()
         {
-            ToTable("Appliances", "Auluxa");
-            HasKey(a => a.Id);
+            ToTable("ApplianceSetting", "Auluxa");
+            HasKey(a => a.ApplianceSettingId);
+            //Property(a => a.ApplianceSettingId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             Map<ClimateSetting>(m => m.Requires("Type").HasValue("ClimateSetting"));
             Map<LightSetting>(m => m.Requires("Type").HasValue("LightSetting"));
             Map<ShadeSetting>(m => m.Requires("Type").HasValue("ShadeSetting"));
+
+            HasRequired(s => s.Appliance).WithMany();
         }
     }
 }

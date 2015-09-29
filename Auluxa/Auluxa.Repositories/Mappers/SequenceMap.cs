@@ -8,15 +8,18 @@ namespace Auluxa.Repositories.Mappers
         public SequenceMap()
         {
             ToTable("Scenes", "Auluxa");
-            
+
+            //HasMany(s => s.Triggers)
+            //    .WithMany()
+            //    .Map(m =>
+            //    {
+            //        m.ToTable("SequenceTriggers", "Auluxa");
+            //        m.MapLeftKey("SequenceId");
+            //        m.MapRightKey("TriggerId");
+            //    });
+
             HasMany(s => s.Triggers)
-                .WithMany()
-                .Map(m =>
-                {
-                    m.ToTable("SequenceTriggers");
-                    m.MapLeftKey("SequenceId");
-                    m.MapRightKey("TriggerId");
-                });
+                .WithRequired(t => t.Sequence);
         }
     }
 }

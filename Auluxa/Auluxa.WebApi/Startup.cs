@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using Newtonsoft.Json.Converters;
 
 namespace Auluxa.WebApi
 {
@@ -25,6 +26,8 @@ namespace Auluxa.WebApi
             // Use camel case for JSON data and remove XML support
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(
+                new StringEnumConverter { CamelCaseText = true });
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             // Set dependency injection

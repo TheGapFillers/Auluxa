@@ -17,13 +17,13 @@ namespace Auluxa.Repositories.Mappers
             HasRequired(s => s.Sequence)
                 .WithRequiredPrincipal(s => s.Scene);
 
-            HasMany(s => s.Appliances)
+            HasMany(s => s.ApplianceSettings)
                 .WithMany()
                 .Map(m =>
                 {
-                    m.ToTable("SceneAppliances");
+                    m.ToTable("SceneApplianceSettings", "Auluxa");
                     m.MapLeftKey("SceneId");
-                    m.MapRightKey("ApplianceId");
+                    m.MapRightKey("ApplianceSettingId");
                 });
         }
     }

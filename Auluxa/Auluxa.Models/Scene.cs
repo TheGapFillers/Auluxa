@@ -8,6 +8,6 @@ namespace Auluxa.Models
         public string Name { get; set; }
         public Sequence Sequence { get; set; }
         public Schedule Schedule { get; set; }
-        public List<Appliance> Appliances { get; set; }
+        public List<ApplianceSetting> ApplianceSettings { get; set; }
     }
 }
