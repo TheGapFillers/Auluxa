@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\SceneController.cs" />
     <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="Startup.cs" />

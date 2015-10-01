@@ -9,5 +9,9 @@ namespace Auluxa.Repositories
         Task<IEnumerable<Scene>> GetScenesAsync(IEnumerable<int> ids = null);
         Task<Scene> UpsertSceneAsync(Scene scene);
         Task<Scene> DeleteSceneAsync(int id);
+
+		Task<IEnumerable<Zone>> GetZonesAsync(IEnumerable<int> ids = null);
+		Task<Zone> UpsertZoneAsync(Zone zone);
+		Task<Zone> DeleteZoneAsync(int id);
     }
 }
