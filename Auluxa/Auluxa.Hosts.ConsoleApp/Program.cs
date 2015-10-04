@@ -11,7 +11,7 @@ namespace Auluxa.Hosts.ConsoleApp
         /// </summary>
         static void Main()
         {
-            string baseAddress = "http://*:9000/";
+            string baseAddress = "http://localhost:9000/";
 
             // Start OWIN host 
             using (WebApp.Start<Startup>(url: baseAddress))
