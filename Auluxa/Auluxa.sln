@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.Models", "Auluxa.Models\Auluxa.Models.csproj", "{CB945E29-650A-44FB-B7A0-3F4F6278561D}"
 EndProject
@@ -10,6 +10,16 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.WebApi", "Auluxa.WebApi\Auluxa.WebApi.csproj", "{B89C98CB-717D-4DD6-9713-B13B9DE5480E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.Repositories", "Auluxa.Repositories\Auluxa.Repositories.csproj", "{03922D61-3CB6-4EE5-B606-4597AB74633B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts", "Hosts", "{502538D3-F568-4D90-B721-4BBC1D796625}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Repositories", "Repositories", "{68E49AB7-BDDF-45D2-ACEE-BDC7D6FF2BE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{9AAE5C97-6E25-45DB-97FD-2EDD9561CD30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.Hosts.WebApp", "Auluxa.Hosts.WebApp\Auluxa.Hosts.WebApp.csproj", "{4DABABBB-DD5D-4D25-A153-8E2318A4F7EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.Auth.Repositories", "Auluxa.Auth.Repositories\Auluxa.Auth.Repositories.csproj", "{AB6E17AC-D17A-477A-B9B0-181BE865E226}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +43,23 @@ Global
 		{03922D61-3CB6-4EE5-B606-4597AB74633B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03922D61-3CB6-4EE5-B606-4597AB74633B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03922D61-3CB6-4EE5-B606-4597AB74633B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DABABBB-DD5D-4D25-A153-8E2318A4F7EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DABABBB-DD5D-4D25-A153-8E2318A4F7EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DABABBB-DD5D-4D25-A153-8E2318A4F7EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DABABBB-DD5D-4D25-A153-8E2318A4F7EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB6E17AC-D17A-477A-B9B0-181BE865E226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB6E17AC-D17A-477A-B9B0-181BE865E226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB6E17AC-D17A-477A-B9B0-181BE865E226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB6E17AC-D17A-477A-B9B0-181BE865E226}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CB945E29-650A-44FB-B7A0-3F4F6278561D} = {9AAE5C97-6E25-45DB-97FD-2EDD9561CD30}
+		{E1A53ED3-0D4C-40FE-9CB7-C0608559DE9D} = {502538D3-F568-4D90-B721-4BBC1D796625}
+		{03922D61-3CB6-4EE5-B606-4597AB74633B} = {68E49AB7-BDDF-45D2-ACEE-BDC7D6FF2BE6}
+		{4DABABBB-DD5D-4D25-A153-8E2318A4F7EC} = {502538D3-F568-4D90-B721-4BBC1D796625}
+		{AB6E17AC-D17A-477A-B9B0-181BE865E226} = {68E49AB7-BDDF-45D2-ACEE-BDC7D6FF2BE6}
 	EndGlobalSection
 EndGlobal
