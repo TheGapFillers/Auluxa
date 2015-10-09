@@ -104,6 +104,22 @@ namespace Auluxa.Repositories
 			return zoneToUpsert;
 		}
 
+		public async Task<Zone> AttachAppliancesToZone(int zoneId, IEnumerable<int> applianceIds)
+		{
+			Zone zoneToUpdate  = (await GetZonesAsync(new List<int> { zoneId })).SingleOrDefault();
+			if(zoneToUpdate == null)
+				return null;
+
+			foreach(var appliance in Context.Appliances.Where(a => applianceIds.Contains(a.ApplianceId)))
+			{
+				appliance.Zone = zoneToUpdate;
+			}
+
+			await SaveAsync();
+			return zoneToUpdate;
+
+		}
+
 		public async Task<Zone> DeleteZoneAsync(int id)
 		{
 			Zone alreadExistsZone = (await GetZonesAsync(new List<int> { id })).SingleOrDefault();

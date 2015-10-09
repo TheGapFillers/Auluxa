@@ -60,6 +60,20 @@ namespace Auluxa.WebApi.Controllers
 			return Created(Request.RequestUri, createdZone);
 		}
 
+		[HttpPut]
+		[Route("{zoneId}/appliances/{applianceIds}")]
+		public async Task<IHttpActionResult> Put(int zoneId, string applianceIds)
+		{
+			List<int> appliancesIdsList = null;
+			if (applianceIds != null)
+			{
+				appliancesIdsList = applianceIds.SplitAndTrim(',').Select(int.Parse).ToList();
+			}
+
+			Zone updatedZone = await _repository.AttachAppliancesToZone(zoneId, appliancesIdsList);
+			return Ok(updatedZone);
+		}
+
 		/// <summary>
 		/// Delete the zone of the inputted id.
 		/// </summary>

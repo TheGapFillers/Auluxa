@@ -4,21 +4,23 @@ using Microsoft.Owin.Hosting;
 
 namespace Auluxa.Hosts.ConsoleApp
 {
-    class Program
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        static void Main()
-        {
-            string baseAddress = "http://localhost:9000/";
+	class Program
+	{
 
-            // Start OWIN host 
-            using (WebApp.Start<Startup>(url: baseAddress))
-            {
-                Console.WriteLine("Started.");
-                Console.ReadLine();
-            }  
-        }
-    }
+		private const int PortNumber = 9000;
+		/// <summary>
+		/// 
+		/// </summary>
+		static void Main()
+		{
+			string baseAddress = $"http://localhost:{PortNumber}/" ;
+
+			// Start OWIN host 
+			using (WebApp.Start<Startup>(url: baseAddress))
+			{
+				Console.WriteLine($"Started. Listening on port {PortNumber}.");
+				Console.ReadLine();
+			}  
+		}
+	}
 }

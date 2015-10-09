@@ -14,15 +14,15 @@ namespace Auluxa.WebApi.Controllers
     [RoutePrefix("api/scenes")]
     public class SceneController : ApiController
     {
-        private readonly IApplicationRepository _sceneRepository;
+        private readonly IApplicationRepository _repository;
 
         /// <summary>
         /// Constructor of the SceneController
         /// </summary>
-        /// <param name="sceneRespository">Injected by DI</param>
-        public SceneController(IApplicationRepository sceneRespository)
+        /// <param name="respository">Injected by DI</param>
+        public SceneController(IApplicationRepository respository)
         {
-            _sceneRepository = sceneRespository;
+            _repository = respository;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Auluxa.WebApi.Controllers
                 idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
             }
 
-            List<Scene> scenes = (await _sceneRepository.GetScenesAsync(idList)).ToList();
+            List<Scene> scenes = (await _repository.GetScenesAsync(idList)).ToList();
             return Ok(scenes);
         }
 
@@ -56,7 +56,7 @@ namespace Auluxa.WebApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            Scene createdScene = await _sceneRepository.UpsertSceneAsync(scene);
+            Scene createdScene = await _repository.UpsertSceneAsync(scene);
             return Created(Request.RequestUri, createdScene);
         }
 
@@ -69,7 +69,7 @@ namespace Auluxa.WebApi.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> Delete(int id)
         {
-            Scene deletedScene = await _sceneRepository.DeleteSceneAsync(id);
+            Scene deletedScene = await _repository.DeleteSceneAsync(id);
             return Ok(deletedScene);
         }
     }
