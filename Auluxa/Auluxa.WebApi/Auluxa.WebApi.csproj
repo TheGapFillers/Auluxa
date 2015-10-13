@@ -128,6 +128,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\ApplianceController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Controllers\SceneController.cs" />
     <Compile Include="Helpers\ArrayExtensions.cs" />

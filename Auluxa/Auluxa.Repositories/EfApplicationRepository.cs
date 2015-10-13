@@ -131,6 +131,53 @@ namespace Auluxa.Repositories
 			return deletedZone;
 		}
 
+		public async Task<IEnumerable<Appliance>> GetAppliancesAsync(IEnumerable<int> ids = null)
+		{
+			List<int> idList = ids?.ToList();
+			IQueryable<Appliance> query = Context.Appliances;
+
+			if (idList != null)
+				query = Context.Appliances.Where(z => idList.Contains(z.ApplianceId));
+
+			IEnumerable<Appliance> appliances = await query
+											.Include(a => a.Zone)
+											.Include(a => a.CurrentSetting)
+											.ToListAsync();
+
+			return appliances;
+		}
+
+		public async Task<Appliance> UpsertApplianceAsync(Appliance appliance)
+		{
+			Appliance applianceToUpsert = (await GetAppliancesAsync(new List<int> { appliance.ApplianceId })).SingleOrDefault();
+
+			if (applianceToUpsert == null)   // Insert
+			{
+				//if (appliance.CurrentSetting == null) appliance.CurrentSetting = new ApplianceSetting(); //todo: manage inheritancs
+				applianceToUpsert = Context.Appliances.Add(appliance);
+			}
+			else // Update
+			{
+				applianceToUpsert.Name = appliance.Name;
+				applianceToUpsert.Category = appliance.Category;
+				applianceToUpsert.Zone = appliance.Zone;
+				applianceToUpsert.CurrentSetting = appliance.CurrentSetting;// ?? new ApplianceSetting(); //todo: manage inheritancs
+			}
+
+			await SaveAsync();
+			return applianceToUpsert;
+		}
+		public async Task<Appliance> DeleteApplianceAsync(int id)
+		{
+			Appliance alreadExistsAppliance = (await GetAppliancesAsync(new List<int> { id })).SingleOrDefault();
+			if (alreadExistsAppliance == null)
+				return null;
+
+			Appliance deletedAppliance = Context.Appliances.Remove(alreadExistsAppliance);
+			await SaveAsync();
+			return deletedAppliance;
+		}
+
 		#endregion
 
 		public async Task<int> SaveAsync()
@@ -153,6 +200,5 @@ namespace Auluxa.Repositories
 					Context.Dispose();
 			}
 		}
-
 	}
 }
