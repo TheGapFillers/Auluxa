@@ -46,8 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Appliance.cs" />
+    <Compile Include="ApplianceModel.cs" />
     <Compile Include="ApplianceSetting.cs" />
-    <Compile Include="Category.cs" />
     <Compile Include="ClimateSetting.cs" />
     <Compile Include="LightSetting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Auluxa.Models
 {
@@ -8,5 +9,6 @@ namespace Auluxa.Models
 		public string ApplianceName { get { return Appliance?.Name; } }
 		[JsonIgnore]
 		public Appliance Appliance { get; set; }
+		public Dictionary<string, string> CurrentSettings { get; set; }
 	}
 }

@@ -159,7 +159,6 @@ namespace Auluxa.Repositories
 			else // Update
 			{
 				applianceToUpsert.Name = appliance.Name;
-				applianceToUpsert.Category = appliance.Category;
 				applianceToUpsert.Zone = appliance.Zone;
 				applianceToUpsert.CurrentSetting = appliance.CurrentSetting;// ?? new ApplianceSetting(); //todo: manage inheritancs
 			}

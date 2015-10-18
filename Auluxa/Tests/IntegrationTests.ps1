@@ -28,8 +28,7 @@ function testAppliances() {
 	
 	$newAppliance = '
 	{
-		"Name": "Lockpad",
-		"Category": "Security"
+		"Name": "Lockpad"
 	}
 	'
 	$newAppliance = Invoke-RestMethod -Method Post -Uri http://localhost:9000/api/appliances/ -Body $newAppliance -ContentType "application/json"
@@ -37,8 +36,7 @@ function testAppliances() {
 	$updatedAppliance = '
 	{
 		"ApplianceId": "5",
-		"Name": "Lockpad-Modified",
-		"Category": "Security",
+		"Name": "Lockpad-Modified"
 	}
 	'
 	$noDisplay = Invoke-RestMethod -Method Post -Uri http://localhost:9000/api/appliances/ -Body $updatedAppliance -ContentType "application/json"

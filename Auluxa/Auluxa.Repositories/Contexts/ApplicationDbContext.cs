@@ -47,12 +47,10 @@ namespace Auluxa.Repositories.Contexts
 				{
 					new Appliance
 					{
-						Category = Category.Climate,
 						Name = "Appliance1"
 					},
 					new Appliance
 					{
-						Category = Category.Light,
 						Name = "Appliance2"
 					},
 				};
@@ -69,12 +67,10 @@ namespace Auluxa.Repositories.Contexts
 						{
 							new Appliance
 							{
-								Category = Category.Audio,
 								Name = "BT Speaker"
 							},
 							new Appliance
 							{
-								Category = Category.Video,
 								Name = "HDTV"
 							},
 						}
