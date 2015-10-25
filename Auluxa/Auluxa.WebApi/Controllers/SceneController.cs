@@ -36,16 +36,14 @@ namespace Auluxa.WebApi.Controllers
         {
             List<int> idList = null;
             if (ids != null)
-            {
                 idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
-            }
 
             List<Scene> scenes = (await _repository.GetScenesAsync(idList)).ToList();
             return Ok(scenes);
         }
 
         /// <summary>
-        /// Upsert a new scene.
+        /// Create a new scene.
         /// </summary>
         /// <param name="scene"></param>
         /// <returns></returns>
@@ -56,8 +54,24 @@ namespace Auluxa.WebApi.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            Scene createdScene = await _repository.UpsertSceneAsync(scene);
+            Scene createdScene = await _repository.CreateSceneAsync(scene);
             return Created(Request.RequestUri, createdScene);
+        }
+
+        /// <summary>
+        /// Update an exisiting scene.
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Route()]
+        public async Task<IHttpActionResult> Patch([FromBody]Scene scene)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            Scene updatedScene = await _repository.UpdateSceneAsync(scene);
+            return Created(Request.RequestUri, updatedScene);
         }
 
         /// <summary>

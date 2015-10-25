@@ -8,196 +8,272 @@ using Auluxa.Repositories.Contexts;
 
 namespace Auluxa.Repositories
 {
-	public class EfApplicationRepository : IApplicationRepository
-	{
-		public IApplicationDbContext Context { get; set; }
+    public class EfApplicationRepository : IApplicationRepository
+    {
+        public IApplicationDbContext Context { get; set; }
 
-		#region Scene
-		public async Task<IEnumerable<Scene>> GetScenesAsync(IEnumerable<int> ids = null)
-		{
-			List<int> idList = ids?.ToList();
-			IQueryable<Scene> query;
+        #region Scene
+        public async Task<IEnumerable<Scene>> GetScenesAsync(IEnumerable<int> ids = null)
+        {
+            List<int> idList = ids?.ToList();
 
-			if (idList == null)
-				query = Context.Scenes;
-			else
-				query = Context.Scenes.Where(s => idList.Contains(s.Id));
+            IQueryable<Scene> query = idList == null ?
+                Context.Scenes :
+                Context.Scenes.Where(s => idList.Contains(s.Id));
 
-			IEnumerable<Scene> scenes = await query
-				.Include(q => q.ApplianceSettings)
-				.Include(q => q.ApplianceSettings.Select(s => s.Appliance))
-				.Include(q => q.ApplianceSettings.Select(s => s.Appliance).Select(a => a.Zone))
-				.Include(q => q.Sequence)
-				.Include(q => q.Schedule)
-				.ToListAsync();
+            IEnumerable<Scene> scenes = await query
+                .Include(q => q.ApplianceSettings)
+                .Include(q => q.ApplianceSettings.Select(s => s.Appliance))
+                .Include(q => q.ApplianceSettings.Select(s => s.Appliance.Model))
+                .Include(q => q.ApplianceSettings.Select(s => s.Appliance).Select(a => a.Zone))
+                .Include(q => q.Sequence)
+                .Include(q => q.Schedule)
+                .ToListAsync();
 
-			return scenes;
-		}
+            return scenes;
+        }
 
-		public async Task<Scene> UpsertSceneAsync(Scene scene)
-		{
-			Scene sceneToUpsert = (await GetScenesAsync(new List<int> { scene.Id })).SingleOrDefault();
+        public async Task<Scene> CreateSceneAsync(Scene scene)
+        {
+            List<Appliance> usedAppliances =
+                (await GetAppliancesAsync(scene.ApplianceSettings.Select(s => s.Appliance.Id))).ToList();
 
-			if (sceneToUpsert == null) // Insert
-			{
-				if (scene.Schedule == null) scene.Schedule = new Schedule();
-				if (scene.Sequence == null) scene.Sequence = new Sequence();
-				sceneToUpsert = Context.Scenes.Add(scene);
-			}
-			else // Update
-			{
-				sceneToUpsert.ApplianceSettings = scene.ApplianceSettings;
-				sceneToUpsert.Name = scene.Name;
-				sceneToUpsert.Schedule = scene.Schedule ?? new Schedule();
-				sceneToUpsert.Sequence = scene.Sequence ?? new Sequence();
-			}
+            foreach (ApplianceSetting setting in scene.ApplianceSettings)
+                setting.Appliance = usedAppliances.SingleOrDefault(a => a.Id == setting.Appliance.Id);
 
-			await SaveAsync();
-			return sceneToUpsert;
-		}
+            if (scene.Schedule == null) scene.Schedule = new Schedule();
+            if (scene.Sequence == null) scene.Sequence = new Sequence();
+            Scene sceneToCreate = Context.Scenes.Add(scene);
 
-		public async Task<Scene> DeleteSceneAsync(int id)
-		{
-			Scene alreadyExistsScene = (await GetScenesAsync(new List<int> { id })).SingleOrDefault();
-			if (alreadyExistsScene == null)
-				return null;
+            await SaveAsync();
+            return sceneToCreate;
+        }
 
-			Scene deletedScene = Context.Scenes.Remove(alreadyExistsScene);
-			await SaveAsync();
-			return deletedScene;
-		}
+        public async Task<Scene> UpdateSceneAsync(Scene scene)
+        {
+            Scene sceneToUpdate = (await GetScenesAsync(new List<int> { scene.Id })).SingleOrDefault();
+            if (sceneToUpdate == null)
+                return null;
 
-		#endregion
-		#region Zone
+            if (scene.ApplianceSettings != null)
+            {
+                List<Appliance> usedAppliances =
+                    (await GetAppliancesAsync(scene.ApplianceSettings.Select(s => s.Appliance.Id))).ToList();
 
-		public async Task<IEnumerable<Zone>> GetZonesAsync(IEnumerable<int> ids = null)
-		{
-			List<int> idList = ids?.ToList();
-			IQueryable<Zone> query = Context.Zones;
+                foreach (ApplianceSetting setting in scene.ApplianceSettings)
+                    setting.Appliance = usedAppliances.SingleOrDefault(a => a.Id == setting.Appliance.Id);
 
-			if (idList != null)
-				query = Context.Zones.Where(z => idList.Contains(z.Id));
+                sceneToUpdate.ApplianceSettings = scene.ApplianceSettings;
+            }
+            if (scene.Name != null) sceneToUpdate.Name = scene.Name;
+            if (scene.Schedule != null) sceneToUpdate.Schedule = scene.Schedule;
+            if (scene.Sequence != null) sceneToUpdate.Sequence = scene.Sequence;
 
-			IEnumerable<Zone> zones = await query
-											.Include(z => z.Appliances)
-											.ToListAsync();
 
-			return zones;
-		}
+            await SaveAsync();
+            return sceneToUpdate;
+        }
 
-		public async Task<Zone> UpsertZoneAsync(Zone zone)
-		{
-			Zone zoneToUpsert = (await GetZonesAsync(new List<int> { zone.Id })).SingleOrDefault();
+        public async Task<Scene> DeleteSceneAsync(int id)
+        {
+            Scene alreadyExistsScene = (await GetScenesAsync(new List<int> { id })).SingleOrDefault();
+            if (alreadyExistsScene == null)
+                return null;
 
-			if (zoneToUpsert == null)   // Insert
-			{
-				if (zone.Appliances == null) zone.Appliances = new List<Appliance>();
-				zoneToUpsert = Context.Zones.Add(zone);
-			}
-			else // Update
-			{
-				zoneToUpsert.Name = zone.Name;
-				zoneToUpsert.Appliances = zone.Appliances ?? new List<Appliance>();
-			}
+            Scene deletedScene = Context.Scenes.Remove(alreadyExistsScene);
+            await SaveAsync();
+            return deletedScene;
+        }
 
-			await SaveAsync();
-			return zoneToUpsert;
-		}
+        #endregion
+        #region Zone
 
-		public async Task<Zone> AttachAppliancesToZone(int zoneId, IEnumerable<int> applianceIds)
-		{
-			Zone zoneToUpdate  = (await GetZonesAsync(new List<int> { zoneId })).SingleOrDefault();
-			if(zoneToUpdate == null)
-				return null;
+        public async Task<IEnumerable<Zone>> GetZonesAsync(IEnumerable<int> ids = null)
+        {
+            List<int> idList = ids?.ToList();
+            IQueryable<Zone> query = Context.Zones;
 
-			foreach(var appliance in Context.Appliances.Where(a => applianceIds.Contains(a.ApplianceId)))
-			{
-				appliance.Zone = zoneToUpdate;
-			}
+            if (idList != null)
+                query = Context.Zones.Where(z => idList.Contains(z.Id));
 
-			await SaveAsync();
-			return zoneToUpdate;
+            IEnumerable<Zone> zones = await query
+                .Include(z => z.Appliances)
+                .ToListAsync();
 
-		}
+            return zones;
+        }
 
-		public async Task<Zone> DeleteZoneAsync(int id)
-		{
-			Zone alreadExistsZone = (await GetZonesAsync(new List<int> { id })).SingleOrDefault();
-			if (alreadExistsZone == null)
-				return null;
+        public async Task<Zone> CreateZoneAsync(Zone zone)
+        {
+            List<Appliance> usedAppliances =
+                (await GetAppliancesAsync(zone.Appliances.Select(z => z.Id))).ToList();
 
-			Zone deletedZone = Context.Zones.Remove(alreadExistsZone);
-			await SaveAsync();
-			return deletedZone;
-		}
+            zone.Appliances = usedAppliances;
 
-		public async Task<IEnumerable<Appliance>> GetAppliancesAsync(IEnumerable<int> ids = null)
-		{
-			List<int> idList = ids?.ToList();
-			IQueryable<Appliance> query = Context.Appliances;
+            Zone zoneToCreate = Context.Zones.Add(zone);
 
-			if (idList != null)
-				query = Context.Appliances.Where(z => idList.Contains(z.ApplianceId));
+            await SaveAsync();
+            return zoneToCreate;
+        }
 
-			IEnumerable<Appliance> appliances = await query
-											.Include(a => a.Zone)
-											.Include(a => a.CurrentSetting)
-											.ToListAsync();
+        public async Task<Zone> UpdateZoneAsync(Zone zone)
+        {
+            Zone zoneToUpdate = (await GetZonesAsync(new List<int> { zone.Id })).SingleOrDefault();
+            if (zoneToUpdate == null)
+                return null;
 
-			return appliances;
-		}
+            if (zone.Appliances != null)
+            {
+                List<Appliance> usedAppliances =
+                (await GetAppliancesAsync(zone.Appliances.Select(a => a.Id))).ToList();
 
-		public async Task<Appliance> UpsertApplianceAsync(Appliance appliance)
-		{
-			Appliance applianceToUpsert = (await GetAppliancesAsync(new List<int> { appliance.ApplianceId })).SingleOrDefault();
+                zoneToUpdate.Appliances = usedAppliances;
+            }
+            if (zone.Name != null) zoneToUpdate.Name = zone.Name;
 
-			if (applianceToUpsert == null)   // Insert
-			{
-				//if (appliance.CurrentSetting == null) appliance.CurrentSetting = new ApplianceSetting(); //todo: manage inheritancs
-				applianceToUpsert = Context.Appliances.Add(appliance);
-			}
-			else // Update
-			{
-				applianceToUpsert.Name = appliance.Name;
-				applianceToUpsert.Zone = appliance.Zone;
-				applianceToUpsert.CurrentSetting = appliance.CurrentSetting;// ?? new ApplianceSetting(); //todo: manage inheritancs
-			}
+            await SaveAsync();
+            return zoneToUpdate;
+        }
 
-			await SaveAsync();
-			return applianceToUpsert;
-		}
-		public async Task<Appliance> DeleteApplianceAsync(int id)
-		{
-			Appliance alreadExistsAppliance = (await GetAppliancesAsync(new List<int> { id })).SingleOrDefault();
-			if (alreadExistsAppliance == null)
-				return null;
+        public async Task<Zone> DeleteZoneAsync(int id)
+        {
+            Zone alreadExistsZone = (await GetZonesAsync(new List<int> { id })).SingleOrDefault();
+            if (alreadExistsZone == null)
+                return null;
 
-			Appliance deletedAppliance = Context.Appliances.Remove(alreadExistsAppliance);
-			await SaveAsync();
-			return deletedAppliance;
-		}
+            Zone deletedZone = Context.Zones.Remove(alreadExistsZone);
+            await SaveAsync();
+            return deletedZone;
+        }
 
-		#endregion
+        public async Task<IEnumerable<Appliance>> GetAppliancesAsync(IEnumerable<int> ids = null)
+        {
+            List<int> idList = ids?.ToList();
+            IQueryable<Appliance> query = Context.Appliances;
 
-		public async Task<int> SaveAsync()
-		{
-			int count = await Context.SaveChangesAsync();
-			return count;
-		}
+            if (idList != null)
+                query = Context.Appliances.Where(z => idList.Contains(z.Id));
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+            IEnumerable<Appliance> appliances = await query
+                .Include(a => a.Zone)
+                .Include(a => a.Model)
+                .ToListAsync();
 
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (Context != null)
-					Context.Dispose();
-			}
-		}
-	}
+            return appliances;
+        }
+
+        public async Task<Appliance> CreateApplianceAsync(Appliance appliance)
+        {
+            ApplianceModel usedModel = (await GetApplianceModelsAsync(new[] {appliance.Model.Id})).SingleOrDefault();
+            if (usedModel == null)
+                return null;
+
+            appliance.Model = usedModel;
+            Appliance applianceToCreate = Context.Appliances.Add(appliance);
+
+            await SaveAsync();
+            return applianceToCreate;
+        }
+
+        public async Task<Appliance> UpdateApplianceAsync(Appliance appliance)
+        {
+            Appliance applianceToUpdate = (await GetAppliancesAsync(new List<int> { appliance.Id })).SingleOrDefault();
+            if (applianceToUpdate == null)
+                return null;
+
+            if (appliance.Model != null)
+            {
+                ApplianceModel usedModel = (await GetApplianceModelsAsync(new[] { appliance.Model.Id })).SingleOrDefault();
+                if (usedModel == null)
+                    return null;
+
+                applianceToUpdate.Model = usedModel;
+            }
+           
+            if (appliance.CurrentSetting != null) applianceToUpdate.CurrentSetting = appliance.CurrentSetting; 
+            if (appliance.Name != null) applianceToUpdate.Name = appliance.Name;
+            if (appliance.Zone != null) applianceToUpdate.Zone = appliance.Zone;
+
+            await SaveAsync();
+            return applianceToUpdate;
+        }
+
+        public async Task<Appliance> DeleteApplianceAsync(int id)
+        {
+            Appliance alreadExistsAppliance = (await GetAppliancesAsync(new List<int> { id })).SingleOrDefault();
+            if (alreadExistsAppliance == null)
+                return null;
+
+            Appliance deletedAppliance = Context.Appliances.Remove(alreadExistsAppliance);
+            await SaveAsync();
+            return deletedAppliance;
+        }
+
+        public async Task<IEnumerable<ApplianceModel>> GetApplianceModelsAsync(IEnumerable<int> ids = null)
+        {
+            List<int> idList = ids?.ToList();
+            IQueryable<ApplianceModel> query = Context.ApplianceModels;
+
+            if (idList != null)
+                query = Context.ApplianceModels.Where(z => idList.Contains(z.Id));
+
+            IEnumerable<ApplianceModel> applianceModels = await query.ToListAsync();
+
+            return applianceModels;
+        }
+
+        public async Task<ApplianceModel> CreateApplianceModelAsync(ApplianceModel applianceModel)
+        {
+            ApplianceModel applianceModelToCreate = Context.ApplianceModels.Add(applianceModel);
+
+            await SaveAsync();
+            return applianceModelToCreate;
+        }
+
+        public async Task<ApplianceModel> UpdateApplianceModelAsync(ApplianceModel applianceModel)
+        {
+            ApplianceModel applianceModelToUpdate = (await GetApplianceModelsAsync(new List<int> { applianceModel.Id })).SingleOrDefault();
+            if (applianceModelToUpdate == null)
+                return null;
+
+            if (applianceModel.BrandName != null) applianceModelToUpdate.BrandName = applianceModel.BrandName;
+            if (applianceModel.Category != null) applianceModelToUpdate.Category = applianceModel.Category;
+            if (applianceModel.ModelName != null) applianceModelToUpdate.ModelName = applianceModel.ModelName;
+            if (applianceModel.PossibleSettings != null) applianceModelToUpdate.PossibleSettings = applianceModel.PossibleSettings;
+
+            await SaveAsync();
+            return applianceModelToUpdate;
+        }
+
+        public async Task<ApplianceModel> DeleteApplianceModelAsync(int id)
+        {
+            ApplianceModel existingApplianceModel = (await GetApplianceModelsAsync(new List<int> { id })).SingleOrDefault();
+            if (existingApplianceModel == null)
+                return null;
+
+            ApplianceModel deletedApplianceModel = Context.ApplianceModels.Remove(existingApplianceModel);
+            await SaveAsync();
+            return deletedApplianceModel;
+        }
+
+        #endregion
+
+        public async Task<int> SaveAsync()
+        {
+            int count = await Context.SaveChangesAsync();
+            return count;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Context?.Dispose();
+        }
+    }
 }

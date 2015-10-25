@@ -36,16 +36,14 @@ namespace Auluxa.WebApi.Controllers
 		{
 			List<int> idList = null;
 			if (ids != null)
-			{
 				idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
-			}
 
 			List<Zone> zones = (await _repository.GetZonesAsync(idList)).ToList();
 			return Ok(zones);
 		}
 
 		/// <summary>
-		/// Upsert a new zone.
+		/// Create a new zone.
 		/// </summary>
 		/// <param name="zone"></param>
 		/// <returns></returns>
@@ -56,22 +54,24 @@ namespace Auluxa.WebApi.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Zone createdZone = await _repository.UpsertZoneAsync(zone);
+			Zone createdZone = await _repository.CreateZoneAsync(zone);
 			return Created(Request.RequestUri, createdZone);
 		}
 
-		[HttpPut]
-		[Route("{zoneId}/appliances/{applianceIds}")]
-		public async Task<IHttpActionResult> Put(int zoneId, string applianceIds)
+		/// <summary>
+		/// Update an exisiting zone.
+		/// </summary>
+		/// <param name="zone"></param>
+		/// <returns></returns>
+		[HttpPatch]
+		[Route()]
+		public async Task<IHttpActionResult> Patch([FromBody]Zone zone)
 		{
-			List<int> appliancesIdsList = null;
-			if (applianceIds != null)
-			{
-				appliancesIdsList = applianceIds.SplitAndTrim(',').Select(int.Parse).ToList();
-			}
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
 
-			Zone updatedZone = await _repository.AttachAppliancesToZone(zoneId, appliancesIdsList);
-			return Ok(updatedZone);
+			Zone updatedZone = await _repository.UpdateZoneAsync(zone);
+			return Created(Request.RequestUri, updatedZone);
 		}
 
 		/// <summary>

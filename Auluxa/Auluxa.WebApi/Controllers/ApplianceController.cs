@@ -36,16 +36,14 @@ namespace Auluxa.WebApi.Controllers
 		{
 			List<int> idList = null;
 			if (ids != null)
-			{
 				idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
-			}
 
 			List<Appliance> appliances = (await _repository.GetAppliancesAsync(idList)).ToList();
 			return Ok(appliances);
 		}
 
 		/// <summary>
-		/// Upsert a new appliance.
+		/// Create a new appliance.
 		/// </summary>
 		/// <param name="appliance"></param>
 		/// <returns></returns>
@@ -56,8 +54,24 @@ namespace Auluxa.WebApi.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-			Appliance createdAppliance = await _repository.UpsertApplianceAsync(appliance);
+			Appliance createdAppliance = await _repository.CreateApplianceAsync(appliance);
 			return Created(Request.RequestUri, createdAppliance);
+		}
+
+		/// <summary>
+		/// Update an existing appliance.
+		/// </summary>
+		/// <param name="appliance"></param>
+		/// <returns></returns>
+		[HttpPatch]
+		[Route()]
+		public async Task<IHttpActionResult> Patch([FromBody]Appliance appliance)
+		{
+			if (!ModelState.IsValid)
+				return BadRequest(ModelState);
+
+			Appliance updatedAppliance = await _repository.UpdateApplianceAsync(appliance);
+			return Created(Request.RequestUri, updatedAppliance);
 		}
 
 		/// <summary>

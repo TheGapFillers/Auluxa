@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace Auluxa.Hosts.WebApp.Models
+﻿namespace Auluxa.Hosts.WebApp.Models
 {
     // Models returned by MeController actions.
     public class GetViewModel

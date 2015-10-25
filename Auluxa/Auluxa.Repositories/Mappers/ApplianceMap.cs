@@ -9,14 +9,11 @@ namespace Auluxa.Repositories.Mappers
         public ApplianceMap()
         {
             ToTable("Appliances", "Auluxa");
-            HasKey(a => a.ApplianceId);
-            Property(a => a.ApplianceId).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            HasKey(a => a.Id);
+            Property(a => a.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            HasOptional(a => a.CurrentSetting);
-
-            //HasRequired(a => a.Setting)
-            //    .WithRequiredPrincipal(t => t.Appliance);
-
+            HasRequired(a => a.Model);
+            //HasOptional(a => a.CurrentSetting).WithRequired(s => s.Appliance);
             HasOptional(a => a.Zone);
         }
     }

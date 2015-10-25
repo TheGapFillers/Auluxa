@@ -54,6 +54,7 @@
     <Compile Include="Contexts\ApplicationDbContext.cs" />
     <Compile Include="IApplicationRepository.cs" />
     <Compile Include="Mappers\ApplianceMap.cs" />
+    <Compile Include="Mappers\ApplianceModelMap.cs" />
     <Compile Include="Mappers\ApplianceSettingMap.cs" />
     <Compile Include="Mappers\SceneMap.cs" />
     <Compile Include="Mappers\ScheduleMap.cs" />

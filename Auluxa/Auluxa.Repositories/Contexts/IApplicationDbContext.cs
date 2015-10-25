@@ -10,6 +10,7 @@ namespace Auluxa.Repositories.Contexts
         DbSet<Scene> Scenes { get; set; }
         DbSet<Sequence> Sequences { get; set; }
         DbSet<Schedule> Schedules { get; set; }
+        DbSet<ApplianceModel> ApplianceModels { get; set; }
         DbSet<Appliance> Appliances { get; set; }
         DbSet<ApplianceSetting> ApplianceSettings { get; set; }
         DbSet<Zone> Zones { get; set; }
