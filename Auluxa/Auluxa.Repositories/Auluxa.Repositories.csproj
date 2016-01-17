@@ -68,12 +68,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Auluxa.Models\Auluxa.Models.csproj">
-      <Project>{cb945e29-650a-44fb-b7a0-3f4f6278561d}</Project>
-      <Name>Auluxa.Models</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -1,25 +1,26 @@
-﻿using System.Web.Http;
-using Owin;
-using Microsoft.Owin.Security.Cookies;
+﻿using System;
+using System.Web.Http;
+using Auluxa.WebApp.Auth;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
-using System;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security.OAuth;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
+using Microsoft.Owin.Security.OAuth;
+using Owin;
 
-namespace Auluxa.WebApi
+namespace Auluxa.WebApp
 {
     /// <summary>
     /// Landing startup class. Start point of the service.
     /// </summary>
-    public class Startup
+    public partial class Startup
     {
         /// <summary>
         /// Method being called by the Owin layer to configure the application
         /// </summary>
         /// <param name="appBuilder">Injected appBuilder from the host.</param>
-        public void Configuration(IAppBuilder appBuilder)
+        public void ConfigureAuth(IAppBuilder appBuilder)
         {
             // Configure the db context, user manager and signin manager to use a single instance per request
             appBuilder.CreatePerOwinContext(AuthDbContext.Create);

@@ -1,12 +1,14 @@
-﻿using Autofac;
+﻿using System.Reflection;
+using System.Web.Http;
+using Auluxa.WebApp.Repositories;
+using Auluxa.WebApp.Repositories.Contexts;
+using Autofac;
 using Autofac.Integration.WebApi;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using System.Reflection;
-using System.Web.Http;
 
-namespace Auluxa.WebApi
+namespace Auluxa.WebApp
 {
     /// <summary>
     /// WebApi configuration class

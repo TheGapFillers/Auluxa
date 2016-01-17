@@ -128,11 +128,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\ApplianceController.cs" />
-    <Compile Include="Controllers\ApplianceModelController.cs" />
-    <Compile Include="Controllers\ZoneController.cs" />
-    <Compile Include="Controllers\SceneController.cs" />
-    <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebApiConfig.cs" />
@@ -140,20 +135,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Auluxa.Auth.Repositories\Auluxa.Auth.Repositories.csproj">
-      <Project>{ab6e17ac-d17a-477a-b9b0-181be865e226}</Project>
-      <Name>Auluxa.Auth.Repositories</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Auluxa.Models\Auluxa.Models.csproj">
-      <Project>{cb945e29-650a-44fb-b7a0-3f4f6278561d}</Project>
-      <Name>Auluxa.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Auluxa.Repositories\Auluxa.Repositories.csproj">
-      <Project>{03922d61-3cb6-4ee5-b606-4597ab74633b}</Project>
-      <Name>Auluxa.Repositories</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
