@@ -6,32 +6,32 @@ function assertAreEqual($expected, $actual) {
 	}
 }
 
-Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/zones
-Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/zones?ids="3,1"
+Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/zones
+Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/zones?ids="3,1"
 
 $zone ='
 {
   "Name": "Kitchen",
 }
 '
-Invoke-RestMethod -Method Post -Uri http://localhost:9000/api/zones/ -Body $zone -ContentType "application/json"
-Invoke-RestMethod -Method Delete -Uri http://localhost:9000/api/zones/3 -ContentType "application/json"
+Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/zones/ -Body $zone -ContentType "application/json"
+Invoke-RestMethod -Method Delete -Uri http://localhost:57776/api/zones/3 -ContentType "application/json"
 
-Invoke-RestMethod -Method Put -Uri http://localhost:9000/api/zones/1/Appliances/1 -ContentType "application/json"
-Invoke-RestMethod -Method Put -Uri http://localhost:9000/api/zones/1/Appliances/1,2 -ContentType "application/json"
+Invoke-RestMethod -Method Put -Uri http://localhost:57776/api/zones/1/Appliances/1 -ContentType "application/json"
+Invoke-RestMethod -Method Put -Uri http://localhost:57776/api/zones/1/Appliances/1,2 -ContentType "application/json"
 
 
 #************************
 function testAppliances() {
-	$allAppliances = Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/appliances
-	$someAppliances = Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/appliances?ids="1,2"
+	$allAppliances = Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/appliances
+	$someAppliances = Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/appliances?ids="1,2"
 	
 	$newAppliance = '
 	{
 		"Name": "Lockpad"
 	}
 	'
-	$newAppliance = Invoke-RestMethod -Method Post -Uri http://localhost:9000/api/appliances/ -Body $newAppliance -ContentType "application/json"
+	$newAppliance = Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/appliances/ -Body $newAppliance -ContentType "application/json"
 
 	$updatedAppliance = '
 	{
@@ -39,11 +39,11 @@ function testAppliances() {
 		"Name": "Lockpad-Modified"
 	}
 	'
-	$noDisplay = Invoke-RestMethod -Method Post -Uri http://localhost:9000/api/appliances/ -Body $updatedAppliance -ContentType "application/json"
-	$updatedAppliance = Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/appliances?ids="5"
-	$noDisplay = Invoke-RestMethod -Method Delete -Uri http://localhost:9000/api/appliances/5
+	$noDisplay = Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/appliances/ -Body $updatedAppliance -ContentType "application/json"
+	$updatedAppliance = Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/appliances?ids="5"
+	$noDisplay = Invoke-RestMethod -Method Delete -Uri http://localhost:57776/api/appliances/5
 
-	$appliancesAfterDelete = Invoke-RestMethod -Method Get -Uri http://localhost:9000/api/appliances
+	$appliancesAfterDelete = Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/appliances
 	
 	assertAreEqual 4 $allAppliances.count
 	assertAreEqual 2 $someAppliances.count

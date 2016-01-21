@@ -243,6 +243,8 @@
     </Compile>
     <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Kranium.cs" />
     <Compile Include="Models\Appliance.cs" />
     <Compile Include="Models\ApplianceModel.cs" />
     <Compile Include="Models\ApplianceSetting.cs" />
@@ -261,6 +263,8 @@
     <Compile Include="Repositories\Mappers\ApplianceMap.cs" />
     <Compile Include="Repositories\Mappers\ApplianceModelMap.cs" />
     <Compile Include="Repositories\Mappers\ApplianceSettingMap.cs" />
+    <Compile Include="Repositories\Mappers\SettingsMap.cs" />
+    <Compile Include="Repositories\Mappers\KraniumMap.cs" />
     <Compile Include="Repositories\Mappers\SceneMap.cs" />
     <Compile Include="Repositories\Mappers\ScheduleMap.cs" />
     <Compile Include="Repositories\Mappers\SequenceMap.cs" />
@@ -348,10 +352,7 @@
     </Content>
     <Content Include="Scripts\knockout.validation.min.js.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Providers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

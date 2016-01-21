@@ -10,7 +10,7 @@ namespace Auluxa.WebApp.Repositories.Mappers
         {
             ToTable("Zones", "Auluxa");
             HasKey(z => z.Id);
-            Property(s => s.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            Property(z => z.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             HasMany(z => z.Appliances).WithOptional(a => a.Zone);
         }
