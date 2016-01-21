@@ -10,7 +10,6 @@ namespace Auluxa.WebApp.Repositories.Mappers
 		{
 			ToTable("Kranium", "Auluxa");
 			HasKey(k => k.Id);
-			Property(k => k.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 		}
 	}
 }

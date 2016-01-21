@@ -150,6 +150,7 @@ namespace Auluxa.WebApp.Repositories.Contexts
 				};
 				context.Settings.Add(settings);
 				base.Seed(context);
+				context.SaveChanges();
 
 				var kranium = new Kranium()
 				{
@@ -159,6 +160,7 @@ namespace Auluxa.WebApp.Repositories.Contexts
 				};
 				context.Kranium.Add(kranium);
 				base.Seed(context);
+				context.SaveChanges();
 			}
 		}
 	}
