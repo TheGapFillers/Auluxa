@@ -14,16 +14,16 @@ namespace Auluxa.WebApp.Models
 		[JsonIgnore]
 		public Zone Zone { get; set; }
 
-		//public ApplianceSetting CurrentSetting { get; set; }
 		public ApplianceModel Model { get; set; }
+		public ApplianceSetting CurrentSetting { get; set; }
 
-		public Dictionary<string, string> CurrentSetting
-		{
-			get { return SerializedSetting != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(SerializedSetting) : null; }
-			set { SerializedSetting = JsonConvert.SerializeObject(value); }
-		}
+		//public Dictionary<string, string> CurrentSetting
+		//{
+		//	get { return SerializedSetting != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(SerializedSetting) : null; }
+		//	set { SerializedSetting = JsonConvert.SerializeObject(value); }
+		//}
 
-		[JsonIgnore]
-		public string SerializedSetting { get; set; }
+		//[JsonIgnore]
+		//public string SerializedSetting { get; set; }
 	}
 }

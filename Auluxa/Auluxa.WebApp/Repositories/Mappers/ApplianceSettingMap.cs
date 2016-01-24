@@ -10,7 +10,7 @@ namespace Auluxa.WebApp.Repositories.Mappers
             ToTable("ApplianceSettings", "Auluxa");
             HasKey(a => a.Id);
 
-            HasRequired(s => s.Appliance);
+            //HasRequired(s => s.Appliance);
         }
     }
 }

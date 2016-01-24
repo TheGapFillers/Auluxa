@@ -82,14 +82,18 @@ namespace Auluxa.WebApp.Repositories.Contexts
 						Id = 1,
 						Name = "Appliance1",
 						Model = applianceModels.Find(am => am.Id == 1),
-						CurrentSetting =  new Dictionary<string, string>
+						CurrentSetting = new ApplianceSetting
 						{
-							["FunctionA"] = "FunctionAChoice2",
-							["FunctionB"] = "FunctionBChoice3"
+							Setting = new Dictionary<string, string>
+							{
+								["FunctionA"] = "FunctionAChoice2",
+								["FunctionB"] = "FunctionBChoice3"
+							}
 						}
 					},
 					new Appliance { Id = 2, Name = "Appliance2", Model = applianceModels.Find(am => am.Id == 2) },
 				};
+
 				context.Appliances.AddRange(appliances);
 				context.SaveChanges();
 

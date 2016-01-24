@@ -13,8 +13,8 @@ namespace Auluxa.WebApp.Repositories.Mappers
             Property(a => a.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             HasRequired(a => a.Model);
-            //HasOptional(a => a.CurrentSetting).WithRequired(s => s.Appliance);
-            HasOptional(a => a.Zone);
-        }
+			HasOptional(a => a.CurrentSetting).WithRequired(s => s.Appliance);
+			HasOptional(a => a.Zone);
+		}
     }
 }

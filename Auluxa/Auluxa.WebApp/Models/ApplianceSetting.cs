@@ -7,7 +7,7 @@ namespace Auluxa.WebApp.Models
 	{
 		public int Id { get; set; }
 		public string ApplianceName => Appliance?.Name;
-
+		
 		public Appliance Appliance { get; set; }
 
 		public Dictionary<string, string> Setting
@@ -18,5 +18,6 @@ namespace Auluxa.WebApp.Models
 
 		[JsonIgnore]
 		public string SerializedSetting { get; set; }
+
 	}
 }
