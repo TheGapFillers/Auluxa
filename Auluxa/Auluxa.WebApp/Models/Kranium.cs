@@ -10,10 +10,10 @@ namespace Auluxa.WebApp.Models
 		public int Id { get; set; } = 1;
 		public string Name { get; set; }
 		public string Version { get; set; }
-		public PhysicalAddress MacAddress { get; set; }
-		public IPAddress IPAddress { get; set; }
+		public string MacAddress { get; set; }
+		public string IPAddress { get; set; }
 		public string ZigBeePanId { get; set; }
 		public string ZigBeeChannel { get; set; }
-		public PhysicalAddress ZigBeeMacAddress { get; set; }
+		public string ZigBeeMacAddress { get; set; }
 	}
 }

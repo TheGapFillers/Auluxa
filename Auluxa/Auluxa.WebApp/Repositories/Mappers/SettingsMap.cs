@@ -4,7 +4,7 @@ using Auluxa.WebApp.Models;
 
 namespace Auluxa.WebApp.Repositories.Mappers
 {
-	public class SettingsMap : EntityTypeConfiguration<Settings>
+	public class SettingsMap : EntityTypeConfiguration<Setting>
 	{
 		public SettingsMap()
 		{

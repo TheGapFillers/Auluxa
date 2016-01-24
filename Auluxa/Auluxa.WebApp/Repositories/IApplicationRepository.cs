@@ -25,5 +25,9 @@ namespace Auluxa.WebApp.Repositories
 		Task<ApplianceModel> CreateApplianceModelAsync(ApplianceModel applianceModel);
 		Task<ApplianceModel> UpdateApplianceModelAsync(ApplianceModel applianceModel);
 		Task<ApplianceModel> DeleteApplianceModelAsync(int id);
+
+		Task<Setting> CreateSettingAsync(Setting setting);
+		Task<Setting> GetSettingAsync();
+		Task<Setting> UpdateSettingAsync(Setting setting);
 	}
 }

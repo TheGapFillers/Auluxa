@@ -6,6 +6,10 @@ function assertAreEqual($expected, $actual) {
 	}
 }
 
+
+#************************
+# ZONES
+#************************
 Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/zones
 Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/zones?ids="3,1"
 
@@ -17,10 +21,23 @@ $zone ='
 Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/zones/ -Body $zone -ContentType "application/json"
 Invoke-RestMethod -Method Delete -Uri http://localhost:57776/api/zones/3 -ContentType "application/json"
 
-Invoke-RestMethod -Method Put -Uri http://localhost:57776/api/zones/1/Appliances/1 -ContentType "application/json"
-Invoke-RestMethod -Method Put -Uri http://localhost:57776/api/zones/1/Appliances/1,2 -ContentType "application/json"
+#************************
+# SETTINGS
+#************************
+Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/settings
 
+$settingUpdate ='
+{
+  "hoursFormat": "hh:mm:ss",
+  "dateFormat": "yyyyMMdd",
+  "timeZoneName": "Hong Kong",
+  "timeZoneUtcOffset": 8,
+}
+'
+$updatedSettings = Invoke-RestMethod -Method Patch -Uri http://localhost:57776/api/settings/ -Body $settingUpdate -ContentType "application/json"
 
+#************************
+# APPLIANCES
 #************************
 function testAppliances() {
 	$allAppliances = Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/appliances

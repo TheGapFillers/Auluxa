@@ -237,13 +237,14 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SceneController.cs" />
+    <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\Kranium.cs" />
     <Compile Include="Models\Appliance.cs" />
     <Compile Include="Models\ApplianceModel.cs" />

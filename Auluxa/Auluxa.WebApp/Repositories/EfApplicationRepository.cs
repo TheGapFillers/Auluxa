@@ -245,7 +245,7 @@ namespace Auluxa.WebApp.Repositories
             return applianceModelToUpdate;
         }
 
-        public async Task<ApplianceModel> DeleteApplianceModelAsync(int id)
+		public async Task<ApplianceModel> DeleteApplianceModelAsync(int id)
         {
             ApplianceModel existingApplianceModel = (await GetApplianceModelsAsync(new List<int> { id })).SingleOrDefault();
             if (existingApplianceModel == null)
@@ -256,9 +256,40 @@ namespace Auluxa.WebApp.Repositories
             return deletedApplianceModel;
         }
 
-        #endregion
+		public async Task<Setting> CreateSettingAsync(Setting setting)
+		{
+			if (await GetSettingAsync() != null)
+				return null;
 
-        public async Task<int> SaveAsync()
+			Setting settingToCreate = Context.Settings.Add(setting);
+
+			await SaveAsync();
+			return settingToCreate;
+		}
+
+		public async Task<Setting> GetSettingAsync()
+		{
+			return await Context.Settings.FirstAsync();
+		}
+
+		public async Task<Setting> UpdateSettingAsync(Setting setting)
+		{
+			Setting settingToUpdate = await GetSettingAsync();
+			if (settingToUpdate == null)
+				return await CreateSettingAsync(new Setting());
+
+			if (setting.HoursFormat != null) settingToUpdate.HoursFormat = setting.HoursFormat;
+			if (setting.DateFormat != null) settingToUpdate.DateFormat = setting.DateFormat;
+			if (setting.TimeZoneName != null) settingToUpdate.TimeZoneName = setting.TimeZoneName;
+			if (setting.TimeZoneUtcOffset != null) settingToUpdate.TimeZoneUtcOffset = setting.TimeZoneUtcOffset;
+
+			await SaveAsync();
+			return settingToUpdate;
+		}
+
+		#endregion
+
+		public async Task<int> SaveAsync()
         {
             int count = await Context.SaveChangesAsync();
             return count;
@@ -275,5 +306,5 @@ namespace Auluxa.WebApp.Repositories
             if (disposing)
                 Context?.Dispose();
         }
-    }
+	}
 }
