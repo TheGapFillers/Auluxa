@@ -37,6 +37,24 @@ $settingUpdate ='
 $updatedSettings = Invoke-RestMethod -Method Patch -Uri http://localhost:57776/api/settings/ -Body $settingUpdate -ContentType "application/json"
 
 #************************
+# KRANIUM
+#************************
+Invoke-RestMethod -Method Get -Uri http://localhost:57776/api/kranium
+
+$kraniumUpdate ='
+{
+  "name": "Two Kranium",
+  "version": "2.0",
+  "macAddress": "aa:bb:cc:dd:ee:ff",
+  "iPAddress": "127.0.0.2",
+  "zigBeePanId": "7",
+  "zigBeeChannel": "8",
+  "zigBeeMacAddress": "11:22:33:44:55:66",
+}
+'
+$updatedKranium = Invoke-RestMethod -Method Patch -Uri http://localhost:57776/api/kranium/ -Body $kraniumUpdate -ContentType "application/json"
+
+#************************
 # APPLIANCES
 #************************
 function testAppliances() {

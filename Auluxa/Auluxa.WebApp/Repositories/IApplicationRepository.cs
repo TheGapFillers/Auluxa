@@ -29,5 +29,9 @@ namespace Auluxa.WebApp.Repositories
 		Task<Setting> CreateSettingAsync(Setting setting);
 		Task<Setting> GetSettingAsync();
 		Task<Setting> UpdateSettingAsync(Setting setting);
+
+		Task<Kranium> CreateKraniumAsync(Kranium kranium);
+		Task<Kranium> GetKraniumAsync();
+		Task<Kranium> UpdateKraniumAsync(Kranium kranium);
 	}
 }

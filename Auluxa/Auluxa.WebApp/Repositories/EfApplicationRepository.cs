@@ -287,6 +287,40 @@ namespace Auluxa.WebApp.Repositories
 			return settingToUpdate;
 		}
 
+		public async Task<Kranium> CreateKraniumAsync(Kranium kranium)
+		{
+			if (await GetKraniumAsync() != null)
+				return null;
+
+			Kranium kraniumToCreate = Context.Kranium.Add(kranium);
+
+			await SaveAsync();
+			return kraniumToCreate;
+		}
+
+		public async Task<Kranium> GetKraniumAsync()
+		{
+			return await Context.Kranium.FirstAsync();
+		}
+
+		public async Task<Kranium> UpdateKraniumAsync(Kranium kranium)
+		{
+			Kranium kraniumToUpdate = await GetKraniumAsync();
+			if (kraniumToUpdate == null)
+				return await CreateKraniumAsync(new Kranium());
+
+			if (kranium.Name != null) kraniumToUpdate.Name = kranium.Name;
+			if (kranium.Version != null) kraniumToUpdate.Version = kranium.Version;
+			if (kranium.MacAddress != null) kraniumToUpdate.MacAddress = kranium.MacAddress;
+			if (kranium.IPAddress != null) kraniumToUpdate.IPAddress = kranium.IPAddress;
+			if (kranium.ZigBeePanId != null) kraniumToUpdate.ZigBeePanId = kranium.ZigBeePanId;
+			if (kranium.ZigBeeChannel != null) kraniumToUpdate.ZigBeeChannel = kranium.ZigBeeChannel;
+			if (kranium.ZigBeeMacAddress != null) kraniumToUpdate.ZigBeeMacAddress = kranium.ZigBeeMacAddress;
+
+			await SaveAsync();
+			return kraniumToUpdate;
+		}
+
 		#endregion
 
 		public async Task<int> SaveAsync()
