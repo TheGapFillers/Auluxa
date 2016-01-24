@@ -24,8 +24,8 @@ namespace Auluxa.WebApp.Repositories.Contexts
 		public DbSet<ApplianceSetting> ApplianceSettings { get; set; }
 		public DbSet<Zone> Zones { get; set; }
 		public DbSet<Trigger> Triggers { get; set; }
-		public DbSet<Settings> Settings { get; set; }
-		public DbSet<Kranium> Kranium { get; set; }
+		//public DbSet<Settings> Settings { get; set; }
+		//public DbSet<Kranium> Kranium { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
@@ -41,8 +41,8 @@ namespace Auluxa.WebApp.Repositories.Contexts
 			modelBuilder.Configurations.Add(new SequenceMap());
 			modelBuilder.Configurations.Add(new TriggerMap());
 			modelBuilder.Configurations.Add(new ZoneMap());
-			modelBuilder.Configurations.Add(new SettingsMap());
-			modelBuilder.Configurations.Add(new KraniumMap());
+			//modelBuilder.Configurations.Add(new SettingsMap());
+			//modelBuilder.Configurations.Add(new KraniumMap());
 		}
 
 		public class ApplicationDbContextInitializer : DropCreateDatabaseAlways<ApplicationDbContext>
@@ -144,23 +144,23 @@ namespace Auluxa.WebApp.Repositories.Contexts
 
 				base.Seed(context);
 
-				var settings = new Settings()
-				{
-					TimeZone = TimeZone.CurrentTimeZone
-				};
-				context.Settings.Add(settings);
-				base.Seed(context);
-				context.SaveChanges();
+				//var settings = new Settings()
+				//{
+				//	TimeZone = TimeZone.CurrentTimeZone
+				//};
+				//context.Settings.Add(settings);
+				//base.Seed(context);
+				//context.SaveChanges();
 
-				var kranium = new Kranium()
-				{
-					Name = "One Kranium",
-					Version = "0.1",
-					IPAddress = new IPAddress(new byte[] { 127, 0, 0, 1 })
-				};
-				context.Kranium.Add(kranium);
-				base.Seed(context);
-				context.SaveChanges();
+				//var kranium = new Kranium()
+				//{
+				//	Name = "One Kranium",
+				//	Version = "0.1",
+				//	IPAddress = new IPAddress(new byte[] { 127, 0, 0, 1 })
+				//};
+				//context.Kranium.Add(kranium);
+				//base.Seed(context);
+				//context.SaveChanges();
 			}
 		}
 	}

@@ -15,7 +15,9 @@ namespace Auluxa.WebApp.Repositories.Contexts
         DbSet<ApplianceSetting> ApplianceSettings { get; set; }
         DbSet<Zone> Zones { get; set; }
         DbSet<Trigger> Triggers { get; set; }
+		//DbSet<Settings> Settings { get; set; }
+		//DbSet<Kranium> Kranium { get; set; }
 
-        Task<int> SaveChangesAsync();
+		Task<int> SaveChangesAsync();
     }
 }
