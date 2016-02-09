@@ -1,6 +1,5 @@
 ﻿using System;
 using Moq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Auluxa.WebApp.Models;
 using System.Data.Entity;
 using Auluxa.WebApp.Repositories.Contexts;
@@ -9,13 +8,14 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity.Infrastructure;
+using NUnit.Framework;
 
 namespace Auluxa.WebApp.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public class KraniumTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetKraniumAsyncTest()
 		{
 			var kraniumsMockedList = new List<Kranium>
@@ -47,21 +47,5 @@ namespace Auluxa.WebApp.Tests
 			Assert.AreEqual("TheKranium", kranium.Name);
 			Assert.AreEqual("192.168.0.50", kranium.IPAddress);
 		}
-
-		//[TestMethod]
-		//public async Task RepositoryCreateTest()
-		//{
-		//	var mockSet = new Mock<DbSet<Kranium>>();
-		//	var mockContext = new Mock<IApplicationDbContext>();
-		//	mockContext.Setup(c => c.Kranium).Returns(mockSet.Object);
-
-		//	var repository = new EfApplicationRepository { Context = mockContext.Object };
-
-		//	Task.Run(async () =>
-		//	{
-		//		await repository.CreateKraniumAsync(new Kranium { Name = "TheKranium", IPAddress = "127.0.0.1" });
-		//		mockContext.Verify(c => c.SaveChangesAsync(), Times.Never);
-		//	}).GetAwaiter().GetResult();
-		//}
 	}
 }
