@@ -69,7 +69,7 @@ namespace Auluxa.WebApp.Tests
 		[Test]
 		public async Task GetZonesAsyncTest()
 		{
-			IEnumerable<Zone> zones = await MockedRepository.GetZonesAsync();
+			IEnumerable<Zone> zones = await MockedRepository.GetZonesAsync();	//todo understand failure when including appliance
 			Assert.IsNotNull(zones);
 			Assert.AreEqual(2, zones.Count());
 
@@ -88,7 +88,28 @@ namespace Auluxa.WebApp.Tests
 			Zone newZone = new Zone { Name = "Living Room" };
 
 			await MockedRepository.CreateZoneAsync(newZone);
+
 			MockedContext.Verify(c => c.SaveChangesAsync(), Times.Once);
+		}
+
+		[Test]
+		public async Task UpdateZoneAsyncTest()
+		{
+			Zone zoneToUpdate = new Zone { Id =  1, Name = "Renovated Bed Room" };
+
+			await MockedRepository.UpdateZoneAsync(zoneToUpdate);
+
+			MockedContext.Verify(c => c.SaveChangesAsync(), Times.Once);
+		}
+
+		[Test]
+		public async Task UpdateNonExistingZoneAsyncTest()
+		{
+			Zone zoneToUpdate = new Zone { Id = 4, Name = "Area51" };
+
+			await MockedRepository.UpdateZoneAsync(zoneToUpdate);
+
+			MockedContext.Verify(c => c.SaveChangesAsync(), Times.Never);
 		}
 	}
 }

@@ -97,7 +97,7 @@ namespace Auluxa.WebApp.Repositories
                 query = Context.Zones.Where(z => idList.Contains(z.Id));
 
             IEnumerable<Zone> zones = await query
-                //.Include(z => z.Appliances)
+                .Include(z => z.Appliances)
                 .ToListAsync();
 
             return zones;
