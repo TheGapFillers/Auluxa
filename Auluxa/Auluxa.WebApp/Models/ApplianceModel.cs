@@ -16,8 +16,8 @@ namespace Auluxa.WebApp.Models
             ModelName = modelName;
         }
 
-        public string Category { get; set; }
-        public int Id { get; set; }
+		public int Id { get; set; }
+		public string Category { get; set; }
         public string BrandName { get; set; }
         public string ModelName { get; set; }
 

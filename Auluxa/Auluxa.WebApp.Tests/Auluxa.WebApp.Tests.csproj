@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="AsyncQueryProvider.cs" />
     <Compile Include="DbSetExtensions.cs" />
+    <Compile Include="ApplianceTests.cs" />
     <Compile Include="ZonesRepositoryTests.cs" />
     <Compile Include="KraniumTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

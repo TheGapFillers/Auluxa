@@ -57,8 +57,8 @@ namespace Auluxa.WebApp.Repositories.Contexts
 						Id = 1,
 						PossibleSettings = new Dictionary<string, string[]>
 						{
-							["FunctionA"] = new [] { "FunctionAChoice1", "FunctionAChoice2", "FunctionAChoice3" },
-							["FunctionB"] = new [] { "FunctionBChoice1", "FunctionBChoice2", "FunctionBChoice3" }
+							["FunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
+							["FunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
 						}
 					},
 					new ApplianceModel("Light", "BrandNameA", "Light A")
@@ -66,8 +66,8 @@ namespace Auluxa.WebApp.Repositories.Contexts
 						Id = 2,
 						PossibleSettings = new Dictionary<string, string[]>
 						{
-							["FunctionA"] = new [] { "FunctionAChoice1", "FunctionAChoice2", "FunctionAChoice3" },
-							["FunctionB"] = new [] { "FunctionBChoice1", "FunctionBChoice2", "FunctionBChoice3" }
+							["FunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
+							["FunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
 						}
 					}
 				};
