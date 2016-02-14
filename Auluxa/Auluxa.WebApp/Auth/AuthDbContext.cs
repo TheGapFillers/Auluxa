@@ -5,7 +5,7 @@ namespace Auluxa.WebApp.Auth
     public class AuthDbContext : IdentityDbContext<AuthUser>
     {
         public AuthDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+            : base("IdentityConnection", throwIfV1Schema: false)
         {
         }
 
