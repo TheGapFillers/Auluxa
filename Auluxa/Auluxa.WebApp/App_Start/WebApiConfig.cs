@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Web.Http;
+using System.Web.Http.ExceptionHandling;
+using Auluxa.WebApp.ErrorHandling;
 using Auluxa.WebApp.Repositories;
 using Auluxa.WebApp.Repositories.Contexts;
 using Autofac;
@@ -35,6 +37,9 @@ namespace Auluxa.WebApp
 
             // Set dependency injection
             SetAutofacContainer(config);
+
+            // Exception handler
+            config.Services.Replace(typeof(IExceptionHandler), new AuluxaExceptionHandler());
 
             // Web API routes
             config.MapHttpAttributeRoutes();
