@@ -59,10 +59,5 @@ namespace Auluxa.WebApp.Models
 
 			return true;
 		}
-
-		public void SetSetting(string setting, string value)
-		{
-			//todo
-		}
 	}
 }

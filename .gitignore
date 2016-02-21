@@ -217,7 +217,7 @@ FakesAssemblies/
 _Pvt_Extensions
 
 # Frontend files
-/Auluxa/Auluxa.WebApp/app/**/**.js.map
-/Auluxa/Auluxa.WebApp/app/**/**.js
-/Auluxa/Auluxa.WebApp/app/node_modules/**/**
-/Auluxa/Auluxa.WebApp/app/typings/**/**
+/Auluxa/Auluxa.WebApp/_frontend/**/**.js.map
+/Auluxa/Auluxa.WebApp/_frontend/**/**.js
+/Auluxa/Auluxa.WebApp/_frontend/node_modules/**/**
+/Auluxa/Auluxa.WebApp/_frontend/typings/**/**

@@ -24,7 +24,7 @@ namespace Auluxa.WebApp.Models
 		public bool IsValid()
 		{
 			if (Appliance?.Model?.PossibleSettings == null)
-				throw new InvalidOperationException("Null or invalid ApplianceModel");
+				throw new InvalidOperationException("Null or invalid Appliance or ApplianceModel");
 
 			if (Setting.Count != Appliance.Model.PossibleSettings.Count)
 				return false;
