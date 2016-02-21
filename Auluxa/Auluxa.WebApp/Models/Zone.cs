@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Http.Results;
 using Newtonsoft.Json;
 
 namespace Auluxa.WebApp.Models
