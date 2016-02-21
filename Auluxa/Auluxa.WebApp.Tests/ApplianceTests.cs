@@ -87,16 +87,5 @@ namespace Auluxa.WebApp.Tests
 			var ex = Assert.Throws(typeof(InvalidOperationException), () => Appliance.AreCurrentSettingsValid());
 			Assert.AreEqual("Null or invalid ApplianceModel", ex.Message);
 		}
-
-		[Test]
-		public void SetSettingTest()
-		{
-			Appliance.CurrentSetting = null;
-			Appliance.ApplyDefaultSettings();
-
-			Assert.IsTrue(Appliance.AreCurrentSettingsValid());
-			Assert.AreEqual(Appliance.CurrentSetting["FunctionA"], "FunctionADefaultChoice");
-			Assert.AreEqual(Appliance.CurrentSetting["FunctionB"], "FunctionBDefaultChoice");
-		}
 	}
 }
