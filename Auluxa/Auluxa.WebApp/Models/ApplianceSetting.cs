@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
 
 namespace Auluxa.WebApp.Models
 {
@@ -18,5 +20,26 @@ namespace Auluxa.WebApp.Models
 
 		[JsonIgnore]
 		public string SerializedSetting { get; set; }
+
+		public bool IsValid()
+		{
+			if (Appliance?.Model?.PossibleSettings == null)
+				throw new InvalidOperationException("Null or invalid ApplianceModel");
+
+			if (Setting.Count != Appliance.Model.PossibleSettings.Count)
+				return false;
+
+			foreach (var kvp in Setting)
+			{
+				if (!Appliance.Model.PossibleSettings.ContainsKey(kvp.Key))
+					return false;
+
+				if (!Appliance.Model.PossibleSettings[kvp.Key].Contains(kvp.Value))
+					return false;
+			}
+
+			return true;
+		}
+
 	}
 }
