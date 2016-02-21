@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 
 namespace Auluxa.WebApp.Auth
@@ -10,17 +13,28 @@ namespace Auluxa.WebApp.Auth
 
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            return base.ValidateClientAuthentication(context);
+            context.Validated();
+            return Task.FromResult(0);
         }
 
-        public override Task GrantClientCredentials(OAuthGrantClientCredentialsContext context)
+        public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
-            return base.GrantClientCredentials(context);
-        }
+            // Enable Cors
+            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
-        public override Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
-        {
-            return base.GrantResourceOwnerCredentials(context);
+            // Get the user
+            var userManager = context.OwinContext.GetUserManager<AuthUserManager>();
+            AuthUser user = await userManager.FindAsync(context.UserName, context.Password);
+            if (user == null)
+            {
+                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                return;
+            }
+
+            // Validates the ticket
+            ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager);
+            var ticket = new AuthenticationTicket(oAuthIdentity, new AuthenticationProperties());
+            context.Validated(ticket);
         }
 
         public OAuthProvider(string publicClientId)

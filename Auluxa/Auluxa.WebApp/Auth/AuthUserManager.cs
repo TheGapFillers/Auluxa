@@ -13,6 +13,7 @@ namespace Auluxa.WebApp.Auth
             : base(store)
         {
         }
+
         public static AuthUserManager Create(
             IdentityFactoryOptions<AuthUserManager> options,
             IOwinContext context)
