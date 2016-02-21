@@ -34,22 +34,18 @@ namespace Auluxa.WebApp.Repositories
         }
 
         public async Task<Scene> CreateSceneAsync(Scene scene)
-        {
-            List<Appliance> usedAppliances =
-                (await GetAppliancesAsync(scene.ApplianceSettings.Select(s => s.Appliance.Id))).ToList();
+		{
+			await BindSceneSettingsToAppliances(scene);
 
-            foreach (ApplianceSetting setting in scene.ApplianceSettings)
-                setting.Appliance = usedAppliances.SingleOrDefault(a => a.Id == setting.Appliance.Id);
+			if (scene.Schedule == null) scene.Schedule = new Schedule();
+			if (scene.Sequence == null) scene.Sequence = new Sequence();
+			Scene sceneToCreate = Context.Scenes.Add(scene);
 
-            if (scene.Schedule == null) scene.Schedule = new Schedule();
-            if (scene.Sequence == null) scene.Sequence = new Sequence();
-            Scene sceneToCreate = Context.Scenes.Add(scene);
+			await SaveAsync();
+			return sceneToCreate;
+		}
 
-            await SaveAsync();
-            return sceneToCreate;
-        }
-
-        public async Task<Scene> UpdateSceneAsync(Scene scene)
+		public async Task<Scene> UpdateSceneAsync(Scene scene)
         {
             Scene sceneToUpdate = (await GetScenesAsync(new List<int> { scene.Id })).SingleOrDefault();
             if (sceneToUpdate == null)
@@ -57,24 +53,34 @@ namespace Auluxa.WebApp.Repositories
 
             if (scene.ApplianceSettings != null)
             {
-                List<Appliance> usedAppliances =
-                    (await GetAppliancesAsync(scene.ApplianceSettings.Select(s => s.Appliance.Id))).ToList();
+				await BindSceneSettingsToAppliances(scene);
 
-                foreach (ApplianceSetting setting in scene.ApplianceSettings)
-                    setting.Appliance = usedAppliances.SingleOrDefault(a => a.Id == setting.Appliance.Id);
-
-                sceneToUpdate.ApplianceSettings = scene.ApplianceSettings;
+				sceneToUpdate.ApplianceSettings = scene.ApplianceSettings;
             }
             if (scene.Name != null) sceneToUpdate.Name = scene.Name;
             if (scene.Schedule != null) sceneToUpdate.Schedule = scene.Schedule;
             if (scene.Sequence != null) sceneToUpdate.Sequence = scene.Sequence;
 
-
             await SaveAsync();
             return sceneToUpdate;
         }
 
-        public async Task<Scene> DeleteSceneAsync(int id)
+		private async Task BindSceneSettingsToAppliances(Scene scene)
+		{
+			List<Appliance> usedAppliances =
+				(await GetAppliancesAsync(scene.ApplianceSettings.Select(s => s.Appliance.Id))).ToList();
+
+			foreach (ApplianceSetting setting in scene.ApplianceSettings)
+			{
+				setting.Appliance = usedAppliances.SingleOrDefault(a => a.Id == setting.Appliance.Id);
+				if(!setting.IsValid())
+				{
+					throw new Exception($"Invalid setting for appliance {setting.Appliance.Id}");
+				}
+			}
+		}
+
+		public async Task<Scene> DeleteSceneAsync(int id)
         {
             Scene alreadyExistsScene = (await GetScenesAsync(new List<int> { id })).SingleOrDefault();
             if (alreadyExistsScene == null)
@@ -169,6 +175,17 @@ namespace Auluxa.WebApp.Repositories
                 return null;
 
             appliance.Model = usedModel;
+
+			if(appliance.CurrentSetting == null)
+			{
+				appliance.ApplyDefaultSettings();
+			}
+			else
+			{
+				if(!appliance.AreCurrentSettingsValid())
+					throw new Exception("Invalid settings, must follow appliance model");
+			}
+
             Appliance applianceToCreate = Context.Appliances.Add(appliance);
 
             await SaveAsync();
@@ -189,8 +206,15 @@ namespace Auluxa.WebApp.Repositories
 
                 applianceToUpdate.Model = usedModel;
             }
-           
-            if (appliance.CurrentSetting != null) applianceToUpdate.CurrentSetting = appliance.CurrentSetting; 
+
+			if (appliance.CurrentSetting != null)
+			{
+				if(!appliance.AreCurrentSettingsValid())
+					throw new Exception("Invalid settings, must follow appliance model");
+
+				applianceToUpdate.CurrentSetting = appliance.CurrentSetting;
+			}
+
             if (appliance.Name != null) applianceToUpdate.Name = appliance.Name;
             if (appliance.Zone != null) applianceToUpdate.Zone = appliance.Zone;
 
