@@ -32,7 +32,7 @@ namespace Auluxa.WebApp
                     // Inject auth URL as 'realm'. Could do better
                     c.EnableOAuth2Support(
                         "web",
-                        "",
+                        "nosecret",
                         ConfigurationManager.AppSettings["auluxa-auth:Url"],
                         "auluxa-auth");
 
