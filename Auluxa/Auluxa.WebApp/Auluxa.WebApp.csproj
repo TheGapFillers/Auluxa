@@ -232,6 +232,8 @@
     <Compile Include="Auth\AuthUser.cs" />
     <Compile Include="Auth\AuthUserManager.cs" />
     <Compile Include="Auth\OAuthProvider.cs" />
+    <Compile Include="Auth\Subscription.cs" />
+    <Compile Include="Auth\SubscriptionType.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplianceController.cs" />
     <Compile Include="Controllers\ApplianceModelController.cs" />

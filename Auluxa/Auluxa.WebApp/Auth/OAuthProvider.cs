@@ -49,19 +49,19 @@ namespace Auluxa.WebApp.Auth
 
         public override Task ValidateClientRedirectUri(OAuthValidateClientRedirectUriContext context)
         {
-            if (context.ClientId == _publicClientId)
-            {
-                Uri expectedRootUri = new Uri(context.Request.Uri, "/");
+            if (context.ClientId != _publicClientId)
+                return Task.FromResult<object>(null);
 
-                if (expectedRootUri.AbsoluteUri == context.RedirectUri)
-                {
-                    context.Validated();
-                }
-                else if (context.ClientId == "web")
-                {
-                    var expectedUri = new Uri(context.Request.Uri, "/");
-                    context.Validated(expectedUri.AbsoluteUri);
-                }
+            var expectedRootUri = new Uri(context.Request.Uri, "/");
+
+            if (expectedRootUri.AbsoluteUri == context.RedirectUri)
+            {
+                context.Validated();
+            }
+            else if (context.ClientId == "web")
+            {
+                var expectedUri = new Uri(context.Request.Uri, "/");
+                context.Validated(expectedUri.AbsoluteUri);
             }
 
             return Task.FromResult<object>(null);

@@ -159,7 +159,7 @@ namespace Auluxa.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new AuthUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
+                var user = new AuthUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -360,7 +360,7 @@ namespace Auluxa.WebApp.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new AuthUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
+                var user = new AuthUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
