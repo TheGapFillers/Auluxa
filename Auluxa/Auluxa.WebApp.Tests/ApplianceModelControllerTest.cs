@@ -54,6 +54,7 @@ namespace Auluxa.WebApp.Tests
 			applianceModelController.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
 
 			// Modify the appliance, send patch and check result
+			//todo test null parameters
 			am.Category = "SuperAC";
 			am.BrandName = "Midea";
 			am.ModelName = "AC3000";

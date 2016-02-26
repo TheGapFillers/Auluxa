@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Auluxa.WebApp.Models
 {
     public class ApplianceModel
-    {
+	{
         public ApplianceModel()
         {            
         }
