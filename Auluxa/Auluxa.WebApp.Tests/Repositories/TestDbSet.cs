@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Auluxa.WebApp.Tests
 {
-	public class TestDbSet<T> : DbSet<T>, IQueryable, IEnumerable<T>
+	public class TestDbSet<T> : DbSet<T>, IQueryable, IEnumerable<T>, IDbAsyncEnumerable<T>
 		where T : class
 	{
 		ObservableCollection<T> _data;
@@ -48,7 +52,7 @@ namespace Auluxa.WebApp.Tests
 
 		public override ObservableCollection<T> Local
 		{
-			get { return new ObservableCollection<T>(_data); }
+			get { return _data; }
 		}
 
 		Type IQueryable.ElementType
@@ -56,14 +60,14 @@ namespace Auluxa.WebApp.Tests
 			get { return _query.ElementType; }
 		}
 
-		System.Linq.Expressions.Expression IQueryable.Expression
+		Expression IQueryable.Expression
 		{
 			get { return _query.Expression; }
 		}
 
 		IQueryProvider IQueryable.Provider
 		{
-			get { return _query.Provider; }
+			get { return new TestDbAsyncQueryProvider<T>(_query.Provider); }
 		}
 
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -74,6 +78,11 @@ namespace Auluxa.WebApp.Tests
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
 			return _data.GetEnumerator();
+		}
+
+		IDbAsyncEnumerator<T> IDbAsyncEnumerable<T>.GetAsyncEnumerator()
+		{
+			return new TestDbAsyncEnumerator<T>(_data.GetEnumerator());
 		}
 	}
 }
