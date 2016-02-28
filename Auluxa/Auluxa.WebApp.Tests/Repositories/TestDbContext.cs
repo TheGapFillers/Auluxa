@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using Auluxa.WebApp.Models;
 using Auluxa.WebApp.Repositories.Contexts;
 using System.Threading.Tasks;

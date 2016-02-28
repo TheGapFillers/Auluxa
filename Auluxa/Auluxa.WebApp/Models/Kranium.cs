@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Net;
-using System.Net.NetworkInformation;
-
-namespace Auluxa.WebApp.Models
+﻿namespace Auluxa.WebApp.Models
 {
 	public class Kranium
 	{

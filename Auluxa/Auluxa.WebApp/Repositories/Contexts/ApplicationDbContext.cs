@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using Auluxa.WebApp.Models;
 using Auluxa.WebApp.Repositories.Mappers;
-using System.Net;
 
 namespace Auluxa.WebApp.Repositories.Contexts
 {

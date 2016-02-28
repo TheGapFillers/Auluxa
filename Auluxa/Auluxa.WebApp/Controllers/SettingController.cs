@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
-using Auluxa.WebApp.Helpers;
 using Auluxa.WebApp.Models;
 using Auluxa.WebApp.Repositories;
 

@@ -1,9 +1,8 @@
-﻿using Auluxa.WebApp.Auth;
-
-namespace Auluxa.WebApp.Subscription
+﻿namespace Auluxa.WebApp.Subscription
 {
     public class Subscription
     {
+        public string Id { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
         public decimal CostPerMonth { get; set; }
         public int UserCountLimitation { get; set; }
