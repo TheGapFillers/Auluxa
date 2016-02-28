@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Auluxa.WebApp.Auth;
 
-namespace Auluxa.WebApp.Auth
+namespace Auluxa.WebApp.Subscription
 {
     public class Subscription
     {

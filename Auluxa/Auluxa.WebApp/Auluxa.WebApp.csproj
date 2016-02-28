@@ -58,6 +58,10 @@
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ChargeBee, Version=1.5.7.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ChargeBee.1.5.7.0\lib\net30\ChargeBee.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -232,8 +236,11 @@
     <Compile Include="Auth\AuthUser.cs" />
     <Compile Include="Auth\AuthUserManager.cs" />
     <Compile Include="Auth\OAuthProvider.cs" />
-    <Compile Include="Auth\Subscription.cs" />
-    <Compile Include="Auth\SubscriptionType.cs" />
+    <Compile Include="Subscription\ChargebeeSubscriptionRepository.cs" />
+    <Compile Include="Subscription\Payment.cs" />
+    <Compile Include="Subscription\Subscription.cs" />
+    <Compile Include="Subscription\SubscriptionRepository.cs" />
+    <Compile Include="Subscription\SubscriptionType.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplianceController.cs" />
     <Compile Include="Controllers\ApplianceModelController.cs" />

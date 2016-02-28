@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Auluxa.WebApp.Subscription;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -13,6 +12,8 @@ namespace Auluxa.WebApp.Auth
         public string ParentUserId { get; set; }
 
         public SubscriptionType SubscriptionType { get; set; }
+
+
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(AuthUserManager manager)
         {
