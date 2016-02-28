@@ -67,16 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplianceSettingsTests.cs" />
-    <Compile Include="AsyncQueryProvider.cs" />
-    <Compile Include="DbSetExtensions.cs" />
+    <Compile Include="Repositories\AsyncQueryProvider.cs" />
     <Compile Include="ApplianceTests.cs" />
-    <Compile Include="Repositories\TestApplianceDbSet.cs" />
     <Compile Include="Repositories\TestDbContext.cs" />
     <Compile Include="Repositories\TestDbSet.cs" />
-    <Compile Include="Repositories\TestApplianceModelDbSet.cs" />
-    <Compile Include="Repositories\TestZoneDbSet.cs" />
-    <Compile Include="ApplianceModelControllerTest.cs" />
-    <Compile Include="ZoneControllerTest.cs" />
+    <Compile Include="ControllersTests\ApplianceModelControllerTest.cs" />
+    <Compile Include="ControllersTests\ZoneControllerTest.cs" />
     <Compile Include="KraniumTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

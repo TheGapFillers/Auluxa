@@ -12,17 +12,31 @@ namespace Auluxa.WebApp.Tests
 	[TestFixture]
 	public class ZoneControllerTest
 	{
-		[Test]
-		public async Task Zone_GetTest()
+		public TestDbContext Context { get; set; }
+		public ZoneController Controller { get; set; }
+
+		[SetUp]
+		public void SetUp()
 		{
-			var context = new TestDbContext();
+			Context = new TestDbContext();
+			Controller = new ZoneController(new EfApplicationRepository { Context = Context });
+			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			if(Controller != null) { Controller.Dispose(); }
+			if(Context != null) { Context.Dispose(); }
+		}
+
+		[Test]
+		public async Task ZoneController_GetTest()
+		{
 			Zone z = BuildTestZoneModel();
-			context.Zones.Add(z);
+			Context.Zones.Add(z);
 
-			var zonesController = new ZoneController(new EfApplicationRepository { Context = context });
-			zonesController.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
-
-			var result = await zonesController.Get() as OkNegotiatedContentResult<List<Zone>>;
+			var result = await Controller.Get() as OkNegotiatedContentResult<List<Zone>>;
 
 			Assert.IsNotNull(result);
 			Assert.AreEqual(1, result.Content.Count);
@@ -30,28 +44,21 @@ namespace Auluxa.WebApp.Tests
 		}
 
 		[Test]
-		public async Task Zone_PostTest()
+		public async Task ZoneController_PostTest()
 		{
-			var zonesController = new ZoneController(new EfApplicationRepository { Context = new TestDbContext() });
-			zonesController.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
-
 			Zone z = BuildTestZoneModel();
 
-			var result = await zonesController.Post(z) as CreatedNegotiatedContentResult<Zone>;
+			var result = await Controller.Post(z) as CreatedNegotiatedContentResult<Zone>;
 
 			Assert.IsNotNull(result);
 			AssertZonesAreEqual(result.Content, z);
 		}
 
 		[Test]
-		public async Task Zone_PatchTest()
+		public async Task ZoneController_PatchTest()
 		{
-			var context = new TestDbContext();
 			Zone z = BuildTestZoneModel();
-			context.Zones.Add(z);
-
-			var zonesController = new ZoneController(new EfApplicationRepository { Context = context });
-			zonesController.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
+			Context.Zones.Add(z);
 
 			// Modify the appliance, send patch and check result
 			//todo test null parameters
@@ -77,13 +84,13 @@ namespace Auluxa.WebApp.Tests
 					}
 				},
 			};
-			var resultPatch = await zonesController.Patch(z) as CreatedNegotiatedContentResult<Zone>;
+			var resultPatch = await Controller.Patch(z) as CreatedNegotiatedContentResult<Zone>;
 
 			Assert.IsNotNull(resultPatch);
 			AssertZonesAreEqual(resultPatch.Content, z);
 
 			// Get all appliances must return modified appliance
-			var resultGet = await zonesController.Get() as OkNegotiatedContentResult<List<Zone>>;
+			var resultGet = await Controller.Get() as OkNegotiatedContentResult<List<Zone>>;
 
 			Assert.IsNotNull(resultGet);
 			Assert.AreEqual(1, resultGet.Content.Count);
@@ -91,24 +98,20 @@ namespace Auluxa.WebApp.Tests
 		}
 
 		[Test]
-		public async Task ApplianceModel_DeleteTest()
+		public async Task ZoneController_DeleteTest()
 		{
-			var context = new TestDbContext();
 			Zone z = BuildTestZoneModel();
-			context.Zones.Add(z);
-
-			var zonesController = new ZoneController(new EfApplicationRepository { Context = context });
-			zonesController.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
+			Context.Zones.Add(z);
 
 			// Delete the appliance, send command and check result
-			var resultDelete = await zonesController.Delete(z.Id) as OkNegotiatedContentResult<Zone>;
+			var resultDelete = await Controller.Delete(z.Id) as OkNegotiatedContentResult<Zone>;
 
 			Assert.IsNotNull(resultDelete);
 			AssertZonesAreEqual(resultDelete.Content, z);
 
 			// Get all appliances must return empty set
 			//todo should we make sure related appliances are not deleted in the process?
-			var resultGet = await zonesController.Get() as OkNegotiatedContentResult<List<Zone>>;
+			var resultGet = await Controller.Get() as OkNegotiatedContentResult<List<Zone>>;
 
 			Assert.IsNotNull(resultGet);
 			Assert.AreEqual(0, resultGet.Content.Count);

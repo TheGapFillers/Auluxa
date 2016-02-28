@@ -33,7 +33,7 @@ namespace Auluxa.WebApp.Tests
 		}
 
 		[Test]
-		public void ApplyDefaultSettingsTest()
+		public void Appliance_ApplyDefaultSettingsTest()
 		{
 			Appliance.CurrentSetting = null;
 			Appliance.ApplyDefaultSettings();
@@ -48,7 +48,7 @@ namespace Auluxa.WebApp.Tests
 		}
 
 		[Test]
-		public void AreCurrentSettingsValidTest()
+		public void Appliance_AreCurrentSettingsValidTest()
 		{
 			Appliance.CurrentSetting = new Dictionary<string, string>
 			{

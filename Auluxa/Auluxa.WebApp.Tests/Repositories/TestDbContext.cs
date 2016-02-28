@@ -2,7 +2,6 @@
 using Auluxa.WebApp.Models;
 using Auluxa.WebApp.Repositories.Contexts;
 using System.Threading.Tasks;
-using Auluxa.WebApp.Tests.Repositories;
 
 namespace Auluxa.WebApp.Tests
 {
@@ -21,11 +20,10 @@ namespace Auluxa.WebApp.Tests
 
 		public TestDbContext()
 		{
-			Zones = new TestZoneDbSet();
-			ApplianceModels = new TestApplianceModelDbSet();
-			Appliances = new TestApplianceDbSet();
+			Zones = new TestDbSet<Zone>();
+			ApplianceModels = new TestDbSet<ApplianceModel>();
+			Appliances = new TestDbSet<Appliance>();
 		}
-
 
 		public async Task<int> SaveChangesAsync()
 		{
