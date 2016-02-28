@@ -215,3 +215,9 @@ FakesAssemblies/
 **/*.Server/GeneratedArtifacts
 **/*.Server/ModelManifest.xml
 _Pvt_Extensions
+
+# Frontend files
+Auluxa/Auluxa.WebApp/_frontend/**/*.js
+Auluxa/Auluxa.WebApp/_frontend/**/*.js.map
+Auluxa/Auluxa.WebApp/_frontend/node_modules/**/**
+Auluxa/Auluxa.WebApp/_frontend/typings/**/**
