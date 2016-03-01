@@ -221,3 +221,5 @@ Auluxa/Auluxa.Frontend/typings/**/**
 Auluxa/Auluxa.Frontend/node_modules/**/**
 Auluxa/Auluxa.Frontend/app/**/*.js
 Auluxa/Auluxa.Frontend/app/**/*.js.map
+Auluxa/Auluxa.Frontend/app_tutorial_tour_of_heroes/**/*.js
+Auluxa/Auluxa.Frontend/app_tutorial_tour_of_heroes/**/*.js.map

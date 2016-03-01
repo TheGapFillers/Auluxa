@@ -1,22 +1,50 @@
 ﻿<html>
+
 <head>
-    <title>Angular 2 QuickStart</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Angular 2 QuickStart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- 1. Load libraries -->
-    <!-- IE required polyfills, in this exact order -->
-    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+  <!-- 1. Load libraries -->
+  <!-- IE required polyfills, in this exact order -->
+  <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+  <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+  <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+  <script src="node_modules/rxjs/bundles/Rx.js"></script>
+  <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+  <script src="node_modules/angular2/bundles/router.dev.js"></script>
 
-    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="node_modules/angular2/bundles/router.dev.js"></script>
-    
-    <!-- 2. Configure SystemJS -->
-    <script>
-        System.config({
+  <!--template css-->
+  <link rel="apple-touch-icon" href="template/touch-icon-iphone.png" />
+  <link rel="apple-touch-icon" sizes="76x76" href="template/touch-icon-ipad.png" />
+  <link rel="apple-touch-icon" sizes="120x120" href="template/touch-icon-iphone-retina.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="template/touch-icon-ipad-retina.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="template/favicon.ico" />
+  <link rel="stylesheet" href="template/css/bootstrap/bootstrap.min.css" />
+  <link rel="stylesheet" href="template/css/font-awesome-4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+  <link rel="stylesheet" href="template/jquery-jvectormap-1.2.2/jquery-jvectormap-1.2.2.css" />
+  <link rel="stylesheet" href="template/css/helper.css" />
+  <link rel="stylesheet" href="template/css/style.css" />
+
+  <!-- --template scripts -->
+  <script src="template/js/jquery-1.11.3.min.js"></script>
+  <script src="template/js/jquery-ui.js"></script>
+  <script src="template/js/bootstrap.min.js"></script>
+  <!--<script src="template/amcharts/amcharts.js"></script>
+  <script src="template/amcharts/serial.js"></script>
+  <script src="template/amcharts/pie.js"></script>-->
+  <!--<script src="template/js/chart.js"></script>-->
+  <script src="template/js/map.js"></script>
+  <script src="template/jquery-jvectormap-1.2.2/jquery-jvectormap-1.2.2.min.js"></script>
+  <script src="template/jquery-jvectormap-1.2.2/jquery-jvectormap-us-aea-en.js"></script>
+  <!--<script src="template/js/main.js"></script>-->
+  <!--manually changed the main.js to remove some javascript errors -->
+  <script src="template/js/main_auluxa.js"></script>
+
+  <!-- 2. Configure SystemJS -->
+  <script>
+    System.config({
             packages: {
                 app: {
                     format: 'register',
@@ -26,15 +54,73 @@
         });
         System.import('app/main')
               .then(null, console.error.bind(console));
-    </script>
+  </script>
 
 </head>
-    <!--Start the angular router-->
-    <base href="/">
-    
+<!--Start the angular router-->
+<base href="/">
+
 <!-- 3. Display the application -->
+
+<header class="top-bar">
+  <a class="mobile-nav" href="#"><i class="pe-7s-menu"></i></a>
+  <div class="main-logo">Levo <span>Theme</span></div>
+  <input type="checkbox" id="s-logo" class="sw" />
+  <label class="switch switch--dark switch--header" for="s-logo"></label>
+
+  <div class="main-search">
+    <input type="text" placeholder="Search for task, goal &amp; review" id="msearch">
+    <label for="msearch">
+      <i class="pe-7s-search"></i>
+    </label>
+  </div>
+  <ul class="profile">
+    <li>
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="return false;" class="profile__user">
+        <figure class="pull-left rounded-image profile__img">
+          <img class="media-object" src="template/images/thumb0.jpg" alt="user">
+        </figure>
+        <span class="profile__name">
+						George <span>Smith</span> <i class="pe-7s-angle-down"></i>
+        </span>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a href="#"><i class="icon pe-7s-info pe-fw"></i> Edit Profile</a></li>
+        <li><a href="#"><i class="icon pe-7s-date pe-fw"></i> My Calendar</a></li>
+        <li><a href="login.html"><i class="icon pe-7s-close-circle pe-fw"></i> Log Out</a></li>
+      </ul>
+    </li>
+    <li class="profile--higlighted">
+      <span class="badge profile__badge badge--red">8</span>
+      <a class="dropdown-toggle" data-toggle="dropdown" onclick="return false;" href="#">
+        <i class="pe-7f-mail"></i>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a href="#"><i class="icon pe-7s-mail"></i> You have 8 unread messages</a></li>
+      </ul>
+    </li>
+    <li class="profile--higlighted">
+      <span class="badge profile__badge badge--red">5</span>
+      <a class="dropdown-toggle" data-toggle="dropdown" onclick="return false;" href="#">
+        <i class="pe-7f-drawer"></i>
+      </a>
+      <ul class="dropdown-menu pull-right">
+        <li><a href="#"><i class="icon pe-7s-drawer"></i> You have 5 new notifications</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <i class="pe-7f-config"></i>
+      </a>
+    </li>
+  </ul>
+
+</header>
+
 <body>
-    <my-app>Loading...</my-app>
+  <div class="wrapper">
+    <auluxa-app>Loading...</auluxa-app>
+  </div>
 </body>
 
 </html>
