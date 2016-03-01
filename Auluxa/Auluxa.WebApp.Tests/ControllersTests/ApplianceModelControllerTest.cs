@@ -43,6 +43,35 @@ namespace Auluxa.WebApp.Tests
 			AssertApplianceModelsAreEqual(result.Content[0], am);
 		}
 
+		[TestCase("", 0)]
+		[TestCase("0", 0)]
+		[TestCase("1", 1)]
+		[TestCase("1,2", 2)]
+		[TestCase("2,3", 1)]
+		public async Task ApplianceModelController_GetByIdTest(string ids, int expectedCount)
+		{
+			ApplianceModel am1 = BuildTestApplianceModel(1);
+			ApplianceModel am2 = BuildTestApplianceModel(2);
+
+			Context.ApplianceModels.Add(am1);
+			Context.ApplianceModels.Add(am2);
+
+			var result = await Controller.Get(ids) as OkNegotiatedContentResult<List<ApplianceModel>>;
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(expectedCount, result.Content.Count);
+		}
+
+		[Test]
+		public void ApplianceModelController_GetByIdTest_InvalidFormatMustThrow()
+		{
+			ApplianceModel am = BuildTestApplianceModel();
+			Context.ApplianceModels.Add(am);
+
+			//var ex = Assert.ThrowsAsync<FormatException>(async () => await Controller.Get("haha")); //NIY
+			Assert.That(async () => await Controller.Get("haha"), Throws.TypeOf<FormatException>());
+		}
+
 		[Test]
 		public async Task ApplianceModelController_PostTest()
 		{
@@ -97,11 +126,11 @@ namespace Auluxa.WebApp.Tests
 			Assert.AreEqual(0, resultGet.Content.Count);
 		}
 
-		private ApplianceModel BuildTestApplianceModel()
+		private ApplianceModel BuildTestApplianceModel(int id = 1)
 		{
 			return new ApplianceModel()
 			{
-				Id = 0, Category = "AC", BrandName = "Dyson", ModelName = "AC2000"
+				Id = id, Category = "AC", BrandName = "Dyson", ModelName = "AC2000"
 			};
 		}
 

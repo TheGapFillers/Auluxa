@@ -43,6 +43,34 @@ namespace Auluxa.WebApp.Tests
 			AssertZonesAreEqual(result.Content[0], z);
 		}
 
+		[TestCase("", 0)]
+		[TestCase("0", 0)]
+		[TestCase("1", 1)]
+		[TestCase("1,2", 2)]
+		[TestCase("2,3", 1)]
+		public async Task ZoneController_GetByIdTest(string ids, int expectedCount)
+		{
+			Zone z1 = BuildTestZoneModel(1);
+			Zone z2 = BuildTestZoneModel(2);
+			Context.Zones.Add(z1);
+			Context.Zones.Add(z2);
+
+			var result = await Controller.Get(ids) as OkNegotiatedContentResult<List<Zone>>;
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(expectedCount, result.Content.Count);
+		}
+
+		[Test]
+		public void ZoneController_GetByIdTest_InvalidFormatMustThrow()
+		{
+			Zone z = BuildTestZoneModel();
+			Context.Zones.Add(z);
+
+			//var ex = Assert.ThrowsAsync<FormatException>(async () => await Controller.Get("haha")); //NIY
+			Assert.That(async () => await Controller.Get("haha"), Throws.TypeOf<FormatException>());
+		}
+
 		[Test]
 		public async Task ZoneController_PostTest()
 		{
@@ -117,11 +145,11 @@ namespace Auluxa.WebApp.Tests
 			Assert.AreEqual(0, resultGet.Content.Count);
 		}
 
-		private Zone BuildTestZoneModel()
+		private Zone BuildTestZoneModel(int id = 1)
 		{
 			return new Zone()
 			{
-				Id = 0,
+				Id = id,
 				Name = "Area 51",
 				UserName = "Agent K",
 				Appliances = new List<Appliance>
