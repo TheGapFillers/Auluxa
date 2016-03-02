@@ -1,0 +1,36 @@
+<header class="top-bar">
+  <a class="mobile-nav" href="#"><i class="pe-7s-menu"></i></a>
+  <div class="main-logo">Auluxa <span> ver {{version}}</span></div>
+
+  <div class="main-search">
+    <ul class="profile" style="position: initial; line-height: 30px;">
+      <li>
+        <span class="profile__name">Account Type: <span> {{accountType}}</span>
+        </span>
+      </li>
+      <li style="margin-left: 52;">
+        <span class="profile__name">Account Status: <span> {{accountStatus}}</span>
+        </span>
+      </li>
+      <li style="margin-left: 52;">
+        <span class="profile__name">Coupon Code: <span> {{couponCode}}</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <ul class="profile">
+    <li>
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="return false;" class="profile__user">
+        <span class="profile__name">
+						{{firstName}} <span>{{lastName}}</span>
+
+        <i class="pe-7s-angle-down"></i>
+        </span>
+      </a>
+      <ul class="dropdown-menu pull-right" style="width: 100%;">
+        <li><a href="login.html"><i class="icon pe-7s-close-circle pe-fw"></i> Log Out</a></li>
+      </ul>
+    </li>
+  </ul>
+
+</header>
