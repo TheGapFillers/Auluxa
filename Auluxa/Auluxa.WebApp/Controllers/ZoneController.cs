@@ -16,6 +16,8 @@ namespace Auluxa.WebApp.Controllers
 	{
 		private readonly IApplicationRepository _repository;
 
+		public ZoneController() { }
+
 		/// <summary>
 		/// Constructor of the ZoneController
 		/// </summary>

@@ -136,8 +136,9 @@ namespace Auluxa.WebApp.Repositories
                 zoneToUpdate.Appliances = usedAppliances;
             }
             if (zone.Name != null) zoneToUpdate.Name = zone.Name;
+            if (zone.UserName != null) zoneToUpdate.UserName = zone.UserName;
 
-            await SaveAsync();
+			await SaveAsync();
             return zoneToUpdate;
         }
 
