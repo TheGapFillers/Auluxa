@@ -1,5 +1,4 @@
-﻿using Auluxa.WebApp.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
@@ -7,7 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Auluxa.WebApp.Tests
+namespace Auluxa.WebApp.Tests.Repositories
 {
 	public class TestDbSet<T> : DbSet<T>, IQueryable, IEnumerable<T>, IDbAsyncEnumerable<T>
 		where T : class
