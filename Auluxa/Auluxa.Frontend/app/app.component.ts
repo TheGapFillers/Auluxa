@@ -23,11 +23,11 @@ import { Shared_FooterComponent } from './shared/footer/shared_footer.component'
   ]
 })
 @RouteConfig([
-  { path: '/add-device', name: 'AddDeviceComponent', component: AddDeviceComponent },
+  { path: '/add-device/...', name: 'AddDevice', component: AddDeviceComponent },
   { path: '/dashboard', name: 'Dashboard', component: DashboardComponent, useAsDefault: true },
-  { path: '/device-list', name: 'DeviceList', component: DeviceListComponent },
+  { path: '/device-list/...', name: 'DeviceList', component: DeviceListComponent },
   { path: '/kranium', name: 'Kranium', component: KraniumComponent },
-  { path: '/user-settings', name: 'UserSettings', component: UserSettingsComponent }
+  { path: '/user-settings/...', name: 'UserSettings', component: UserSettingsComponent }
 ])
 
 export class AppComponent {

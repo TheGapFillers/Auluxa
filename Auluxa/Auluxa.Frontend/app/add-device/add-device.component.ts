@@ -1,11 +1,18 @@
-import { Component, OnInit } from 'angular2/core';
-import { Router } from 'angular2/router';
+import { Component } from 'angular2/core';
+import { RouteConfig, ROUTER_DIRECTIVES } from 'angular2/router';
+import { AuluxaComponent } from './auluxa/auluxa.component';
+import { ThirdPartyComponent } from './third-party/third-party.component';
 
 @Component({
-    selector: 'add-device',
-    templateUrl: './app/add-device/add-device.component.html'
+  selector: 'add-device',
+  template: `
+      <router-outlet></router-outlet>
+    `,
+  directives: [ROUTER_DIRECTIVES]
 })
-export class AddDeviceComponent {
-    constructor(
-      ) { }
-}
+@RouteConfig([
+  { path: '/auluxa', name: 'Auluxa', component: AuluxaComponent, useAsDefault: true },
+  { path: '/thirdparty', name: 'ThirdParty', component: ThirdPartyComponent }
+])
+
+export class AddDeviceComponent { }
