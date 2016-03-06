@@ -1,5 +1,4 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using Auluxa.WebApp.Models;
 using System.Data.Entity;
 using Auluxa.WebApp.Repositories.Contexts;

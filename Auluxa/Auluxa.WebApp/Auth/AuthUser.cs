@@ -11,6 +11,7 @@ namespace Auluxa.WebApp.Auth
     {
         public string ParentUserId { get; set; }
 
+        public string ChargeBeeSubscriptionId { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
 
 

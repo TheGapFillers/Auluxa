@@ -1,11 +1,17 @@
 ﻿using System.Reflection;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using Auluxa.WebApp.Auth;
 using Auluxa.WebApp.ErrorHandling;
 using Auluxa.WebApp.Repositories;
 using Auluxa.WebApp.Repositories.Contexts;
+using Auluxa.WebApp.Subscription;
 using Autofac;
 using Autofac.Integration.WebApi;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -25,7 +31,7 @@ namespace Auluxa.WebApp
         {
             // Web API configuration and services
             // Configure Web API to use only bearer token authentication.
-            //config.SuppressDefaultHostAuthentication();
+            config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
             // Use camel case for JSON data and remove XML support
@@ -66,6 +72,20 @@ namespace Auluxa.WebApp
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             // Register all the types to be abstracted / white labeled
+            // auth
+            builder.RegisterType<AuthDbContext>();
+            builder.RegisterType<AuthUserManager>().AsSelf().InstancePerRequest();
+            builder.RegisterType<AuthSignInManager>().AsSelf().InstancePerRequest();
+            builder.Register(c => new UserStore<AuthUser>(c.Resolve<AuthDbContext>())).AsImplementedInterfaces().InstancePerRequest();
+            builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).As<IAuthenticationManager>();
+            builder.Register(c => new IdentityFactoryOptions<AuthUserManager>
+            {
+                DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("Application​")
+            });
+
+            // subscription 
+            builder.RegisterType<ChargebeeSubscriptionRepository>().As<ISubscriptionRepository>();
+
             // Scene repository
             builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
             builder.RegisterType<EfApplicationRepository>().As<IApplicationRepository>().PropertiesAutowired();

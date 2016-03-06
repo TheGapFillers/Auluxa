@@ -39,7 +39,7 @@ namespace Auluxa.WebApp.Tests
 		}
 
 		[Test]
-		public void IsValidTest()
+		public void ApplianceSettings_IsValidTest()
 		{
 			ApplianceSetting.Setting = new Dictionary<string, string>
 			{

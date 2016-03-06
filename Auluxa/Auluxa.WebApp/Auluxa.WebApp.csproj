@@ -225,12 +225,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Auth\AuthController.cs" />
     <Compile Include="Auth\AuthDbContext.cs" />
     <Compile Include="Auth\AuthEmailService.cs" />
     <Compile Include="Auth\AuthSignInManager.cs" />

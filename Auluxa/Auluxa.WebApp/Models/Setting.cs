@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-
-namespace Auluxa.WebApp.Models
+﻿namespace Auluxa.WebApp.Models
 {
 	public class Setting
 	{
