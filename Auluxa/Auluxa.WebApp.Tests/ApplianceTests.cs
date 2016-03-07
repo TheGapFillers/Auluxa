@@ -1,6 +1,6 @@
 ﻿using System;
-using Auluxa.WebApp.Models;
 using System.Collections.Generic;
+using Auluxa.WebApp.Appliances.Models;
 using NUnit.Framework;
 
 namespace Auluxa.WebApp.Tests

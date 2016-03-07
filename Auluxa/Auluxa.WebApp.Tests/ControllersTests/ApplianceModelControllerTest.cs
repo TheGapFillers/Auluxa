@@ -1,13 +1,14 @@
-﻿using Auluxa.WebApp.Controllers;
-using Auluxa.WebApp.Models;
-using Auluxa.WebApp.Repositories;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
+using Auluxa.WebApp.Appliances.Controllers;
+using Auluxa.WebApp.Appliances.Models;
+using Auluxa.WebApp.Appliances.Repositories;
+using Auluxa.WebApp.Tests.Repositories;
+using NUnit.Framework;
 
-namespace Auluxa.WebApp.Tests
+namespace Auluxa.WebApp.Tests.ControllersTests
 {
 	[TestFixture]
 	public class ApplianceModelControllerTest
@@ -19,15 +20,15 @@ namespace Auluxa.WebApp.Tests
 		public void SetUp()
 		{
 			Context = new TestDbContext();
-			Controller = new ApplianceModelController(new EfApplicationRepository { Context = Context });
+			Controller = new ApplianceModelController(new EfApplianceRepository { Context = Context });
 			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
 		}
 
 		[TearDown]
 		public void TearDown()
 		{
-			if (Controller != null) { Controller.Dispose(); }
-			if (Context != null) { Context.Dispose(); }
+		    Controller?.Dispose();
+		    Context?.Dispose();
 		}
 
 		[Test]

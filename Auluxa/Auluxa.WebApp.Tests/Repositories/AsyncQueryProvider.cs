@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Auluxa.WebApp.Tests
+namespace Auluxa.WebApp.Tests.Repositories
 {
 	internal class TestDbAsyncQueryProvider<TEntity> : IDbAsyncQueryProvider
 	{

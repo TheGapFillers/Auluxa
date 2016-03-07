@@ -1,11 +1,19 @@
 ﻿using System.Data.Entity;
-using Auluxa.WebApp.Models;
-using Auluxa.WebApp.Repositories.Contexts;
 using System.Threading.Tasks;
+using Auluxa.WebApp.Appliances.Models;
+using Auluxa.WebApp.Appliances.Repositories;
+using Auluxa.WebApp.Kranium.Models;
+using Auluxa.WebApp.Kranium.Repositories;
+using Auluxa.WebApp.Scenes.Models;
+using Auluxa.WebApp.Scenes.Repositories;
+using Auluxa.WebApp.UserSettings.Models;
+using Auluxa.WebApp.UserSettings.Repositories;
+using Auluxa.WebApp.Zones.Models;
+using Auluxa.WebApp.Zones.Repositories;
 
-namespace Auluxa.WebApp.Tests
+namespace Auluxa.WebApp.Tests.Repositories
 {
-	public class TestDbContext : IApplicationDbContext
+	public class TestDbContext : IApplianceDbContext, IKraniumDbContext, ISceneDbContext, IUserSettingsDbContext, IZoneDbContext
 	{
 		public DbSet<Scene> Scenes { get; set; }
 		public DbSet<Sequence> Sequences { get; set; }
@@ -15,8 +23,8 @@ namespace Auluxa.WebApp.Tests
 		public DbSet<ApplianceSetting> ApplianceSettings { get; set; }
 		public DbSet<Zone> Zones { get; set; }
 		public DbSet<Trigger> Triggers { get; set; }
-		public DbSet<Setting> Settings { get; set; }
-		public DbSet<Kranium> Kranium { get; set; }
+		public DbSet<UserSetting> Settings { get; set; }
+		public DbSet<KraniumEntity> Kranium { get; set; }
 
 		public TestDbContext()
 		{

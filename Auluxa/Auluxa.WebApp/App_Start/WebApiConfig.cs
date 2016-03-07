@@ -2,11 +2,15 @@
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
+using Auluxa.WebApp.Appliances.Repositories;
+using Auluxa.WebApp.ApplicationContext;
 using Auluxa.WebApp.Auth;
 using Auluxa.WebApp.ErrorHandling;
-using Auluxa.WebApp.Repositories;
-using Auluxa.WebApp.Repositories.Contexts;
+using Auluxa.WebApp.Kranium.Repositories;
+using Auluxa.WebApp.Scenes.Repositories;
 using Auluxa.WebApp.Subscription;
+using Auluxa.WebApp.UserSettings.Repositories;
+using Auluxa.WebApp.Zones.Repositories;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -88,7 +92,11 @@ namespace Auluxa.WebApp
 
             // Scene repository
             builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
-            builder.RegisterType<EfApplicationRepository>().As<IApplicationRepository>().PropertiesAutowired();
+            builder.RegisterType<EfApplianceRepository>().As<IApplianceRepository>().PropertiesAutowired();
+            builder.RegisterType<EfKraniumRepository>().As<IKraniumRepository>().PropertiesAutowired();
+            builder.RegisterType<EfSceneRepository>().As<ISceneRepository>().PropertiesAutowired();
+            builder.RegisterType<EfUserSettingsRepository>().As<IUserSettingsRepository>().PropertiesAutowired();
+            builder.RegisterType<EfZoneRepository>().As<IZoneRepository>().PropertiesAutowired();
 
             // Build the container and set the dependency resolver of the config.
             IContainer container = builder.Build();
