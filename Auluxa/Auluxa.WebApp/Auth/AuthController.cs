@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using Auluxa.WebApp.Subscription;
 using Microsoft.AspNet.Identity;
 
 namespace Auluxa.WebApp.Auth

@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Auluxa.WebApp.Auth;
 using Microsoft.AspNet.Identity;
 
 namespace Auluxa.WebApp.Subscription
 {
-    [Authorize]
+    [AuluxaAuthorization(Roles = "Admin")]
     [RoutePrefix("subscription")]
     public class SubscriptionController : ApiController
     {
@@ -18,12 +19,19 @@ namespace Auluxa.WebApp.Subscription
             _subscriptionRepository = subscriptionRepository;
         }
 
+        [HttpGet]
+        [Route]
+        public async Task<IHttpActionResult> GetSubsriptionAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         [HttpPost]
         [Route]
-        public async Task<IHttpActionResult> SubscribeToPlan(string email, [FromBody]Subscription subscription)
+        public async Task<IHttpActionResult> SubscribeToPlanAsync([FromBody]Subscription subscription)
         {
             // Get the user
-            AuthUser user = await _userManager.FindByEmailAsync(email);
+            AuthUser user = await _userManager.FindByNameAsync(User.Identity.Name);
             if (user == null)
             {
                 ModelState.AddModelError("user", "This email has not been registered before.");

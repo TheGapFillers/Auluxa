@@ -233,6 +233,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Auth\AuluxaAuthorizationAttribute.cs" />
     <Compile Include="Auth\AuthController.cs" />
     <Compile Include="Auth\AuthDbContext.cs" />
     <Compile Include="Auth\AuthEmailService.cs" />
@@ -250,12 +251,14 @@
     <Compile Include="Subscription\ChargebeeSubscriptionRepository.cs" />
     <Compile Include="Subscription\Payment.cs" />
     <Compile Include="Subscription\Subscription.cs" />
+    <Compile Include="Subscription\SubscriptionController.cs" />
     <Compile Include="Subscription\SubscriptionRepository.cs" />
     <Compile Include="Subscription\SubscriptionType.cs" />
     <Compile Include="Appliances\Controllers\ApplianceController.cs" />
     <Compile Include="Appliances\Controllers\ApplianceModelController.cs" />
     <Compile Include="Scenes\Controllers\SceneController.cs" />
     <Compile Include="Kranium\Controllers\KraniumController.cs" />
+    <Compile Include="Tools\ArrayExtensions.cs" />
     <Compile Include="UserSettings\Controllers\UserSettingsController.cs" />
     <Compile Include="UserSettings\Repositories\EfUserSettingsRepository.cs" />
     <Compile Include="UserSettings\Repositories\IUserSettingsDbContext.cs" />
