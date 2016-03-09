@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.ExceptionHandling;
 using Auluxa.WebApp.Appliances.Repositories;
 using Auluxa.WebApp.ApplicationContext;
@@ -58,7 +59,7 @@ namespace Auluxa.WebApp
             config.EnsureInitialized();
 
             // Enables CORS
-            config.EnableCors();
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
 
             // Ensure initialization is correct
             config.EnsureInitialized();
