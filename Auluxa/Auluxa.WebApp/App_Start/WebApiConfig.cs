@@ -93,6 +93,12 @@ namespace Auluxa.WebApp
 
             // Scene repository
             builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IApplianceDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IKraniumDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<ISceneDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IZoneDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IUserSettingsDbContext>();
+
             builder.RegisterType<EfApplianceRepository>().As<IApplianceRepository>().PropertiesAutowired();
             builder.RegisterType<EfKraniumRepository>().As<IKraniumRepository>().PropertiesAutowired();
             builder.RegisterType<EfSceneRepository>().As<ISceneRepository>().PropertiesAutowired();
