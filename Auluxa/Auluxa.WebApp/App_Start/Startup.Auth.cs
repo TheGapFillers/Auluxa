@@ -4,6 +4,7 @@ using Auluxa.WebApp.Auth;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using Microsoft.Owin.Cors;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
 using Microsoft.Owin.Security.OAuth;
@@ -26,6 +27,9 @@ namespace Auluxa.WebApp
             appBuilder.CreatePerOwinContext(AuthDbContext.Create);
             appBuilder.CreatePerOwinContext<AuthUserManager>(AuthUserManager.Create);
             appBuilder.CreatePerOwinContext<AuthSignInManager>(AuthSignInManager.Create);
+
+            // Allow Cors
+            appBuilder.UseCors(CorsOptions.AllowAll);
 
             // Enable the application to use a cookie to store information for the signed in user
             appBuilder.UseCookieAuthentication(new CookieAuthenticationOptions
@@ -80,11 +84,6 @@ namespace Auluxa.WebApp
                 ClientId = "aaa",
                 ClientSecret = "aaa"
             });
-
-            // Web API configuration and services configuration
-            var config = new HttpConfiguration();
-            WebApiConfig.Register(config);
-            appBuilder.UseWebApi(config);
         }
     }
 }

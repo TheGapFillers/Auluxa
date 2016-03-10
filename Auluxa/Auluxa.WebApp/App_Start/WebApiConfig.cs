@@ -46,6 +46,9 @@ namespace Auluxa.WebApp
                 new StringEnumConverter { CamelCaseText = true });
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
+            // Enables CORS
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+
             // Set dependency injection
             SetAutofacContainer(config);
 
@@ -54,12 +57,6 @@ namespace Auluxa.WebApp
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
-            // Ensure initializations of config and starts to listen.
-            config.EnsureInitialized();
-
-            // Enables CORS
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
 
             // Ensure initialization is correct
             config.EnsureInitialized();
