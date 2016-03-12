@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Auluxa.WebApp.Subscription
 {
-    [RoutePrefix("subscription")]
+    [RoutePrefix("subscriptions")]
     public class SubscriptionController : ApiController
     {
         private readonly AuthUserManager _userManager;
