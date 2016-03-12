@@ -10,8 +10,9 @@ using Auluxa.WebApp.UserSettings.Models;
 using Auluxa.WebApp.UserSettings.Repositories;
 using Auluxa.WebApp.Zones.Models;
 using Auluxa.WebApp.Zones.Repositories;
+using Auluxa.WebApp.Tests.Repositories;
 
-namespace Auluxa.WebApp.Tests.Repositories
+namespace Auluxa.WebApp.Tests
 {
 	public class TestDbContext : IApplianceDbContext, IKraniumDbContext, ISceneDbContext, IUserSettingsDbContext, IZoneDbContext
 	{
