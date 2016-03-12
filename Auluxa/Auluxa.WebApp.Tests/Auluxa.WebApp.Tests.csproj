@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplianceSettingsTests.cs" />
+    <Compile Include="ControllersTests\BaseControllerTest.cs" />
     <Compile Include="Repositories\AsyncQueryProvider.cs" />
     <Compile Include="ApplianceTests.cs" />
     <Compile Include="Repositories\TestDbContext.cs" />
