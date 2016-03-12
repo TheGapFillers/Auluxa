@@ -20,7 +20,7 @@ namespace Auluxa.WebApp.Auth
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             // Enable Cors
-            context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
+            //context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
             // Get the user
             var userManager = context.OwinContext.GetUserManager<AuthUserManager>();

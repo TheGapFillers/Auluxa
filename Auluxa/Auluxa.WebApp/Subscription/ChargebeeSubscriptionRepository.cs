@@ -20,15 +20,30 @@ namespace Auluxa.WebApp.Subscription
                 default: throw new ArgumentOutOfRangeException();
             }
 
-            ChargeBee.Models.Subscription chargebeeSubscription = await Task.Run
-            (() => 
-                ChargeBee.Models.Subscription.Create()
-                    .PlanId(cbSubscriptionPlan)
-                    .CustomerEmail(user.Email)
-                    .CustomerFirstName(user.UserName)
-                    .CustomerPhone(user.PhoneNumber)
-                    .Request().Subscription
-            );
+            // create customer
+            ChargeBee.Models.Customer chargebeeCustomer = await Task.Run
+                (() =>
+                    ChargeBee.Models.Customer.Create()
+                        .Email(user.Email)
+                        .Request().Customer);
+
+            //ChargeBee.Models.Subscription chargebeeSubscription = await Task.Run
+            //(() =>
+            //    ChargeBee.Models.Subscription.Create()
+            //        .PlanId(cbSubscriptionPlan)
+            //        .CustomerEmail(chargebeeCustomer.Email)
+            //        .CustomerFirstName("John")
+            //      .CustomerLastName("Doe")
+            //      .CustomerPhone("+1-949-999-9999")
+            //      .BillingAddressFirstName("John")
+            //      .BillingAddressLastName("Doe")
+            //      .BillingAddressLine1("PO Box 9999")
+            //      .BillingAddressCity("Walnut")
+            //      .BillingAddressState("California")
+            //      .BillingAddressZip("91789")
+            //      .BillingAddressCountry("US")
+            //        .Request().Subscription
+            //);
 
             return subscription;
         }

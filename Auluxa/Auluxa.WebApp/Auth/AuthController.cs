@@ -17,17 +17,44 @@ namespace Auluxa.WebApp.Auth
 
         [AllowAnonymous]
         [HttpPost]
-        [Route("register")] 
-        public async Task<IHttpActionResult> RegisterAsync([FromBody]AuthUser authUser)
+        [Route("register")]
+        public async Task<IHttpActionResult> RegisterAsync([FromBody]AuthUserViewModel authUserViewModel)
         {
-            // create the user
-            IdentityResult result = await _userManager.CreateAsync(authUser);
-            if (result.Succeeded)
-                return Ok(result);
+            if (string.IsNullOrEmpty(authUserViewModel.Role))
+            {
+                ModelState.AddModelError("", "The role of the user is missing");
+                return BadRequest(ModelState);
+            }
 
-            foreach (string error in result.Errors)
-                ModelState.AddModelError(error, error);
-            return BadRequest(ModelState);
+            // transform view model to model
+            var userToCreate = new AuthUser
+            {
+                UserName = authUserViewModel.Email,
+                Email = authUserViewModel.Email,
+            };
+
+            // create the user
+            IdentityResult result = await _userManager.CreateAsync(userToCreate, authUserViewModel.Password);
+            if (!result.Succeeded)
+            {
+                foreach (string error in result.Errors)
+                    ModelState.AddModelError(error, error);
+                return BadRequest(ModelState);
+            }
+
+            // assign user to specific role
+            AuthUser createdUser = await _userManager.FindByEmailAsync(userToCreate.Email);
+            IdentityResult roleResult = await _userManager.AddToRolesAsync(createdUser.Id, authUserViewModel.Role);
+            if (!roleResult.Succeeded)
+            {
+                foreach (string error in result.Errors)
+                    ModelState.AddModelError(error, error);
+                return BadRequest(ModelState);
+            }
+
+
+
+            return Ok(result);
         }
     }
 }
