@@ -99,8 +99,8 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				["FunctionB"] = "FunctionBChoice2"
 			};
 
-			//todo test message "Invalid settings, must follow appliance model"
-			Assert.That(async () => await ModelController_PatchTest(a), Throws.TypeOf<Exception>());
+			var ex = Assert.ThrowsAsync<Exception>(async () => await ModelController_PatchTest(a));
+			Assert.AreEqual(ex.Message, "Invalid settings, must follow appliance model");
 		}
 
 		[Test]

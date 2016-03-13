@@ -64,8 +64,8 @@ namespace Auluxa.WebApp.Tests
 			TModel m = BuildTestModel();
 			ContextAdd(m);
 
-			//var ex = Assert.ThrowsAsync<FormatException>(async () => await Controller.Get("haha")); //NIY
-			Assert.That(async () => await ControllerGet("haha"), Throws.TypeOf<FormatException>());
+			var ex = Assert.ThrowsAsync<FormatException>(async () => await ControllerGet("haha"));
+			Assert.AreEqual(ex.Message, "Input string was not in a correct format.");
 		}
 
 		public async Task ModelController_PostTest()
