@@ -10,8 +10,18 @@ namespace Auluxa.WebApp.Tests
 	public abstract class BaseControllerTest<TModel, TController>
 		where TController : ApiController, IDisposable
 	{
+		public const string REQUEST_URI = "http://localhost:57776/api/models";
+
 		public TestDbContext Context { get; set; }
 		public TController Controller { get; set; }
+
+		public Func<TModel, TModel> ContextAdd { get; set; }
+		public Func<string, Task<IHttpActionResult>> ControllerGet { get; set; }
+		public Func<TModel, Task<IHttpActionResult>> ControllerPost { get; set; }
+		public Func<TModel, Task<IHttpActionResult>> ControllerPatch { get; set; }
+		public Func<int, Task<IHttpActionResult>> ControllerDelete { get; set; }
+
+		public BaseControllerTest() { }
 
 		public virtual void SetUp()
 		{
@@ -24,10 +34,10 @@ namespace Auluxa.WebApp.Tests
 			if (Context != null) { Context.Dispose(); }
 		}
 
-		public async Task ModelController_GetTest(Func<TModel, TModel> AddToContext, Func<string, Task<IHttpActionResult>> ControllerGet)
+		public async Task ModelController_GetTest()
 		{
 			TModel m = BuildTestModel();
-			AddToContext(m);
+			ContextAdd(m);
 
 			var result = await ControllerGet(null) as OkNegotiatedContentResult<List<TModel>>;
 
@@ -36,12 +46,12 @@ namespace Auluxa.WebApp.Tests
 			AssertModelsAreEqual(result.Content[0], m);
 		}
 
-		public async Task ModelController_GetIdTest(string ids, int expectedCount, Func<TModel, TModel> AddToContext, Func<string, Task<IHttpActionResult>> ControllerGet)
+		public async Task ModelController_GetIdTest(string ids, int expectedCount)
 		{
 			TModel m1 = BuildTestModel(1);
 			TModel m2 = BuildTestModel(2);
-			AddToContext(m1);
-			AddToContext(m2);
+			ContextAdd(m1);
+			ContextAdd(m2);
 
 			var result = await ControllerGet(ids) as OkNegotiatedContentResult<List<TModel>>;
 
@@ -49,16 +59,16 @@ namespace Auluxa.WebApp.Tests
 			Assert.AreEqual(expectedCount, result.Content.Count);
 		}
 
-		public void ModelController_GetByIdTest_InvalidFormatMustThrow(Func<TModel, TModel> AddToContext, Func<string, Task<IHttpActionResult>> ControllerGet)
+		public void ModelController_GetByIdTest_InvalidFormatMustThrow()
 		{
 			TModel m = BuildTestModel();
-			AddToContext(m);
+			ContextAdd(m);
 
 			//var ex = Assert.ThrowsAsync<FormatException>(async () => await Controller.Get("haha")); //NIY
 			Assert.That(async () => await ControllerGet("haha"), Throws.TypeOf<FormatException>());
 		}
 
-		public async Task ModelController_PostTest(Func<TModel, Task<IHttpActionResult>> ControllerPost)
+		public async Task ModelController_PostTest()
 		{
 			TModel m = BuildTestModel();
 
@@ -68,10 +78,10 @@ namespace Auluxa.WebApp.Tests
 			AssertModelsAreEqual(result.Content, m);
 		}
 
-		public async Task ModelController_PatchTest(TModel modifiedModel, Func<TModel, TModel> AddToContext, Func<string, Task<IHttpActionResult>> ControllerGet, Func<TModel, Task<IHttpActionResult>> ControllerPatch)
+		public async Task ModelController_PatchTest(TModel modifiedModel)
 		{
 			TModel m = BuildTestModel();
-			AddToContext(m);
+			ContextAdd(m);
 
 			var resultPatch = await ControllerPatch(modifiedModel) as CreatedNegotiatedContentResult<TModel>;
 
@@ -87,10 +97,10 @@ namespace Auluxa.WebApp.Tests
 			AssertModelsAreEqual(resultGet.Content[0], modifiedModel);
 		}
 
-		public async Task ModelController_DeleteTest(Func<TModel, int> GetModelIdentity, Func<TModel, TModel> AddToContext, Func<string, Task<IHttpActionResult>> ControllerGet, Func<int, Task<IHttpActionResult>> ControllerDelete)
+		public async Task ModelController_DeleteTest(Func<TModel, int> GetModelIdentity)
 		{
 			TModel m = BuildTestModel();
-			AddToContext(m);
+			ContextAdd(m);
 
 			int id = GetModelIdentity(m);
 			// Delete the model, send command and check result

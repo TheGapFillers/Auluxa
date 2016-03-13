@@ -1,47 +1,42 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using Auluxa.WebApp.Appliances.Controllers;
 using Auluxa.WebApp.Appliances.Models;
 using Auluxa.WebApp.Appliances.Repositories;
-using Auluxa.WebApp.Tests.Repositories;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Auluxa.WebApp.Tests.ControllersTests
 {
 	[TestFixture]
-	public class ApplianceModelControllerTest
+	public class ApplianceModelControllerTest : BaseControllerTest<ApplianceModel, ApplianceModelController>
 	{
-		public TestDbContext Context { get; set; }
-		public ApplianceModelController Controller { get; set; }
-
 		[SetUp]
-		public void SetUp()
+		public override void SetUp()
 		{
-			Context = new TestDbContext();
-			Controller = new ApplianceModelController(new EfApplianceRepository { Context = Context });
-			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
+			base.SetUp();
+			Controller = new ApplianceModelController(
+				new EfApplianceRepository { Context = Context }
+			);
+			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri(REQUEST_URI) };
+
+			ContextAdd = Context.ApplianceModels.Add;
+			ControllerGet = Controller.Get;
+			ControllerPost = Controller.Post;
+			ControllerPatch = Controller.Patch;
+			ControllerDelete = Controller.Delete;
 		}
 
 		[TearDown]
-		public void TearDown()
+		public override void TearDown()
 		{
-		    Controller?.Dispose();
-		    Context?.Dispose();
+			base.TearDown();
 		}
 
 		[Test]
 		public async Task ApplianceModelController_GetTest()
 		{
-			ApplianceModel am = BuildTestApplianceModel();
-			Context.ApplianceModels.Add(am);
-
-			var result = await Controller.Get() as OkNegotiatedContentResult<List<ApplianceModel>>;
-
-			Assert.IsNotNull(result);
-			Assert.AreEqual(1, result.Content.Count);
-			AssertApplianceModelsAreEqual(result.Content[0], am);
+			await ModelController_GetTest();
 		}
 
 		[TestCase("", 0)]
@@ -51,95 +46,65 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[TestCase("2,3", 1)]
 		public async Task ApplianceModelController_GetByIdTest(string ids, int expectedCount)
 		{
-			ApplianceModel am1 = BuildTestApplianceModel(1);
-			ApplianceModel am2 = BuildTestApplianceModel(2);
-
-			Context.ApplianceModels.Add(am1);
-			Context.ApplianceModels.Add(am2);
-
-			var result = await Controller.Get(ids) as OkNegotiatedContentResult<List<ApplianceModel>>;
-
-			Assert.IsNotNull(result);
-			Assert.AreEqual(expectedCount, result.Content.Count);
+			await ModelController_GetIdTest(ids, expectedCount);
 		}
 
 		[Test]
 		public void ApplianceModelController_GetByIdTest_InvalidFormatMustThrow()
 		{
-			ApplianceModel am = BuildTestApplianceModel();
-			Context.ApplianceModels.Add(am);
-
-			//var ex = Assert.ThrowsAsync<FormatException>(async () => await Controller.Get("haha")); //NIY
-			Assert.That(async () => await Controller.Get("haha"), Throws.TypeOf<FormatException>());
+			ModelController_GetByIdTest_InvalidFormatMustThrow();
 		}
 
 		[Test]
 		public async Task ApplianceModelController_PostTest()
 		{
-			ApplianceModel am = BuildTestApplianceModel();
-
-			var result = await Controller.Post(am) as CreatedNegotiatedContentResult<ApplianceModel>;
-
-			Assert.IsNotNull(result);
-			AssertApplianceModelsAreEqual(result.Content, am);
+			await ModelController_PostTest();
 		}
 
 		[Test]
 		public async Task ApplianceModelController_PatchTest()
 		{
-			ApplianceModel am = BuildTestApplianceModel();
-			Context.ApplianceModels.Add(am);
+			ApplianceModel am = BuildTestModel();
 
-			// Modify the appliance, send patch and check result
+			// Modify the ApplianceModel, send patch and check result
 			//todo test null parameters
 			am.Category = "SuperAC";
 			am.BrandName = "Midea";
 			am.ModelName = "AC3000";
-			var resultPatch = await Controller.Patch(am) as CreatedNegotiatedContentResult<ApplianceModel>;
+			am.PossibleSettings = new Dictionary<string, string[]>
+			{
+				["FunctionC"] = new[] { "FunctionCDefaultChoice", "FunctionCChoice2", "FunctionCChoice3" },
+				["FunctionD"] = new[] { "FunctionDDefaultChoice", "FunctionDChoice2", "FunctionDChoice3" }
+			};
 
-			Assert.IsNotNull(resultPatch);
-			AssertApplianceModelsAreEqual(resultPatch.Content, am);
-
-			// Get all appliances must return modified appliance
-			var resultGet = await Controller.Get() as OkNegotiatedContentResult<List<ApplianceModel>>;
-
-			Assert.IsNotNull(resultGet);
-			Assert.AreEqual(1, resultGet.Content.Count);
-			AssertApplianceModelsAreEqual(resultGet.Content[0], am);
+			await ModelController_PatchTest(am);
 		}
 
 		[Test]
 		public async Task ApplianceModelController_DeleteTest()
 		{
-			ApplianceModel am = BuildTestApplianceModel();
-			Context.ApplianceModels.Add(am);
-
-			// Delete the appliance, send command and check result
-			var resultDelete = await Controller.Delete(am.Id) as OkNegotiatedContentResult<ApplianceModel>;
-
-			Assert.IsNotNull(resultDelete);
-			AssertApplianceModelsAreEqual(resultDelete.Content, am);
-
-			// Get all appliances must return empty set
-			var resultGet = await Controller.Get() as OkNegotiatedContentResult<List<ApplianceModel>>;
-
-			Assert.IsNotNull(resultGet);
-			Assert.AreEqual(0, resultGet.Content.Count);
+			await ModelController_DeleteTest(am => am.Id);
 		}
 
-		private ApplianceModel BuildTestApplianceModel(int id = 1)
+		protected override ApplianceModel BuildTestModel(int id = 1)
 		{
 			return new ApplianceModel()
 			{
-				Id = id, Category = "AC", BrandName = "Dyson", ModelName = "AC2000"
+				Id = id, Category = "AC", BrandName = "Dyson", ModelName = "AC2000",
+				PossibleSettings = new Dictionary<string, string[]>
+				{
+					["FunctionA"] = new[] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
+					["FunctionB"] = new[] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
+				}
 			};
 		}
 
-		private void AssertApplianceModelsAreEqual(ApplianceModel expected, ApplianceModel actual)
+		protected override void AssertModelsAreEqual(ApplianceModel expected, ApplianceModel actual)
 		{
 			Assert.AreEqual(expected.Category, actual.Category);
 			Assert.AreEqual(expected.BrandName, actual.BrandName);
 			Assert.AreEqual(expected.ModelName, actual.ModelName);
+			Assert.AreEqual(expected.PossibleSettings, actual.PossibleSettings);
 		}
 	}
 }

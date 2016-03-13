@@ -19,7 +19,7 @@ namespace Auluxa.WebApp.Appliances.Models
 
 		public ApplianceModel Model { get; set; }
 
-		public Dictionary<string, string> CurrentSetting	//seems can't perform add operation
+		public Dictionary<string, string> CurrentSetting	//todo Should not be exposed directly for get. All operations will fail.
 		{
 			get { return SerializedSetting != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(SerializedSetting) : null; }
 			set { SerializedSetting = JsonConvert.SerializeObject(value); }

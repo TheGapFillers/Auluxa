@@ -21,7 +21,13 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				new EfZoneRepository { Context = Context },
 				new EfApplianceRepository { Context = Context }
 			);
-			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri("http://localhost:57776/api/models") };
+			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri(REQUEST_URI) };
+
+			ContextAdd = Context.Zones.Add;
+			ControllerGet = Controller.Get;
+			ControllerPost = Controller.Post;
+			ControllerPatch = Controller.Patch;
+			ControllerDelete = Controller.Delete;
 		}
 
 		[TearDown]
@@ -33,7 +39,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[Test]
 		public async Task ZoneController_GetTest()
 		{
-			await ModelController_GetTest(Context.Zones.Add, Controller.Get);
+			await ModelController_GetTest();
 		}
 
 		[TestCase("", 0)]
@@ -43,19 +49,19 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[TestCase("2,3", 1)]
 		public async Task ZoneController_GetByIdTest(string ids, int expectedCount)
 		{
-			await ModelController_GetIdTest(ids, expectedCount, Context.Zones.Add, Controller.Get);
+			await ModelController_GetIdTest(ids, expectedCount);
 		}
 
 		[Test]
 		public void ZoneController_GetByIdTest_InvalidFormatMustThrow()
 		{
-			ModelController_GetByIdTest_InvalidFormatMustThrow(Context.Zones.Add, Controller.Get);
+			ModelController_GetByIdTest_InvalidFormatMustThrow();
 		}
 
 		[Test]
 		public async Task ZoneController_PostTest()
 		{
-			await ModelController_PostTest(Controller.Post);
+			await ModelController_PostTest();
 		}
 
 		[Test]
@@ -63,38 +69,18 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		{
 			Zone z = BuildTestModel();
 
-			// Modify the appliance, send patch and check result
+			// Modify the Zone, send patch and check result
 			//todo test null parameters
 			z.Name = "Bermuda Triangle";
 			z.UserName = "Jack Sparrow";
-			z.Appliances = new List<Appliance>
-			{
-				new Appliance
-				{
-					Id = 1,
-					Name = "The Black Rock",
-					Model = new ApplianceModel()
-					{
-						Id = 0,
-						Category = "Sea Ship",
-						BrandName = "Unknown",
-						ModelName = "Black Rock"
-					},
-					CurrentSetting = new Dictionary<string, string>
-					{
-						["MaxSpeed"] = "60",
-						["Cannons"] = "30"
-					}
-				},
-			};
 
-			await ModelController_PatchTest(z, Context.Zones.Add, Controller.Get, Controller.Patch);
+			await ModelController_PatchTest(z);
 		}
 
 		[Test]
 		public async Task ZoneController_DeleteTest()
 		{
-			await ModelController_DeleteTest(z => z.Id, Context.Zones.Add, Controller.Get, Controller.Delete);
+			await ModelController_DeleteTest(z => z.Id);
 		}
 
 		protected override Zone BuildTestModel(int id = 1)
@@ -131,7 +117,6 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		{
 			Assert.AreEqual(expected.Name, actual.Name);
 			Assert.AreEqual(expected.UserName, actual.UserName);
-			//Assert.AreEqual(expected.Appliances, actual.Appliances);
 		}
 	}
 }
