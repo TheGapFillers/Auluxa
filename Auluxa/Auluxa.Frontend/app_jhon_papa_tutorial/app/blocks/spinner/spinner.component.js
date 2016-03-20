@@ -29,7 +29,7 @@ System.register(['angular2/core', './spinner.service'], function(exports_1, cont
                 }
                 SpinnerComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    componentHandler.upgradeDom();
+                    //componentHandler.upgradeDom();
                     this._spinnerStateChanged = this._spinnerService.spinnerState
                         .subscribe(function (state) { return _this.visible = state.show; });
                 };

@@ -1,8 +1,195 @@
-<h3>Top Heroes</h3>
-<div class="grid grid-pad">
-	<div class="col-1-4">
-		<div class="module hero">
-			<h4>kranium</h4>
-		</div>
-	</div>
+<header class="main-header clearfix">
+  <h1 class="main-header__title">
+					<i class="icon pe-7s-home"></i>
+					Kranium <small>Configuration</small>
+				</h1>
+</header>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <header class="widget__header">
+        <h3 class="widget__title">System Info</h3>
+      </header>
+
+      <div class="widget__content">
+        <dl class="dl-horizontal">
+          <dt>
+            <p>Name:</p>
+          </dt>
+          <dd>
+            <p><input type="text" style="line-height: 19px;width: 200px;" value="{{kranium.name}}"></p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>
+            <p>MAC adress:</p>
+          </dt>
+          <dd>
+            <p>{{kranium.macAddress ? kranium.macAddress : '...'}}</p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>
+            <p>Version:</p>
+          </dt>
+          <dd>
+            <p>{{kranium.version ? kranium.version : '...'}}</p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>
+            <p>IP:</p>
+          </dt>
+          <dd>
+            <p>{{kranium.ipAddress ? kranium.ipAddress : '...'}}</p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>
+            <p>ZigBee PANID:</p>
+          </dt>
+          <dd>
+            <p>{{kranium.zigBeePanId ? kranium.zigBeePanId : '...'}}</p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>
+            <p>ZigBee Channel:</p>
+          </dt>
+          <dd>
+            <p>{{kranium.zigBeeChannel ? kranium.zigBeeChannel : '...'}}</p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt>
+            <p>ZigBee MAC Adress:</p>
+          </dt>
+          <dd>
+            <p>{{kranium.zigBeeMacAddress ? kranium.zigBeeMacAddress : '...'}}</p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt></dt>
+          <dd>
+            <button type="button" class="btn btn-light btn-sm" style="margin-left: 0;">Save</button>
+          </dd>
+        </dl>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <header class="widget__header">
+        <h3 class="widget__title">System Date & Time</h3>
+      </header>
+
+      <div class="widget__content">
+        <dl class="dl-horizontal" style="margin: 2px 0;">
+          <dt>
+            <p>Date:</p>
+          </dt>
+          <dd>
+            <p>
+              <input type="date" style="line-height: 19px;width: 200px;">
+            </p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal" style="margin: 2px 0;">
+          <dt>
+            <p>Time:</p>
+          </dt>
+          <dd>
+            <p>
+              <input type="time" style="line-height: 19px;width: 200px;">
+            </p>
+          </dd>
+        </dl>
+        <dl class="dl-horizontal">
+          <dt></dt>
+          <dd>
+            <button type="button" class="btn btn-light btn-sm" style="margin-left: 0;">Save</button>
+          </dd>
+        </dl>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <header class="widget__header">
+        <h3 class="widget__title">Network Settings</h3>
+      </header>
+
+      <div class="widget__content">
+        <div>
+          <h5 class="widget__title" style="font-size: small;">Start Network</h5>
+          <dl class="dl-horizontal" style="margin: 2px 0;">
+            <dt>
+              <p>Channel:</p>
+            </dt>
+            <dd>
+              <p>
+                <select name="cars" style="border-color: silver; width: 200px;">
+                  <option value="volvo">Auto</option>
+                  <option value="saab">Saab</option>
+                  <option value="fiat">Fiat</option>
+                  <option value="audi">Audi</option>
+                </select>
+              </p>
+            </dd>
+          </dl>
+          <dl class="dl-horizontal" style="margin: 2px 0;">
+            <dt>
+              <p>Show Detail:</p>
+            </dt>
+            <dd>
+              <p>
+                ...
+              </p>
+            </dd>
+          </dl>
+          <dl class="dl-horizontal" style="margin: 2px 0;">
+            <dt></dt>
+            <dd>
+              <p>
+                <button type="button" class="btn btn-light btn-sm" style="margin-left: 0;">Start</button>
+              </p>
+            </dd>
+          </dl>
+        </div>
+        <div>
+          <h5 class="widget__title" style="font-size: small;">Change Channel</h5>
+          <dl class="dl-horizontal" style="margin: 2px 0;">
+            <dt>
+              <p>Channel:</p>
+            </dt>
+            <dd>
+              <p>
+                <select name="cars" style="border-color: silver; width: 200px;">
+                  <option value="volvo">11</option>
+                  <option value="saab">Saab</option>
+                  <option value="fiat">Fiat</option>
+                  <option value="audi">Audi</option>
+                </select>
+              </p>
+            </dd>
+          </dl>
+          <dl class="dl-horizontal" style="margin: 2px 0;">
+            <dt></dt>
+            <dd>
+              <p>
+                <button type="button" class="btn btn-light btn-sm" style="margin-left: 0;">Change</button>
+              </p>
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </article>
+  </div>
 </div>

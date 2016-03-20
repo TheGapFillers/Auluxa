@@ -12,6 +12,15 @@
     </li>
     <li class="main-nav--collapsible">
       <a class="main-nav__link" style="display: flex;">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> Add Device
+      </a>
+      <ul class="main-nav__submenu">
+        <li><a [routerLink]="['AddDevice', 'Auluxa']"><i class="pe-7s-help1"></i><span>Auluxa</span></a></li>
+        <li><a [routerLink]="['AddDevice', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
+      </ul>
+    </li>
+    <li class="main-nav--collapsible">
+      <a class="main-nav__link" style="display: flex;">
         <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> Device List
       </a>
       <ul class="main-nav__submenu">
@@ -28,20 +37,12 @@
     </li>
     <li class="main-nav--collapsible">
       <a class="main-nav__link" style="display: flex;">
-        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> Add Device
-      </a>
-      <ul class="main-nav__submenu">
-        <li><a [routerLink]="['AddDevice', 'Auluxa']"><i class="pe-7s-help1"></i><span>Auluxa</span></a></li>
-        <li><a [routerLink]="['AddDevice', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
-      </ul>
-    </li>
-    <li class="main-nav--collapsible">
-      <a class="main-nav__link" style="display: flex;">
         <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> User Settings
       </a>
       <ul class="main-nav__submenu">
         <li><a [routerLink]="['UserSettings', 'User']"><i class="pe-7s-help1"></i><span>User</span></a></li>
         <li><a [routerLink]="['UserSettings', 'Bill']"><i class="pe-7s-note"></i><span>Bill</span></a></li>
+        <li><a [routerLink]="['UserSettings', 'Store']"><i class="pe-7s-note"></i><span>Store</span></a></li>
       </ul>
     </li>
   </ul>

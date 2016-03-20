@@ -6,8 +6,8 @@ import { Router } from 'angular2/router';
   templateUrl: './app/shared/header/shared_header.component.html'
 })
 export class Shared_HeaderComponent {
-  public firstName = 'Dmints';
-  public lastName = 'Bambi';
+  public firstName = 'Ambroise';
+  public lastName = 'Coussin';
   public accountType = 'Admin';
   public accountStatus = 'Free';
   public couponCode = '1231233';

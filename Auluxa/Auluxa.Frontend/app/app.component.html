@@ -5,10 +5,12 @@
 <div class="wrapper">
   <!--the left sidebar with the navigation-->
   <shared_navigation></shared_navigation>
-  
-  <!--the content comming from the angular router-->
-  <router-outlet></router-outlet>
-  
-  <!--the footer-->
-  <shared_footer></shared_footer>
+
+  <section class="content">
+    <!--the content comming from the angular router-->
+    <router-outlet></router-outlet>
+
+    <!--the footer-->
+    <shared_footer></shared_footer>
+  </section>
 </div>
