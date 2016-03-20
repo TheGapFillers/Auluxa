@@ -1,27 +1,27 @@
 <aside class="sidebar">
   <ul class="main-nav">
-    <li class="main-nav--active">
+    <li [class]="getClasses('dashboard', false)">
       <a class="main-nav__link" style="display: flex;" [routerLink]="['Dashboard']" href="">
-        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-home"></i></span> Dashboard
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-home"></i></span> Dashboard
       </a>
     </li>
-    <li>
+    <li [class]="getClasses('kranium', false)">
       <a class="main-nav__link" style="display: flex;" [routerLink]="['Kranium']" href="">
-        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-edit"></i></span> Kranium
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-cogs"></i></span> Kranium
       </a>
     </li>
-    <li class="main-nav--collapsible">
+    <li [class]="getClasses('add-device', true)">
       <a class="main-nav__link" style="display: flex;">
-        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> Add Device
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-plus-square-o"></i></span> Add Device
       </a>
       <ul class="main-nav__submenu">
-        <li><a [routerLink]="['AddDevice', 'Auluxa']"><i class="pe-7s-help1"></i><span>Auluxa</span></a></li>
-        <li><a [routerLink]="['AddDevice', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
+         <li><a [routerLink]="['AddDevice', 'Auluxa']"><i class="pe-7s-help1"></i><span>Auluxa</span></a></li>
+         <li><a [routerLink]="['AddDevice', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
       </ul>
     </li>
-    <li class="main-nav--collapsible">
+    <li  [class]="getClasses('device-list', true)">
       <a class="main-nav__link" style="display: flex;">
-        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> Device List
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-cubes"></i></span> Device List
       </a>
       <ul class="main-nav__submenu">
         <li><a [routerLink]="['DeviceList', 'All']"><i class="pe-7s-help1"></i><span>All</span></a></li>
@@ -35,14 +35,14 @@
         <li><a [routerLink]="['DeviceList', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
       </ul>
     </li>
-    <li class="main-nav--collapsible">
+    <li   [class]="getClasses('user-settings', true)">
       <a class="main-nav__link" style="display: flex;">
-        <span class="main-nav__icon" style="display: list-item;"><i class="icon pe-7s-photo-gallery"></i></span> User Settings
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-users"></i></span> User Settings
       </a>
       <ul class="main-nav__submenu">
-        <li><a [routerLink]="['UserSettings', 'User']"><i class="pe-7s-help1"></i><span>User</span></a></li>
-        <li><a [routerLink]="['UserSettings', 'Bill']"><i class="pe-7s-note"></i><span>Bill</span></a></li>
-        <li><a [routerLink]="['UserSettings', 'Store']"><i class="pe-7s-note"></i><span>Store</span></a></li>
+         <li><a [routerLink]="['UserSettings', 'User']"><i class="pe-7s-help1"></i><span>User</span></a></li>
+         <li><a [routerLink]="['UserSettings', 'Bill']"><i class="pe-7s-note"></i><span>Bill</span></a></li>
+         <li><a [routerLink]="['UserSettings', 'Store']"><i class="pe-7s-note"></i><span>Store</span></a></li>
       </ul>
     </li>
   </ul>
