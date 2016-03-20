@@ -5,4 +5,5 @@ import { Router } from 'angular2/router';
   selector: 'third-party',
   templateUrl: './app/add-device/third-party/third-party.component.html'
 })
+
 export class ThirdPartyComponent { }

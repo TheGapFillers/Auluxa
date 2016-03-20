@@ -19,7 +19,7 @@
          <li><a [routerLink]="['AddDevice', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
       </ul>
     </li>
-    <li  [class]="getClasses('device-list', true)">
+    <li [class]="getClasses('device-list', true)">
       <a class="main-nav__link" style="display: flex;">
         <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-cubes"></i></span> Device List
       </a>
@@ -35,7 +35,7 @@
         <li><a [routerLink]="['DeviceList', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
       </ul>
     </li>
-    <li   [class]="getClasses('user-settings', true)">
+    <li [class]="getClasses('user-settings', true)">
       <a class="main-nav__link" style="display: flex;">
         <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-users"></i></span> User Settings
       </a>
@@ -44,6 +44,36 @@
          <li><a [routerLink]="['UserSettings', 'Bill']"><i class="pe-7s-note"></i><span>Bill</span></a></li>
          <li><a [routerLink]="['UserSettings', 'Store']"><i class="pe-7s-note"></i><span>Store</span></a></li>
       </ul>
+    </li>
+    <li [class]="getClasses('camera-settings', false)">
+      <a class="main-nav__link" style="display: flex;" [routerLink]="['CameraSettings']" href="">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-video-camera"></i></span> Camera Settings
+      </a>
+    </li>
+    <li [class]="getClasses('energy-settings', false)">
+      <a class="main-nav__link" style="display: flex;" [routerLink]="['EnergySettings']" href="">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-bolt"></i></span> Energy Settings
+      </a>
+    </li>
+    <li [class]="getClasses('image-library', false)">
+      <a class="main-nav__link" style="display: flex;" [routerLink]="['ImageLibrary']" href="">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-picture-o"></i></span> Image Library
+      </a>
+    </li>
+    <li [class]="getClasses('ir-library', false)">
+      <a class="main-nav__link" style="display: flex;" [routerLink]="['IRLibrary']" href="">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-television"></i></span> IR Library
+      </a>
+    </li>
+    <li [class]="getClasses('storage', false)">
+      <a class="main-nav__link" style="display: flex;" [routerLink]="['Storage']" href="">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-hdd-o"></i></span> Storage
+      </a>
+    </li>
+    <li [class]="getClasses('triggers', false)">
+      <a class="main-nav__link" style="display: flex;" [routerLink]="['Triggers']" href="">
+        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-wrench"></i></span> Triggers
+      </a>
     </li>
   </ul>
 </aside>

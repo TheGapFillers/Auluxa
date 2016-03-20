@@ -2,11 +2,11 @@ import { Component, OnInit } from 'angular2/core';
 import { Router } from 'angular2/router';
 
 @Component({
-    selector: 'dashboard',
-    templateUrl: './app/dashboard/dashboard.component.html'
+    selector: 'triggers',
+    templateUrl: './app/triggers/triggers.component.html'
 })
 
-export class DashboardComponent {
+export class TriggersComponent {
     constructor(
       ) { }
 }

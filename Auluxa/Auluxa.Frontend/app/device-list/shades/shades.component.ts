@@ -5,4 +5,5 @@ import { Router } from 'angular2/router';
   selector: 'shades',
   templateUrl: './app/device-list/shades/shades.component.html'
 })
+
 export class ShadesComponent { }
