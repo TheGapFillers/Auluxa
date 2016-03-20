@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.ExceptionHandling;
 using Auluxa.WebApp.Appliances.Repositories;
 using Auluxa.WebApp.ApplicationContext;
@@ -45,6 +46,9 @@ namespace Auluxa.WebApp
                 new StringEnumConverter { CamelCaseText = true });
             config.Formatters.Remove(config.Formatters.XmlFormatter);
 
+            // Enables CORS
+            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+
             // Set dependency injection
             SetAutofacContainer(config);
 
@@ -53,12 +57,6 @@ namespace Auluxa.WebApp
 
             // Web API routes
             config.MapHttpAttributeRoutes();
-
-            // Ensure initializations of config and starts to listen.
-            config.EnsureInitialized();
-
-            // Enables CORS
-            config.EnableCors();
 
             // Ensure initialization is correct
             config.EnsureInitialized();
@@ -92,6 +90,12 @@ namespace Auluxa.WebApp
 
             // Scene repository
             builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IApplianceDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IKraniumDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<ISceneDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IZoneDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IUserSettingsDbContext>();
+
             builder.RegisterType<EfApplianceRepository>().As<IApplianceRepository>().PropertiesAutowired();
             builder.RegisterType<EfKraniumRepository>().As<IKraniumRepository>().PropertiesAutowired();
             builder.RegisterType<EfSceneRepository>().As<ISceneRepository>().PropertiesAutowired();

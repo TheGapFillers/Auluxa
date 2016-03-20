@@ -6,8 +6,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Auluxa.WebApp.Subscription
 {
-    [AuluxaAuthorization(Roles = "Admin")]
-    [RoutePrefix("subscription")]
+    [RoutePrefix("subscriptions")]
     public class SubscriptionController : ApiController
     {
         private readonly AuthUserManager _userManager;
@@ -19,26 +18,34 @@ namespace Auluxa.WebApp.Subscription
             _subscriptionRepository = subscriptionRepository;
         }
 
+        [AuluxaAuthorization]
         [HttpGet]
         [Route]
         public async Task<IHttpActionResult> GetSubsriptionAsync()
         {
-            throw new NotImplementedException();
+            AuthUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (string.IsNullOrEmpty(user.ParentUserId))
+                return Ok(Subscription.FromType(user.SubscriptionType));
+
+            AuthUser parentUser = await _userManager.FindByIdAsync(user.ParentUserId);
+            return Ok(Subscription.FromType(parentUser.SubscriptionType));
         }
 
+        [AuluxaAuthorization(Roles = "Admin")]
         [HttpPost]
-        [Route]
-        public async Task<IHttpActionResult> SubscribeToPlanAsync([FromBody]Subscription subscription)
+        [Route("subscribe")]
+        public async Task<IHttpActionResult> SubscribeToPlanAsync([FromBody]SubscriptionViewModel subscriptionViewModel)
         {
             // Get the user
             AuthUser user = await _userManager.FindByNameAsync(User.Identity.Name);
             if (user == null)
             {
-                ModelState.AddModelError("user", "This email has not been registered before.");
+                ModelState.AddModelError("", "This email has not been registered before.");
                 return BadRequest(ModelState);
             }
 
             // subscribe the user to a new plan
+            Subscription subscription = Subscription.FromType(subscriptionViewModel.SubscriptionType);
             Subscription createdSubscription = await _subscriptionRepository.SubscribeToPlanAsync(
                 user, subscription);
 
