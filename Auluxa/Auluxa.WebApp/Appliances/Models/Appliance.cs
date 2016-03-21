@@ -3,22 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using Auluxa.WebApp.Zones.Models;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Auluxa.WebApp.Appliances.Models
 {
 	public class Appliance
 	{
 		public int Id { get; set; }
+		/// <summary>
+		/// Appliance's owner
+		/// </summary>
 		[JsonIgnore]
+		[Required]
 		public string UserName { get; set; }
-		public string Name { get; set; }
-		public string ZoneName => Zone?.Name;
 
-		[JsonIgnore]
+		/// <summary>
+		/// Appliance's name
+		/// </summary>
+		[Required]
+		public string Name { get; set; }
+
+		/// <summary>
+		/// Appliance's Zone. When creating or editing Appliance, must give an existing Zone identified by its Id, all other Zone attributes will be ignored.
+		/// </summary>
 		public Zone Zone { get; set; }
 
+		/// <summary>
+		/// Appliance's Model. When creating or editing Appliance, must give an existing ApplianceModel identified by its Id, all other ApplianceModel attributes will be ignored.
+		/// </summary>
+		[Required]
 		public ApplianceModel Model { get; set; }
 
+		/// <summary>
+		/// Appliance's settings. If not set, ApplianceModel's default settings will be applied.
+		/// Of type Dictionary[string, string]
+		/// </summary>
 		public Dictionary<string, string> CurrentSetting	//todo Should not be exposed directly for get. All operations will fail.
 		{
 			get { return SerializedSetting != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(SerializedSetting) : null; }
@@ -27,6 +46,11 @@ namespace Auluxa.WebApp.Appliances.Models
 
 		[JsonIgnore]
 		public string SerializedSetting { get; set; }
+
+		/// <summary>
+		/// Appliance's Zone's name. When creating or editing Appliance, will be ignored.
+		/// </summary>
+		public string ZoneName => Zone?.Name;
 
 		public void ApplyDefaultSettings()
 		{
@@ -60,5 +84,9 @@ namespace Auluxa.WebApp.Appliances.Models
 
 			return true;
 		}
+
+
+
+		public bool ShouldSerializeZones() { return false; }
 	}
 }

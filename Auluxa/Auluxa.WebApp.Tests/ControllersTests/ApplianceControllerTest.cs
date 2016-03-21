@@ -92,6 +92,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			// Modify the ApplianceModel, send patch and check result
 			//todo test null parameters
 			a.Name = "ApplianceUpdated";
+			a.UserName = "Mr. Smith";
 			a.Model = GetMockApplianceModel(2);
 			a.CurrentSetting = new Dictionary<string, string>
 			{
@@ -115,6 +116,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			{
 				Id = id,
 				Name = "Appliance1",
+				UserName = "Mr. Bean",
 				Model = GetMockApplianceModel(1),
 				CurrentSetting = new Dictionary<string, string>
 				{
@@ -127,6 +129,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		protected override void AssertModelsAreEqual(Appliance expected, Appliance actual)
 		{
 			Assert.AreEqual(expected.Name, actual.Name);
+			Assert.AreEqual(expected.UserName, actual.UserName);
 			Assert.AreEqual(JsonConvert.SerializeObject(expected.Model), JsonConvert.SerializeObject(actual.Model));
 			Assert.AreEqual(expected.CurrentSetting, actual.CurrentSetting);
 		}
