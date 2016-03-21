@@ -8,3 +8,17 @@
 .dl-input-spacing{
   margin: 2px 0;
 }
+
+.stat__number strong{
+  color: #66cccc;
+  font-size: x-large;
+}
+
+.bolder{
+  color: #66cccc;
+  font-weight: bold;
+}
+
+.addColor{
+  color: #66cccc!important;
+}
