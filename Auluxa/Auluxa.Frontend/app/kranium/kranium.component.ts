@@ -19,6 +19,12 @@ export class KraniumComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.kranium = this._kraniumService.getKranium();
+    this.getKRanium();
+  }
+  
+  getKRanium(){
+    this._kraniumService.getKranium()
+                     .subscribe(
+                       kranium => this.kranium = kranium);
   }
 }

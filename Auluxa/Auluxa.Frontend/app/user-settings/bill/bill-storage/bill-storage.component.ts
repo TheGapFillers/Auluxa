@@ -3,9 +3,9 @@ import { Component, OnInit } from 'angular2/core';
 import { Router } from 'angular2/router';
 
 @Component({
-  selector: 'bill',
-  templateUrl: './app/user-settings/bill/bill.component.html',
+  selector: 'bill-storage',
+  templateUrl: './app/user-settings/bill/bill-storage/bill-storage.component.html',
   directives: [ROUTER_DIRECTIVES]
 })
 
-export class BillComponent { }
+export class BillStorageComponent { }
