@@ -5,6 +5,8 @@ using System.Web.Http;
 using Auluxa.WebApp.Appliances.Models;
 using Auluxa.WebApp.Appliances.Repositories;
 using Auluxa.WebApp.Helpers;
+using Auluxa.WebApp.Zones.Repositories;
+using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.Appliances.Controllers
 {
@@ -15,14 +17,16 @@ namespace Auluxa.WebApp.Appliances.Controllers
 	public class ApplianceController : ApiController
 	{
 		private readonly IApplianceRepository _repository;
+		//private readonly IZoneRepository _zoneRepository;
 
 		/// <summary>
 		/// Constructor of the ApplianceController
 		/// </summary>
 		/// <param name="repository">Injected by DI</param>
-		public ApplianceController(IApplianceRepository repository)
+		public ApplianceController(IApplianceRepository repository/*, IZoneRepository zoneRepository*/)
 		{
 			_repository = repository;
+			//_zoneRepository = zoneRepository;
 		}
 
 		/// <summary>
@@ -70,7 +74,14 @@ namespace Auluxa.WebApp.Appliances.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
+			//if (appliance.Zone != null)
+			//{
+			//	Zone usedZone = (await _zoneRepository.GetZonesAsync(new List<int> { appliance.Zone.Id })).First();
+			//	appliance.Zone = usedZone;
+			//}
+
 			Appliance updatedAppliance = await _repository.UpdateApplianceAsync(appliance);
+
 			return Created(Request.RequestUri, updatedAppliance);
 		}
 

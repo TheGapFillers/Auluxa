@@ -65,6 +65,7 @@ function testAppliances() {
 	{
 		"Name": "Lockpad",
 		"UserName": "TestUser"
+		
 	}
 	'
 	$newAppliance = Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/appliances/ -Body $newAppliance -ContentType "application/json"

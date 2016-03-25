@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Auluxa.WebApp.Appliances.Models;
 using Auluxa.WebApp.Zones.Models;
+using Auluxa.WebApp.Zones.Repositories;
 
 namespace Auluxa.WebApp.Appliances.Repositories
 {
 	public class EfApplianceRepository : IApplianceRepository
 	{
 		public IApplianceDbContext Context { get; set; }
+		public IZoneDbContext ZoneContext { get; set; }
 
 		public async Task<IEnumerable<Appliance>> GetAppliancesAsync(IEnumerable<int> ids = null)
 		{
@@ -26,6 +28,21 @@ namespace Auluxa.WebApp.Appliances.Repositories
 				.ToListAsync();
 
 			return appliances;
+		}
+
+		public async Task<IEnumerable<Zone>> GetZonesAsync(IEnumerable<int> ids = null)
+		{
+			List<int> idList = ids?.ToList();
+			IQueryable<Zone> query = ZoneContext.Zones;
+
+			if (idList != null)
+				query = ZoneContext.Zones.Where(z => idList.Contains(z.Id));
+
+			IEnumerable<Zone> zones = await query
+				.Include(z => z.Appliances)
+				.ToListAsync();
+
+			return zones;
 		}
 
 		public async Task<Appliance> CreateApplianceAsync(Appliance appliance)
@@ -67,14 +84,14 @@ namespace Auluxa.WebApp.Appliances.Repositories
 				applianceToUpdate.Model = usedModel;
 			}
 
-			//if (appliance.Zone != null)
-			//{
-			//	Zone usedZone = (await GetZonesAsync(new[] { appliance.Zone.Id })).SingleOrDefault();
-			//	if (usedZone != null)
-			//	{
-			//		applianceToUpdate.Zone = usedZone;
-			//	}
-			//}
+			if (appliance.Zone != null)
+			{
+				Zone usedZone = (await GetZonesAsync(new[] { appliance.Zone.Id })).SingleOrDefault();
+				if (usedZone == null)
+					return null;
+
+				applianceToUpdate.Zone = usedZone;
+			}
 
 			if (appliance.CurrentSetting != null)
 			{
@@ -84,6 +101,7 @@ namespace Auluxa.WebApp.Appliances.Repositories
 				applianceToUpdate.CurrentSetting = appliance.CurrentSetting;
 			}
 
+			//if (appliance.Zone != null) applianceToUpdate.Zone = appliance.Zone;
 			if (appliance.Name != null) applianceToUpdate.Name = appliance.Name;
 			if (appliance.UserName != null) applianceToUpdate.UserName = appliance.UserName;
 
