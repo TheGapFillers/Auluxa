@@ -1,8 +1,22 @@
 <header class="top-bar">
-  <a class="mobile-nav" href="#"><i class="pe-7s-menu"></i></a>
+  <div class="mobile-nav">
+    <ul class="profile nav-profile" style="position: initial;">
+      <li>
+        <a style="margin-top: 25px;" class="dropdown-toggle" data-toggle="dropdown" href="#" onclick="return false;" class="profile__user">
+          <span class="">
+						<i class="pe-7s-menu"></i>
+          </span>
+        </a>
+        <ul class="dropdown-menu pull-right" style="width: 100%; right: initial; margin-top: -25px;">
+          <li><a href="login.html"><i class="icon pe-7s-close-circle pe-fw"></i> Log Out</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
   <div class="main-logo">Auluxa <span> ver {{version}}</span></div>
 
-  <div class="main-search">
+  <div class="main-search" style="padding-left: 38px;">
     <ul class="profile" style="position: initial; line-height: 30px;">
       <li>
         <span class="profile__name">Account Type: <span> {{accountType}}</span>
@@ -32,5 +46,4 @@
       </ul>
     </li>
   </ul>
-
 </header>

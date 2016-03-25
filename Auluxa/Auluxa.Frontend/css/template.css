@@ -4665,10 +4665,18 @@ label[for=uploader]:after {
   .main-stats > div:last-child {
     border-bottom: 1px solid #e5e5e5;
   }
+  
+  .main-search{
+    display: none;
+  }
 }
 @media (max-width: 1024px) {
   /* line 19, ../sass/partials/_responsive.scss */
   .main-header__date span, .main-header__date i:first-child {
+    display: none;
+  }
+  
+  .main-search{
     display: none;
   }
 
@@ -4680,6 +4688,10 @@ label[for=uploader]:after {
 @media (max-width: 995px) {
   /* line 28, ../sass/partials/_responsive.scss */
   .sidebar {
+    display: none;
+  }
+  
+  .main-search{
     display: none;
   }
 
@@ -4736,21 +4748,6 @@ label[for=uploader]:after {
     text-align: center;
   }
 
-  /* line 67, ../sass/partials/_responsive.scss */
-  .profile {
-    padding-right: 0px;
-  }
-
-  /* line 70, ../sass/partials/_responsive.scss */
-  .profile__name {
-    display: none;
-  }
-
-  /* line 71, ../sass/partials/_responsive.scss */
-  .profile__img {
-    margin-right: 0;
-  }
-
   /* line 72, ../sass/partials/_responsive.scss */
   .main-search input {
     width: 105px;
@@ -4777,6 +4774,14 @@ label[for=uploader]:after {
   .mobile-nav {
     display: inline-block;
   }
+  
+    /* line 142, ../sass/partials/_responsive.scss */
+  .content {
+    margin-left: 0;
+    padding-right: 23px;
+    padding-left: 23px;
+      margin-top: -2px;
+  }
 }
 @media (max-width: 767px) {
   /* line 88, ../sass/partials/_responsive.scss */
@@ -4788,7 +4793,8 @@ label[for=uploader]:after {
   .main-logo {
     margin-left: 20px;
   }
-
+  
+  
   /* line 90, ../sass/partials/_responsive.scss */
   .number-entries .ui-spinner, .widget__header .dropdown {
     display: none;
@@ -4809,8 +4815,31 @@ label[for=uploader]:after {
   .mobile-nav {
     display: inline-block;
   }
+  
+    /* line 142, ../sass/partials/_responsive.scss */
+  .content {
+    margin-left: 0;
+    padding-right: 23px;
+    padding-left: 23px;   
+     margin-top: -2px;
+  }
+    
+  /* line 67, ../sass/partials/_responsive.scss */
+  .profile {
+    padding-right: 0px;
+  }
+
+  /* line 70, ../sass/partials/_responsive.scss */
+  .profile__name {
+    display: none;
+  }
+
+  /* line 71, ../sass/partials/_responsive.scss */
+  .profile__img {
+    margin-right: 0;
+  }
 }
-@media (max-width: 480px) {
+@media (max-width: 480px) { 
   /* line 100, ../sass/partials/_responsive.scss */
   .top-bar, .sidebar {
     position: absolute;
@@ -4893,8 +4922,8 @@ label[for=uploader]:after {
   .content {
     margin-left: 0;
     padding-right: 23px;
-    padding-left: 23px;
-    margin-top: 72px;
+    padding-left: 23px;    
+    margin-top: 73px;
   }
 
   /* line 148, ../sass/partials/_responsive.scss */

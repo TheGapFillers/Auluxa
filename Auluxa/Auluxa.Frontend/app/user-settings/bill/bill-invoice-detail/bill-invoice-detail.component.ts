@@ -10,7 +10,6 @@ import { Router } from 'angular2/router';
 
 export class BillInvoiceDetailComponent {
   public type: string;
-  public parentRoute: string;
 
   constructor(
     private _router: Router,
@@ -18,7 +17,6 @@ export class BillInvoiceDetailComponent {
 
   ngOnInit() {
     this.type = this._routeParams.get('type');
-    this.parentRoute = 'Bill_' + this.type;
     let id = this._routeParams.get('id');
   }
 }
