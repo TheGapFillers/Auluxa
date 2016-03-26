@@ -32,7 +32,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// <summary>
 		/// Get appliances (all or only requested)
 		/// </summary>
-		/// <param name="ids">comma-separated ids.</param>
+		/// <param name="ids">comma-separated ids. If not specified, will return all available appliances.</param>
 		/// <returns></returns>
 		[Route("")]
 		[HttpGet]
@@ -49,7 +49,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// <summary>
 		/// Create a new appliance.
 		/// </summary>
-		/// <param name="appliance"></param>
+		/// <param name="appliance">Give an appliance with all required properties. Id will be ignored.</param>
 		/// <returns></returns>
 		[HttpPost]
 		[Route()]
@@ -65,7 +65,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// <summary>
 		/// Update an existing appliance.
 		/// </summary>
-		/// <param name="appliance"></param>
+		/// <param name="appliance">Must specify the Id of the appliance to be updated, and only properties to change</param>
 		/// <returns></returns>
 		[HttpPatch]
 		[Route()]

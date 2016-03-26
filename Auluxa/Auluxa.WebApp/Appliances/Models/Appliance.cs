@@ -32,7 +32,9 @@ namespace Auluxa.WebApp.Appliances.Models
 
 		/// <summary>
 		/// Appliance's settings. If not set, ApplianceModel's default settings will be applied.
-		/// Of type Dictionary[string, string]
+		/// Format: Dictionary[string, string] where Key is setting's name, and Value is setting's value.
+		/// Warning: Key and Value must exist in ApplianceModel's PossibleSettings
+		/// (e.g. [['Fan', 'Off'], ['AC', 'Auto']])
 		/// </summary>
 		public Dictionary<string, string> CurrentSetting	//todo Should not be exposed directly for get. All operations will fail.
 		{
