@@ -100,8 +100,7 @@ namespace Auluxa.WebApp.Appliances.Repositories
 
 				applianceToUpdate.CurrentSetting = appliance.CurrentSetting;
 			}
-
-			//if (appliance.Zone != null) applianceToUpdate.Zone = appliance.Zone;
+			
 			if (appliance.Name != null) applianceToUpdate.Name = appliance.Name;
 			if (appliance.UserName != null) applianceToUpdate.UserName = appliance.UserName;
 

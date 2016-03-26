@@ -6,6 +6,7 @@ using Auluxa.WebApp.Appliances.Repositories;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.Tests.ControllersTests
 {
@@ -17,7 +18,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		{
 			base.SetUp();
 			Controller = new ApplianceController(
-				new EfApplianceRepository { Context = Context }
+				new EfApplianceRepository { Context = Context, ZoneContext = Context }
 			);
 			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri(REQUEST_URI) };
 
@@ -30,6 +31,8 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			// Fill context with required mock data
 			Context.ApplianceModels.Add(GetMockApplianceModel(1));
 			Context.ApplianceModels.Add(GetMockApplianceModel(2));
+			Context.Zones.Add(GetMockZone(1));
+			Context.Zones.Add(GetMockZone(2));
 		}
 
 		[TearDown]
@@ -75,6 +78,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			//todo test null parameters
 			a.Name = "ApplianceUpdated";
 			a.Model = GetMockApplianceModel(2);
+			a.Zone = GetMockZone(2);
 			a.CurrentSetting = new Dictionary<string, string>
 			{
 				["FunctionA"] = "FunctionADefaultChoice",
@@ -117,12 +121,14 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				Id = id,
 				Name = "Appliance1",
 				UserName = "Mr. Bean",
+				Zone = GetMockZone(1),
 				Model = GetMockApplianceModel(1),
 				CurrentSetting = new Dictionary<string, string>
 				{
 					["FunctionA"] = "FunctionAChoice2",
 					["FunctionB"] = "FunctionBChoice3"
 				}
+				
 			};
 		}
 
@@ -131,6 +137,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			Assert.AreEqual(expected.Name, actual.Name);
 			Assert.AreEqual(expected.UserName, actual.UserName);
 			Assert.AreEqual(JsonConvert.SerializeObject(expected.Model), JsonConvert.SerializeObject(actual.Model));
+			Assert.AreEqual(JsonConvert.SerializeObject(expected.Zone), JsonConvert.SerializeObject(actual.Zone));
 			Assert.AreEqual(expected.CurrentSetting, actual.CurrentSetting);
 		}
 
@@ -161,6 +168,24 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 					["FunctionA"] = new[] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
 					["FunctionB"] = new[] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
 				}
+			};
+		}
+
+		private Zone GetMockZone(int id)
+		{
+			if (id == 1)
+				return new Zone()
+				{
+					Id = 1,
+					Name = "Bed Room",
+					UserName = "Serge"
+				};
+
+			return new Zone()
+			{
+				Id = 2,
+				Name = "Living Room",
+				UserName = "Marcel"
 			};
 		}
 	}
