@@ -4,7 +4,7 @@ using System.Web.Http;
 using NUnit.Framework;
 using Auluxa.WebApp;
 
-namespace Auluxa.WebApp.IntegrationTests.Server
+namespace Auluxa.WebApp.IntegrationTests.Hosts
 {
 	public class InMemoryApiServer : IApiServer
 	{
@@ -25,8 +25,6 @@ namespace Auluxa.WebApp.IntegrationTests.Server
 			{
 				var httpConfig = new HttpConfiguration();
 				WebApiConfig.Register(httpConfig);
-				//var apiConfig = new WebApiConfig(httpConfig);
-	//            apiConfig.Configure();
 				_server = new HttpServer(httpConfig);
 			}
 			catch (Exception e)

@@ -23,88 +23,88 @@ using Newtonsoft.Json.Serialization;
 
 namespace Auluxa.WebApp
 {
-    /// <summary>
-    /// WebApi configuration class
-    /// </summary>
-    public static class WebApiConfig
-    {
-        /// <summary>
-        /// Load the httpConfiguration
-        /// </summary>
-        /// <param name="config"></param>
-        public static void Register(HttpConfiguration config)
-        {
-            // Web API configuration and services
-            // Configure Web API to use only bearer token authentication.
-            config.SuppressDefaultHostAuthentication();
-            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+	/// <summary>
+	/// WebApi configuration class
+	/// </summary>
+	public static class WebApiConfig
+	{
+		/// <summary>
+		/// Load the httpConfiguration
+		/// </summary>
+		/// <param name="config"></param>
+		public static void Register(HttpConfiguration config)
+		{
+			// Web API configuration and services
+			// Configure Web API to use only bearer token authentication.
+			config.SuppressDefaultHostAuthentication();
+			config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-            // Use camel case for JSON data and remove XML support
-            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
-                new CamelCasePropertyNamesContractResolver();
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(
-                new StringEnumConverter { CamelCaseText = true });
-            config.Formatters.Remove(config.Formatters.XmlFormatter);
+			// Use camel case for JSON data and remove XML support
+			config.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
+				new CamelCasePropertyNamesContractResolver();
+			config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(
+				new StringEnumConverter { CamelCaseText = true });
+			config.Formatters.Remove(config.Formatters.XmlFormatter);
 
-            // Enables CORS
-            config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
+			// Enables CORS
+			config.EnableCors(new EnableCorsAttribute("*", "*", "*"));
 
-            // Set dependency injection
-            SetAutofacContainer(config);
+			// Set dependency injection
+			SetAutofacContainer(config);
 
-            // Exception handler
-            config.Services.Replace(typeof(IExceptionHandler), new AuluxaExceptionHandler());
+			// Exception handler
+			config.Services.Replace(typeof(IExceptionHandler), new AuluxaExceptionHandler());
 
-            // Web API routes
-            config.MapHttpAttributeRoutes();
+			// Web API routes
+			config.MapHttpAttributeRoutes();
 
-            // Ensure initialization is correct
-            config.EnsureInitialized();
-        }
+			// Ensure initialization is correct
+			config.EnsureInitialized();
+		}
 
-        /// <summary>
-        /// Set dependency injection using the IoC pattern using Autofac
-        /// </summary>
-        /// <param name="config">The HttpConfiguration instance to be injected.</param>
-        private static void SetAutofacContainer(HttpConfiguration config)
-        {
-            var builder = new ContainerBuilder();
+		/// <summary>
+		/// Set dependency injection using the IoC pattern using Autofac
+		/// </summary>
+		/// <param name="config">The HttpConfiguration instance to be injected.</param>
+		private static void SetAutofacContainer(HttpConfiguration config)
+		{
+			var builder = new ContainerBuilder();
 
-            // Register all the ApiController belonging to this assembly.
-            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+			// Register all the ApiController belonging to this assembly.
+			builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            // Register all the types to be abstracted / white labeled
-            // auth
-            builder.RegisterType<AuthDbContext>();
-            builder.RegisterType<AuthUserManager>().AsSelf().InstancePerRequest();
-            builder.RegisterType<AuthSignInManager>().AsSelf().InstancePerRequest();
-            builder.Register(c => new UserStore<AuthUser>(c.Resolve<AuthDbContext>())).AsImplementedInterfaces().InstancePerRequest();
-            builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).As<IAuthenticationManager>();
-            builder.Register(c => new IdentityFactoryOptions<AuthUserManager>
-            {
-                DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("Application​")
-            });
+			// Register all the types to be abstracted / white labeled
+			// auth
+			builder.RegisterType<AuthDbContext>();
+			builder.RegisterType<AuthUserManager>().AsSelf().InstancePerRequest();
+			builder.RegisterType<AuthSignInManager>().AsSelf().InstancePerRequest();
+			builder.Register(c => new UserStore<AuthUser>(c.Resolve<AuthDbContext>())).AsImplementedInterfaces().InstancePerRequest();
+			builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).As<IAuthenticationManager>();
+			builder.Register(c => new IdentityFactoryOptions<AuthUserManager>
+			{
+				DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("Application​")
+			});
 
-            // subscription 
-            builder.RegisterType<ChargebeeSubscriptionRepository>().As<ISubscriptionRepository>();
+			// subscription 
+			builder.RegisterType<ChargebeeSubscriptionRepository>().As<ISubscriptionRepository>();
 
-            // Scene repository
-            builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
-            builder.RegisterType<ApplicationDbContext>().As<IApplianceDbContext>();
-            builder.RegisterType<ApplicationDbContext>().As<IKraniumDbContext>();
-            builder.RegisterType<ApplicationDbContext>().As<ISceneDbContext>();
-            builder.RegisterType<ApplicationDbContext>().As<IZoneDbContext>();
-            builder.RegisterType<ApplicationDbContext>().As<IUserSettingsDbContext>();
+			// Scene repository
+			builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
+			builder.RegisterType<ApplicationDbContext>().As<IApplianceDbContext>();
+			builder.RegisterType<ApplicationDbContext>().As<IKraniumDbContext>();
+			builder.RegisterType<ApplicationDbContext>().As<ISceneDbContext>();
+			builder.RegisterType<ApplicationDbContext>().As<IZoneDbContext>();
+			builder.RegisterType<ApplicationDbContext>().As<IUserSettingsDbContext>();
 
-            builder.RegisterType<EfApplianceRepository>().As<IApplianceRepository>().PropertiesAutowired();
-            builder.RegisterType<EfKraniumRepository>().As<IKraniumRepository>().PropertiesAutowired();
-            builder.RegisterType<EfSceneRepository>().As<ISceneRepository>().PropertiesAutowired();
-            builder.RegisterType<EfUserSettingsRepository>().As<IUserSettingsRepository>().PropertiesAutowired();
-            builder.RegisterType<EfZoneRepository>().As<IZoneRepository>().PropertiesAutowired();
+			builder.RegisterType<EfApplianceRepository>().As<IApplianceRepository>().PropertiesAutowired();
+			builder.RegisterType<EfKraniumRepository>().As<IKraniumRepository>().PropertiesAutowired();
+			builder.RegisterType<EfSceneRepository>().As<ISceneRepository>().PropertiesAutowired();
+			builder.RegisterType<EfUserSettingsRepository>().As<IUserSettingsRepository>().PropertiesAutowired();
+			builder.RegisterType<EfZoneRepository>().As<IZoneRepository>().PropertiesAutowired();
 
-            // Build the container and set the dependency resolver of the config.
-            IContainer container = builder.Build();
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
-        }
-    }
+			// Build the container and set the dependency resolver of the config.
+			IContainer container = builder.Build();
+			config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+		}
+	}
 }

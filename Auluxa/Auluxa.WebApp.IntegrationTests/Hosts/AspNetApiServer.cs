@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net.Http;
+using System.Web.Http;
 
-namespace Auluxa.WebApp.IntegrationTests.Server
+namespace Auluxa.WebApp.IntegrationTests.Hosts
 {
     public class AspNetApiServer : IApiServer
     {
-        private readonly Uri _baseAddress;
+		private readonly Uri _baseAddress;
 
         public AspNetApiServer(Uri baseAddress)
         {

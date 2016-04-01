@@ -34,7 +34,7 @@ namespace Auluxa.WebApp.Tests
 			if (Context != null) { Context.Dispose(); }
 		}
 
-		public async Task ModelController_GetTest()
+		public async Task ModelController_GetAll()
 		{
 			TModel m = BuildTestModel();
 			ContextAdd(m);
@@ -46,7 +46,7 @@ namespace Auluxa.WebApp.Tests
 			AssertModelsAreEqual(result.Content[0], m);
 		}
 
-		public async Task ModelController_GetIdTest(string ids, int expectedCount)
+		public async Task ModelController_GetById(string ids, int expectedCount)
 		{
 			TModel m1 = BuildTestModel(1);
 			TModel m2 = BuildTestModel(2);
@@ -59,7 +59,7 @@ namespace Auluxa.WebApp.Tests
 			Assert.AreEqual(expectedCount, result.Content.Count);
 		}
 
-		public void ModelController_GetByIdTest_InvalidFormatMustThrow()
+		public void ModelController_GetById_InvalidFormatMustThrow()
 		{
 			TModel m = BuildTestModel();
 			ContextAdd(m);
@@ -68,7 +68,7 @@ namespace Auluxa.WebApp.Tests
 			Assert.AreEqual(ex.Message, "Input string was not in a correct format.");
 		}
 
-		public async Task ModelController_PostTest()
+		public async Task ModelController_Post()
 		{
 			TModel m = BuildTestModel();
 
@@ -78,7 +78,7 @@ namespace Auluxa.WebApp.Tests
 			AssertModelsAreEqual(result.Content, m);
 		}
 
-		public async Task ModelController_PatchTest(TModel modifiedModel)
+		public async Task ModelController_Patch(TModel modifiedModel)
 		{
 			TModel m = BuildTestModel();
 			ContextAdd(m);
@@ -97,7 +97,7 @@ namespace Auluxa.WebApp.Tests
 			AssertModelsAreEqual(resultGet.Content[0], modifiedModel);
 		}
 
-		public async Task ModelController_DeleteTest(Func<TModel, int> GetModelIdentity)
+		public async Task ModelController_Delete(Func<TModel, int> GetModelIdentity)
 		{
 			TModel m = BuildTestModel();
 			ContextAdd(m);

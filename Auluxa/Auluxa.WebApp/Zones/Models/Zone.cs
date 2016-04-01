@@ -7,7 +7,6 @@ namespace Auluxa.WebApp.Zones.Models
 	public class Zone
 	{
 		public int Id { get; set; }
-		[JsonIgnore]
 		public string UserName { get; set; }
 		public string Name { get; set; }
 

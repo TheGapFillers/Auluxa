@@ -37,9 +37,9 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		}
 
 		[Test]
-		public async Task ZoneController_GetTest()
+		public async Task ZoneController_Get()
 		{
-			await ModelController_GetTest();
+			await ModelController_GetAll();
 		}
 
 		[TestCase("", 0)]
@@ -47,25 +47,25 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public async Task ZoneController_GetByIdTest(string ids, int expectedCount)
+		public async Task ZoneController_GetById(string ids, int expectedCount)
 		{
-			await ModelController_GetIdTest(ids, expectedCount);
+			await ModelController_GetById(ids, expectedCount);
 		}
 
 		[Test]
-		public void ZoneController_GetByIdTest_InvalidFormatMustThrow()
+		public void ZoneController_GetById_InvalidFormatMustThrow()
 		{
-			ModelController_GetByIdTest_InvalidFormatMustThrow();
+			ModelController_GetById_InvalidFormatMustThrow();
 		}
 
 		[Test]
-		public async Task ZoneController_PostTest()
+		public async Task ZoneController_Post()
 		{
-			await ModelController_PostTest();
+			await ModelController_Post();
 		}
 
 		[Test]
-		public async Task ZoneController_PatchTest()
+		public async Task ZoneController_Patch()
 		{
 			Zone z = BuildTestModel();
 
@@ -74,13 +74,13 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			z.Name = "Bermuda Triangle";
 			z.UserName = "Jack Sparrow";
 
-			await ModelController_PatchTest(z);
+			await ModelController_Patch(z);
 		}
 
 		[Test]
-		public async Task ZoneController_DeleteTest()
+		public async Task ZoneController_Delete()
 		{
-			await ModelController_DeleteTest(z => z.Id);
+			await ModelController_Delete(z => z.Id);
 		}
 
 		protected override Zone BuildTestModel(int id = 1)

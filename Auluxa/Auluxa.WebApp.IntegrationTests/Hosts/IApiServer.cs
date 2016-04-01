@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 
-namespace Auluxa.WebApp.IntegrationTests.Server
+namespace Auluxa.WebApp.IntegrationTests.Hosts
 {
     public interface IApiServer
     {

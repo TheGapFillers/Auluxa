@@ -1,6 +1,5 @@
 ﻿using System;
-using Auluxa.WebApp.IntegrationTests.Server;
-using Auluxa.WebApp.IntegrationTests.Tests;
+using Auluxa.WebApp.IntegrationTests.Hosts;
 using NUnit.Framework;
 
 namespace Auluxa.WebApp.IntegrationTests
@@ -11,9 +10,9 @@ namespace Auluxa.WebApp.IntegrationTests
     }
 
     [TestFixture]
-    public class AgainstServerBooksApiTests : ZoneTest
+    public class ZoneTestsAgainstServer : ZoneTestsImpl
     {
-        public AgainstServerBooksApiTests(): base(new AspNetApiServer(ApiHost.URI))
+        public ZoneTestsAgainstServer(): base(new AspNetApiServer(ApiHost.URI))
         {
         }
     }

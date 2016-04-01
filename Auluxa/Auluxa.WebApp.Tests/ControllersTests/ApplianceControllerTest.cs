@@ -42,9 +42,9 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		}
 
 		[Test]
-		public async Task ApplianceController_GetTest()
+		public async Task ApplianceController_GetAll()
 		{
-			await ModelController_GetTest();
+			await ModelController_GetAll();
 		}
 
 		[TestCase("", 0)]
@@ -52,25 +52,25 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public async Task ApplianceController_GetByIdTest(string ids, int expectedCount)
+		public async Task ApplianceController_GetById(string ids, int expectedCount)
 		{
-			await ModelController_GetIdTest(ids, expectedCount);
+			await ModelController_GetById(ids, expectedCount);
 		}
 
 		[Test]
-		public void ApplianceController_GetByIdTest_InvalidFormatMustThrow()
+		public void ApplianceController_GetByIdT_InvalidFormatMustThrow()
 		{
-			ModelController_GetByIdTest_InvalidFormatMustThrow();
+			ModelController_GetById_InvalidFormatMustThrow();
 		}
 
 		[Test]
-		public async Task ApplianceController_PostTest()
+		public async Task ApplianceController_Post()
 		{
-			await ModelController_PostTest();
+			await ModelController_Post();
 		}
 
 		[Test]
-		public async Task ApplianceController_PatchTest()
+		public async Task ApplianceController_Patch()
 		{
 			Appliance a = BuildTestModel();
 
@@ -85,11 +85,11 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				["FunctionB"] = "FunctionBChoice2"
 			};
 
-			await ModelController_PatchTest(a);
+			await ModelController_Patch(a);
 		}
 
 		[Test]
-		public void ApplianceController_PatchTest_UseInvalidSettings_MustThrow()
+		public void ApplianceController_Patch_UseInvalidSettings_MustThrow()
 		{
 			Appliance a = BuildTestModel();
 
@@ -104,14 +104,14 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				["FunctionB"] = "FunctionBChoice2"
 			};
 
-			var ex = Assert.ThrowsAsync<Exception>(async () => await ModelController_PatchTest(a));
+			var ex = Assert.ThrowsAsync<Exception>(async () => await ModelController_Patch(a));
 			Assert.AreEqual(ex.Message, "Invalid settings, must follow appliance model");
 		}
 
 		[Test]
-		public async Task ApplianceController_DeleteTest()
+		public async Task ApplianceController_Delete()
 		{
-			await ModelController_DeleteTest(am => am.Id);
+			await ModelController_Delete(am => am.Id);
 		}
 
 		protected override Appliance BuildTestModel(int id = 1)

@@ -1,4 +1,4 @@
-﻿namespace Auluxa.WebApp.IntegrationTests.Server
+﻿namespace Auluxa.WebApp.IntegrationTests.Hosts
 {
     public enum ApiServerHost
     {
