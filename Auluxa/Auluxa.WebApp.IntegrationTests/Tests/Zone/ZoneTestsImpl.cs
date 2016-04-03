@@ -7,6 +7,7 @@ using Auluxa.WebApp.Zones.Models;
 using Newtonsoft.Json;
 using Auluxa.WebApp.IntegrationTests.Helpers;
 using System.Net.Http.Formatting;
+using System.Linq;
 
 namespace Auluxa.WebApp.IntegrationTests
 {
@@ -34,7 +35,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zones_GetAllZones()
+		public void Zone_GetAllZones()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
@@ -44,9 +45,13 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
 
 				Zone[] zones = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+
 				Assert.AreEqual(2, zones.Length);
-				Assert.AreEqual("Zone1", zones[0].Name);
-				Assert.AreEqual("Bed Room", zones[1].Name);
+
+				Zone retrievedZone = zones.Where(z => z.Id == 1).SingleOrDefault();
+				Assert.AreEqual("Zone1", retrievedZone.Name);
+				retrievedZone = zones.Where(z => z.Id == 2).SingleOrDefault();
+				Assert.AreEqual("Bed Room", retrievedZone.Name);
 			}
 		}
 
@@ -55,7 +60,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public void Zones_GetZonesById(string ids, int expectedCount)
+		public void Zone_GetZonesById(string ids, int expectedCount)
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + ids);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
@@ -84,7 +89,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zones_PostZone()
+		public void Zone_PostZone()
 		{
 			Zone zoneToAdd = new Zone
 			{
@@ -108,7 +113,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zones_PatchZone()
+		public void Zone_PatchZone()
 		{
 			Zone zoneToPatch = new Zone
 			{
@@ -150,12 +155,12 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zones_DeleteZone()
+		public void Zone_DeleteZone()
 		{
 			int idOfZoneToDelete = 1;
-			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "/" + idOfZoneToDelete);
 
 			// Make sure the zone exists initially
+			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + idOfZoneToDelete);
 			HttpRequestMessage request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Get);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
 			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
@@ -168,6 +173,7 @@ namespace Auluxa.WebApp.IntegrationTests
 			}
 
 			// Delete it
+			valuesUri = new Uri(_server.BaseAddress, relativeUri + "/" + idOfZoneToDelete);
 			request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Delete);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
 			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
@@ -182,6 +188,7 @@ namespace Auluxa.WebApp.IntegrationTests
 			}
 
 			// Make sure the zone can't be retrieved again
+			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + idOfZoneToDelete);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
 			using (HttpResponseMessage httpResponseMessage = client.GetAsync(valuesUri).Result)
 			{
