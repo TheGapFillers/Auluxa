@@ -23,10 +23,9 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// Constructor of the ApplianceController
 		/// </summary>
 		/// <param name="repository">Injected by DI</param>
-		public ApplianceController(IApplianceRepository repository/*, IZoneRepository zoneRepository*/)
+		public ApplianceController(IApplianceRepository repository)
 		{
 			_repository = repository;
-			//_zoneRepository = zoneRepository;
 		}
 
 		/// <summary>
@@ -40,7 +39,16 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		{
 			List<int> idList = null;
 			if (ids != null)
-				idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
+			{
+				try
+				{
+					idList = ids.SplitAndTrim(',').Select(int.Parse).ToList();
+				}
+				catch (System.FormatException)
+				{
+					return BadRequest();
+				}
+			}
 
 			List<Appliance> appliances = (await _repository.GetAppliancesAsync(idList)).ToList();
 			return Ok(appliances);

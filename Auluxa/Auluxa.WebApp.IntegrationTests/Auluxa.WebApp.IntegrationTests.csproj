@@ -91,13 +91,16 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Helpers\HttpHelpers.cs" />
+    <Compile Include="Hosts\ApiHost.cs" />
+    <Compile Include="Tests\Appliance\ApplianceTestsAgainstServer.cs" />
+    <Compile Include="Tests\Zone\ZoneTestsImpl.cs" />
     <Compile Include="Tests\Zone\ZoneTestsAgainstServer.cs" />
     <Compile Include="Tests\Zone\ZoneTestsInMemory.cs" />
     <Compile Include="Hosts\ApiServerHost.cs" />
     <Compile Include="Hosts\AspNetApiServer.cs" />
     <Compile Include="Hosts\IApiServer.cs" />
     <Compile Include="Hosts\InMemoryApiServer.cs" />
-    <Compile Include="Tests\Zone\ZoneTestsImpl.cs" />
+    <Compile Include="Tests\Appliance\ApplianceTestsImpl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

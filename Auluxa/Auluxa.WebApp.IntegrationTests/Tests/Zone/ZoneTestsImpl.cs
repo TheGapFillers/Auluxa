@@ -106,10 +106,11 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
 
 				Zone addedZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(3, addedZone.Id);
 				Assert.AreEqual("New Zone Unlocked", addedZone.Name);
 				Assert.AreEqual("Alfred", addedZone.UserName);
 			}
+
+			//todo: get the new item's id and try to retrieve it
 		}
 
 		[Test]
@@ -119,6 +120,7 @@ namespace Auluxa.WebApp.IntegrationTests
 			{
 				Id = 2,
 				Name = "Renovated Bed Room",
+				UserName = "Batman",
 			};
 
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
@@ -134,10 +136,10 @@ namespace Auluxa.WebApp.IntegrationTests
 				Zone modifiedZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
 				Assert.AreEqual(2, modifiedZone.Id);
 				Assert.AreEqual("Renovated Bed Room", modifiedZone.Name);
-				Assert.Null(modifiedZone.UserName);
+				Assert.AreEqual("Batman", modifiedZone.UserName);
 			}
 
-			// Make sure patch has been applied
+			// Get modified Zone and make sure patch has been applied
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
 			request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Get);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
@@ -146,11 +148,11 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
 				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
 
-				Zone[] zones = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(1, zones.Length);
-				Assert.AreEqual(2, zones[0].Id);
-				Assert.AreEqual("Renovated Bed Room", zones[0].Name);
-				Assert.Null(zones[0].UserName);
+				Zone zone = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result).SingleOrDefault();
+				Assert.IsNotNull(zone);
+				Assert.AreEqual(2, zone.Id);
+				Assert.AreEqual("Renovated Bed Room", zone.Name);
+				Assert.AreEqual("Batman", zone.UserName);
 			}
 		}
 
@@ -168,8 +170,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
 				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
 
-				Zone[] zones = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(1, zones.Length);
+				Zone zone = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result).SingleOrDefault();
+				Assert.IsNotNull(zone);
 			}
 
 			// Delete it
@@ -195,8 +197,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
 				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
 
-				Zone[] zones = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(0, zones.Length);
+				Zone zone = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result).SingleOrDefault(); ;
+				Assert.IsNull(zone);
 			}
 		}
 	}
