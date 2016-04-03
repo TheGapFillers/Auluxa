@@ -1,57 +1,57 @@
 ﻿<html>
 
 <head>
-  <title>Auluxa</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Auluxa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- 1. Load libraries -->
-  <!-- IE required polyfills, in this exact order -->
-  <script src="node_modules/es6-shim/es6-shim.min.js"></script>
-  <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
-  <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
-  <script src="node_modules/systemjs/dist/system.src.js"></script>
-  <script src="node_modules/rxjs/bundles/Rx.js"></script>
-  <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-  <script src="node_modules/angular2/bundles/router.dev.js"></script>
-  <script src="node_modules/angular2/bundles/http.dev.js"></script>
+    <!-- 1. Load libraries -->
+    <!-- IE required polyfills, in this exact order -->
+    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
 
-  <!--template css-->
-  <link rel="apple-touch-icon" href="template/touch-icon-iphone.png" />
-  <link rel="apple-touch-icon" sizes="76x76" href="template/touch-icon-ipad.png" />
-  <link rel="apple-touch-icon" sizes="120x120" href="template/touch-icon-iphone-retina.png" />
-  <link rel="apple-touch-icon" sizes="152x152" href="template/touch-icon-ipad-retina.png" />
-  <link rel="shortcut icon" type="image/x-icon" href="template/favicon.ico" />
+    <!--template css-->
+    <link rel="apple-touch-icon" href="template/touch-icon-iphone.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="template/touch-icon-ipad.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="template/touch-icon-iphone-retina.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="template/touch-icon-ipad-retina.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="template/favicon.ico" />
 
-  <link rel="stylesheet" href="template/css/bootstrap/bootstrap.min.css" />
-  <link rel="stylesheet" href="template/css/font-awesome-4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-  <link rel="stylesheet" href="template/jquery-jvectormap-1.2.2/jquery-jvectormap-1.2.2.css" />
+    <link rel="stylesheet" href="template/css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="template/css/font-awesome-4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+    <link rel="stylesheet" href="template/jquery-jvectormap-1.2.2/jquery-jvectormap-1.2.2.css" />
 
-  
-  <!--added manualy-->
-  <link rel="stylesheet" href="css/font-awesome-4.5.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/template-helper.css" />
-  <link rel="stylesheet" href="css/template.css" />
-  
-  <!-- --template scripts -->
-  <script src="template/js/jquery-1.11.3.min.js"></script>
-  <script src="template/js/jquery-ui.js"></script>
-  <script src="template/js/bootstrap.min.js"></script>
-  <!--<script src="template/amcharts/amcharts.js"></script>
+
+    <!--added manualy-->
+    <link rel="stylesheet" href="css/font-awesome-4.5.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/template-helper.css" />
+    <link rel="stylesheet" href="css/template.css" />
+
+    <!-- --template scripts -->
+    <script src="template/js/jquery-1.11.3.min.js"></script>
+    <script src="template/js/jquery-ui.js"></script>
+    <script src="template/js/bootstrap.min.js"></script>
+    <!--<script src="template/amcharts/amcharts.js"></script>
   <script src="template/amcharts/serial.js"></script>
   <script src="template/amcharts/pie.js"></script>-->
-  <!--<script src="template/js/chart.js"></script>-->
-  <script src="template/js/map.js"></script>
-  <script src="template/jquery-jvectormap-1.2.2/jquery-jvectormap-1.2.2.min.js"></script>
-  <script src="template/jquery-jvectormap-1.2.2/jquery-jvectormap-us-aea-en.js"></script>
-  <!--<script src="template/js/main.js"></script>-->
-  <!--manually changed the main.js to remove some javascript errors -->
-  <script src="template/js/main_auluxa.js"></script>
+    <!--<script src="template/js/chart.js"></script>-->
+    <script src="template/js/map.js"></script>
+    <script src="template/jquery-jvectormap-1.2.2/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="template/jquery-jvectormap-1.2.2/jquery-jvectormap-us-aea-en.js"></script>
+    <!--<script src="template/js/main.js"></script>-->
+    <!--manually changed the main.js to remove some javascript errors -->
+    <script src="template/js/main_auluxa.js"></script>
 
-  <!-- 2. Configure SystemJS -->
-  <script>
-    System.config({
+    <!-- 2. Configure SystemJS -->
+    <script>
+        System.config({
             packages: {
                 app: {
                     format: 'register',
@@ -61,7 +61,7 @@
         });
         System.import('app/main')
               .then(null, console.error.bind(console));
-  </script>
+    </script>
 
 </head>
 <!--Start the angular router-->
@@ -70,7 +70,7 @@
 <!-- 3. Display the application -->
 
 <body>
-  <auluxa-app>Loading...</auluxa-app>
+    <auluxa-app>Loading...</auluxa-app>
 </body>
 
 </html>

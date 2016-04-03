@@ -1,0 +1,128 @@
+<header class="main-header clearfix">
+  <h1 class="main-header__title">
+    <i class="icon fa fa-money"></i>
+    Invoice Detail
+  </h1>
+  <ul class="main-header__breadcrumb" style="margin-top: 3px;">
+    <li><span class="page-title-parent-level">User Settings</span></li>
+    <li><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill']" href="" class="addColor">Bill</a></span></li>
+    <li [hidden]="type != 'App'"><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill_App']" href="" class="addColor">App</a></span></li>
+    <li [hidden]="type != 'Product'"><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill_Product']" href="" class="addColor">Product</a></span></li>
+    <li [hidden]="type != 'Storage'"><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill_Storage']" href="" class="addColor">Storage</a></span></li>
+  </ul>
+  <ul class="main-header__breadcrumb" style="float: right;">
+    <li [hidden]="type != 'App'"><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill_App']" href="" class="addColor">Back</a></span></li>
+    <li [hidden]="type != 'Product'"><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill_Product']" href="" class="addColor">Back</a></span></li>
+    <li [hidden]="type != 'Storage'"><span class="page-title-parent-level"><a [routerLink]="['/Users', 'Bill_Storage']" href="" class="addColor">Back</a></span></li>
+  </ul>
+</header>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <div class="widget__content">
+        <header class="widget__header">
+          <h3 class="widget__title">Order Information</h3>
+        </header>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Order Date</th>
+              <th>Invoice Number</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>December 20, 2015</td>
+              <td>456564$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <div class="widget__content">
+        <header class="widget__header">
+          <h3 class="widget__title">Order Information</h3>
+        </header>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Payment Summary</th>
+              <th>Billing Address</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>December 20, 2015</td>
+              <td>456564$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <div class="widget__content">
+        <header class="widget__header">
+          <h3 class="widget__title">Items Purchased</h3>
+        </header>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Services</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Managed DNS Express</td>
+              <td>1$</td>
+              <td>10.00$</td>
+            </tr>
+            <tr>
+              <td class="bg--skyblue"></td>
+              <td class="bg--skyblue" style="text-align: right;color: white;">Sub-Total</td>
+              <td>10.00$</td>
+            </tr>
+            <tr>
+              <td class="bg--skyblue"></td>
+              <td class="bg--skyblue" style="text-align: right;color: white;">Discounts Applied</td>
+              <td>None</td>
+            </tr>
+            <tr>
+              <td class="bg--skyblue"></td>
+              <td class="bg--skyblue" style="text-align: right;color: white;">Invoice Total</td>
+              <td>10.00$</td>
+            </tr>
+            <tr>
+              <td class="bg--skyblue"></td>
+              <td class="bg--skyblue" style="text-align: right;color: white;">Amount Billed</td>
+              <td>10.00$</td>
+            </tr>
+            <tr>
+              <td class="bg--skyblue"></td>
+              <td class="bg--skyblue" style="text-align: right;color: white;">Payment Received</td>
+              <td>10.00$</td>
+            </tr>
+            <tr>
+              <td class="bg--skyblue"></td>
+              <td class="bg--skyblue" style="text-align: right;color: white;">Balance Due</td>
+              <td>0.00$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</div>
