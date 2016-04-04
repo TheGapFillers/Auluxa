@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
@@ -24,6 +27,20 @@ namespace Auluxa.WebApp.IntegrationTests.Helpers
 			request.Content = new ObjectContent<T>(content, formatter);
 
 			return request;
+		}
+
+		public static T[] GetEntities<T>(Uri uri, HttpMessageHandler serverHandler)
+		{
+			using (HttpClient client = new HttpClient(serverHandler))
+			using (HttpResponseMessage httpResponseMessage = client.GetAsync(uri).Result)
+			{
+				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+
+				T[] entities = JsonConvert.DeserializeObject<T[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+
+				return entities;
+			}
 		}
 	}
 }

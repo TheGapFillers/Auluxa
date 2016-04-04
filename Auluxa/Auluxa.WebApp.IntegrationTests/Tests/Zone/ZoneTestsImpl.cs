@@ -38,21 +38,14 @@ namespace Auluxa.WebApp.IntegrationTests
 		public void Zone_GetAllZones()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.GetAsync(valuesUri).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+			Zone[] zones = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler);
 
-				Zone[] zones = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+			Assert.AreEqual(2, zones.Length);
 
-				Assert.AreEqual(2, zones.Length);
-
-				Zone retrievedZone = zones.Where(z => z.Id == 1).SingleOrDefault();
-				Assert.AreEqual("Zone1", retrievedZone.Name);
-				retrievedZone = zones.Where(z => z.Id == 2).SingleOrDefault();
-				Assert.AreEqual("Bed Room", retrievedZone.Name);
-			}
+			Zone retrievedZone = zones.Where(z => z.Id == 1).SingleOrDefault();
+			Assert.AreEqual("Zone1", retrievedZone.Name);
+			retrievedZone = zones.Where(z => z.Id == 2).SingleOrDefault();
+			Assert.AreEqual("Bed Room", retrievedZone.Name);
 		}
 
 		[TestCase("", 2)]
@@ -63,15 +56,9 @@ namespace Auluxa.WebApp.IntegrationTests
 		public void Zone_GetZonesById(string ids, int expectedCount)
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + ids);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.GetAsync(valuesUri).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+			Zone[] zones = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler);
 
-				Zone[] zones = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(expectedCount, zones.Length);
-			}
+			Assert.AreEqual(expectedCount, zones.Length);
 		}
 
 		[Test]
@@ -96,7 +83,9 @@ namespace Auluxa.WebApp.IntegrationTests
 				Name = "New Zone Unlocked",
 				UserName = "Alfred"
 			};
+			int createdZoneId;
 
+			// Post and check it returns what we sent
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Zone>(valuesUri, "application/json", HttpMethod.Post, zoneToAdd, new JsonMediaTypeFormatter());
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
@@ -105,12 +94,19 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
 				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
 
-				Zone addedZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual("New Zone Unlocked", addedZone.Name);
-				Assert.AreEqual("Alfred", addedZone.UserName);
+				Zone createdZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+				Assert.AreEqual("New Zone Unlocked", createdZone.Name);
+				Assert.AreEqual("Alfred", createdZone.UserName);
+
+				createdZoneId = createdZone.Id;
 			}
 
-			//todo: get the new item's id and try to retrieve it
+			// Retrieve manually and make sure it has been saved
+			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + createdZoneId);
+			Zone retrievedZone = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler).SingleOrDefault();
+			Assert.IsNotNull(retrievedZone);
+			Assert.AreEqual("New Zone Unlocked", retrievedZone.Name);
+			Assert.AreEqual("Alfred", retrievedZone.UserName);
 		}
 
 		[Test]
@@ -141,19 +137,11 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Get modified Zone and make sure patch has been applied
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
-			request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Get);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
-
-				Zone zone = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result).SingleOrDefault();
-				Assert.IsNotNull(zone);
-				Assert.AreEqual(2, zone.Id);
-				Assert.AreEqual("Renovated Bed Room", zone.Name);
-				Assert.AreEqual("Batman", zone.UserName);
-			}
+			Zone retrievedZone = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler).SingleOrDefault();
+			
+			Assert.AreEqual(2, retrievedZone.Id);
+			Assert.AreEqual("Renovated Bed Room", retrievedZone.Name);
+			Assert.AreEqual("Batman", retrievedZone.UserName);
 		}
 
 		[Test]
@@ -163,20 +151,12 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Make sure the zone exists initially
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + idOfZoneToDelete);
-			HttpRequestMessage request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Get);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
-
-				Zone zone = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result).SingleOrDefault();
-				Assert.IsNotNull(zone);
-			}
-
+			Zone existingZone = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler).SingleOrDefault();
+			Assert.IsNotNull(existingZone);
+			
 			// Delete it
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "/" + idOfZoneToDelete);
-			request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Delete);
+			HttpRequestMessage request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Delete);
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
 			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
 			{
@@ -191,15 +171,8 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Make sure the zone can't be retrieved again
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + idOfZoneToDelete);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.GetAsync(valuesUri).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
-
-				Zone zone = JsonConvert.DeserializeObject<Zone[]>(httpResponseMessage.Content.ReadAsStringAsync().Result).SingleOrDefault(); ;
-				Assert.IsNull(zone);
-			}
+			Zone alreadyDeletedZone = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler).SingleOrDefault();
+			Assert.IsNull(alreadyDeletedZone);
 		}
 	}
 }
