@@ -62,7 +62,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zones_GetZonesById_InvalidFormatMustThrow()
+		public void Zones_GetZonesById_InvalidFormat_MustReturnBadRequest()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=hahaha");
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
