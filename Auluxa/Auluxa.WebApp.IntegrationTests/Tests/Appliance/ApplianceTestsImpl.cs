@@ -67,14 +67,8 @@ namespace Auluxa.WebApp.IntegrationTests
 		public void Appliance_1_GetApplianceById_InvalidFormat_MustReturnBadRequest()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=hahaha");
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.GetAsync(valuesUri).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.BadRequest, httpResponseMessage.StatusCode);
-				string content = httpResponseMessage.Content.ReadAsStringAsync().Result;
-				Assert.AreEqual(String.Empty, content);
-			}
+			Appliance[] appliances = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler, false, HttpStatusCode.BadRequest);
+			Assert.IsNull(appliances);
 		}
 
 		[Test]
@@ -86,27 +80,18 @@ namespace Auluxa.WebApp.IntegrationTests
 				UserName = "Alfred",
 				Model = new ApplianceModel { Id = 1 }
 			};
-			int createdApplianceId;
 
 			// Post and check it returns what we sent
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", HttpMethod.Post, applianceToAdd, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+			Appliance createdAppliance = HttpHelpers.PostEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToAdd, true, HttpStatusCode.Created);
+			Assert.AreEqual("New AC", createdAppliance.Name);
+			Assert.AreEqual("Alfred", createdAppliance.UserName);
+			Assert.AreEqual(1, createdAppliance.Model.Id);
+			Assert.AreEqual("FunctionADefaultChoice", createdAppliance.CurrentSetting["acFunctionA"]);  //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBDefaultChoice", createdAppliance.CurrentSetting["acFunctionB"]);
 
-				Appliance createdAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual("New AC", createdAppliance.Name);
-				Assert.AreEqual("Alfred", createdAppliance.UserName);
-				Assert.AreEqual(1, createdAppliance.Model.Id);
-				Assert.AreEqual("FunctionADefaultChoice", createdAppliance.CurrentSetting["acFunctionA"]);	//todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBDefaultChoice", createdAppliance.CurrentSetting["acFunctionB"]);
-
-				createdApplianceId = createdAppliance.Id;
-			}
-
+			int createdApplianceId = createdAppliance.Id;
+			
 			// Retrieve manually and make sure it has been saved
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + createdApplianceId);
 			Appliance retrievedAppliancee = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler).SingleOrDefault();
@@ -132,26 +117,17 @@ namespace Auluxa.WebApp.IntegrationTests
 					["ACFunctionB"] = "FunctionBChoice2"
 				}
 			};
-			int createdApplianceId;
 
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", HttpMethod.Post, applianceToAdd, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+			Appliance createdAppliance = HttpHelpers.PostEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToAdd, true, HttpStatusCode.Created);
+			Assert.AreEqual("New AC", createdAppliance.Name);
+			Assert.AreEqual("Alfred", createdAppliance.UserName);
+			Assert.AreEqual(1, createdAppliance.Model.Id);
+			Assert.AreEqual("FunctionAChoice2", createdAppliance.CurrentSetting["acFunctionA"]);  //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBChoice2", createdAppliance.CurrentSetting["acFunctionB"]);
 
-				Appliance createdAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual("New AC", createdAppliance.Name);
-				Assert.AreEqual("Alfred", createdAppliance.UserName);
-				Assert.AreEqual(1, createdAppliance.Model.Id);
-				Assert.AreEqual("FunctionAChoice2", createdAppliance.CurrentSetting["acFunctionA"]);  //todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBChoice2", createdAppliance.CurrentSetting["acFunctionB"]);
-
-				createdApplianceId = createdAppliance.Id;
-			}
-
+			int createdApplianceId = createdAppliance.Id;
+		
 			// Retrieve manually and make sure it has been saved
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + createdApplianceId);
 			Appliance retrievedAppliancee = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler).SingleOrDefault();
@@ -179,14 +155,9 @@ namespace Auluxa.WebApp.IntegrationTests
 			};
 
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", HttpMethod.Post, applianceToAdd, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode); 
-				//todo should not be Error 500. Change controller/repo to follow best practices
-			}
+			Appliance createdAppliance = HttpHelpers.PostEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToAdd, false, HttpStatusCode.InternalServerError);
+			//todo should not be Error 500. Change controller/repo to follow best practices
+			Assert.IsNull(createdAppliance);
 		}
 
 		[Test]
@@ -205,14 +176,9 @@ namespace Auluxa.WebApp.IntegrationTests
 			};
 
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", HttpMethod.Post, applianceToAdd, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
-				//todo should not be Error 500. Change controller/repo to follow best practices
-			}
+			Appliance createdAppliance = HttpHelpers.PostEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToAdd, false, HttpStatusCode.InternalServerError);
+			//todo should not be Error 500. Change controller/repo to follow best practices
+			Assert.IsNull(createdAppliance);
 		}
 
 		[Test]
@@ -230,14 +196,9 @@ namespace Auluxa.WebApp.IntegrationTests
 			};
 
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", HttpMethod.Post, applianceToAdd, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
-				//todo should not be Error 500. Change controller/repo to follow best practices
-			}
+			Appliance createdAppliance = HttpHelpers.PostEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToAdd, false, HttpStatusCode.InternalServerError);
+			//todo should not be Error 500. Change controller/repo to follow best practices
+			Assert.IsNull(createdAppliance);
 		}
 
 		[Test]

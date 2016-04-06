@@ -65,14 +65,8 @@ namespace Auluxa.WebApp.IntegrationTests
 		public void Zones_1_GetZonesById_InvalidFormat_MustReturnBadRequest()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=hahaha");
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.GetAsync(valuesUri).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.BadRequest, httpResponseMessage.StatusCode);
-				string content = httpResponseMessage.Content.ReadAsStringAsync().Result;
-				Assert.AreEqual(String.Empty, content);
-			}
+			Zone[] zones = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler, false, HttpStatusCode.BadRequest);
+			Assert.IsNull(zones);
 		}
 
 		[Test]
@@ -87,19 +81,11 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Post and check it returns what we sent
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
-			HttpRequestMessage request = HttpHelpers.CreateRequest<Zone>(valuesUri, "application/json", HttpMethod.Post, zoneToAdd, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+			Zone createdZone = HttpHelpers.PostEntities<Zone>(valuesUri, _server.ServerHandler, zoneToAdd, true, HttpStatusCode.Created);
+			Assert.AreEqual("New Zone Unlocked", createdZone.Name);
+			Assert.AreEqual("Alfred", createdZone.UserName);
 
-				Zone createdZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual("New Zone Unlocked", createdZone.Name);
-				Assert.AreEqual("Alfred", createdZone.UserName);
-
-				createdZoneId = createdZone.Id;
-			}
+			createdZoneId = createdZone.Id;
 
 			// Retrieve manually and make sure it has been saved
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + createdZoneId);
