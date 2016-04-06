@@ -60,5 +60,39 @@ namespace Auluxa.WebApp.IntegrationTests.Helpers
 			}
 		}
 
+		public static T PatchEntities<T>(Uri uri, HttpMessageHandler serverHandler, T entityToPatch, bool assertSuccees = true, HttpStatusCode expectedStatusCode = HttpStatusCode.OK) where T : class
+		{
+			HttpRequestMessage request = CreateRequest(uri, "application/json", new HttpMethod("PATCH"), entityToPatch, new JsonMediaTypeFormatter());
+			using (HttpClient client = new HttpClient(serverHandler))
+			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
+			{
+				Assert.AreEqual(assertSuccees, httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(expectedStatusCode, httpResponseMessage.StatusCode);
+
+				if (expectedStatusCode == HttpStatusCode.InternalServerError)
+					return null;
+
+				T modifiedEntity = JsonConvert.DeserializeObject<T>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+				return modifiedEntity;
+			}
+		}
+
+		public static T DeleteEntity<T>(Uri uri, HttpMessageHandler serverHandler, bool assertSuccees = true, HttpStatusCode expectedStatusCode = HttpStatusCode.OK) where T : class
+		{
+			HttpRequestMessage request = HttpHelpers.CreateRequest(uri, "application/json", HttpMethod.Delete);
+			using (HttpClient client = new HttpClient(serverHandler))
+			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
+			{
+				Assert.AreEqual(assertSuccees, httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(expectedStatusCode, httpResponseMessage.StatusCode);
+
+				if (expectedStatusCode == HttpStatusCode.InternalServerError)
+					return null;
+
+				T deletedEntity = JsonConvert.DeserializeObject<T>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+				return deletedEntity;
+			}
+		}
+
 	}
 }

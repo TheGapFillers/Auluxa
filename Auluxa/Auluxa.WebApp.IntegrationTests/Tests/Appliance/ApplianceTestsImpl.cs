@@ -217,23 +217,15 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Patch and check returned result
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+			Appliance modifiedAppliance = HttpHelpers.PatchEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToPatch, true, HttpStatusCode.Created);
 
-				Appliance modifiedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(2, modifiedAppliance.Id, "Invalid Id");
-				Assert.AreEqual("Patched AC", modifiedAppliance.Name, "Invalid Name");
-				Assert.AreEqual("Batman", modifiedAppliance.UserName, "Invalid UserName");
-				
-				Assert.AreEqual(2, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
-				Assert.AreEqual("FunctionADefaultChoice", modifiedAppliance.CurrentSetting["lightFunctionA"]);    //todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBDefaultChoice", modifiedAppliance.CurrentSetting["lightFunctionB"]);
-
-				Assert.AreEqual(1, modifiedAppliance.Zone.Id, "Invalid Zone Id");
-			}
+			Assert.AreEqual(2, modifiedAppliance.Id, "Invalid Id");
+			Assert.AreEqual("Patched AC", modifiedAppliance.Name, "Invalid Name");
+			Assert.AreEqual("Batman", modifiedAppliance.UserName, "Invalid UserName");
+			Assert.AreEqual(2, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+			Assert.AreEqual("FunctionADefaultChoice", modifiedAppliance.CurrentSetting["lightFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBDefaultChoice", modifiedAppliance.CurrentSetting["lightFunctionB"]);
+			Assert.AreEqual(1, modifiedAppliance.Zone.Id, "Invalid Zone Id");
 
 			// Get modified Appliance and make sure patch has been applied
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
@@ -243,11 +235,9 @@ namespace Auluxa.WebApp.IntegrationTests
 			Assert.AreEqual(2, retrievedAppliancee.Id, "Invalid Id");
 			Assert.AreEqual("Patched AC", retrievedAppliancee.Name, "Invalid Name");
 			Assert.AreEqual("Batman", retrievedAppliancee.UserName, "Invalid UserName");
-			
 			Assert.AreEqual(2, retrievedAppliancee.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
 			Assert.AreEqual("FunctionADefaultChoice", retrievedAppliancee.CurrentSetting["lightFunctionA"]);    //todo for some reason first letter gets lowercased...
 			Assert.AreEqual("FunctionBDefaultChoice", retrievedAppliancee.CurrentSetting["lightFunctionB"]);
-
 			Assert.AreEqual(1, retrievedAppliancee.Zone.Id, "Invalid Zone Id");
 		}
 
@@ -269,18 +259,11 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Patch and check returned result
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+			Appliance modifiedAppliance = HttpHelpers.PatchEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToPatch, true, HttpStatusCode.Created);
 
-				Appliance modifiedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				
-				Assert.AreEqual(3, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
-				Assert.AreEqual("FunctionAChoice2", modifiedAppliance.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBChoice2", modifiedAppliance.CurrentSetting["switchFunctionB"]);
-			}
+			Assert.AreEqual(3, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+			Assert.AreEqual("FunctionAChoice2", modifiedAppliance.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBChoice2", modifiedAppliance.CurrentSetting["switchFunctionB"]);
 
 			// Get modified Appliance and make sure patch has been applied
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
@@ -309,18 +292,11 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Patch and check returned result
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+			Appliance modifiedAppliance = HttpHelpers.PatchEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToPatch, true, HttpStatusCode.Created);
 
-				Appliance modifiedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-
-				Assert.AreEqual(3, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
-				Assert.AreEqual("FunctionAChoice3", modifiedAppliance.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBChoice3", modifiedAppliance.CurrentSetting["switchFunctionB"]);
-			}
+			Assert.AreEqual(3, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+			Assert.AreEqual("FunctionAChoice3", modifiedAppliance.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBChoice3", modifiedAppliance.CurrentSetting["switchFunctionB"]);
 
 			// Get modified Appliance and make sure patch has been applied
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
@@ -349,13 +325,9 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Patch and check returned result
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
-				//todo should not be Error 500. Change controller/repo to follow best practices
-			}
+			Appliance modifiedAppliance = HttpHelpers.PatchEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToPatch, false, HttpStatusCode.InternalServerError);
+			//todo should not be Error 500. Change controller/repo to follow best practices
+			Assert.IsNull(modifiedAppliance);
 		}
 
 		[Test]
@@ -375,13 +347,9 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Patch and check returned result
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
-				//todo should not be Error 500. Change controller/repo to follow best practices
-			}
+			Appliance modifiedAppliance = HttpHelpers.PatchEntities<Appliance>(valuesUri, _server.ServerHandler, applianceToPatch, false, HttpStatusCode.InternalServerError);
+			//todo should not be Error 500. Change controller/repo to follow best practices
+			Assert.IsNull(modifiedAppliance);
 		}
 
 		[Test]
@@ -396,18 +364,11 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Delete it
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "/" + idOfApplianceToDelete);
-			HttpRequestMessage request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Delete);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+			Appliance deletedAppliance = HttpHelpers.DeleteEntity<Appliance>(valuesUri, _server.ServerHandler);
 
-				Appliance deletedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(idOfApplianceToDelete, deletedAppliance.Id);
-				Assert.AreEqual("Appliance1", deletedAppliance.Name);
-				Assert.AreEqual("Serge", deletedAppliance.UserName);
-			}
+			Assert.AreEqual(idOfApplianceToDelete, deletedAppliance.Id);
+			Assert.AreEqual("Appliance1", deletedAppliance.Name);
+			Assert.AreEqual("Serge", deletedAppliance.UserName);
 
 			// Make sure the appliance can't be retrieved again
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + idOfApplianceToDelete);

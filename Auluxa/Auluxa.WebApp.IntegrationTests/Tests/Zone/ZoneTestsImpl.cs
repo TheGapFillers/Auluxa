@@ -109,17 +109,10 @@ namespace Auluxa.WebApp.IntegrationTests
 
 			// Patch and check returned result
 			HttpRequestMessage request = HttpHelpers.CreateRequest<Zone>(valuesUri, "application/json", new HttpMethod("PATCH"), zoneToPatch, new JsonMediaTypeFormatter());
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
-
-				Zone modifiedZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(2, modifiedZone.Id);
-				Assert.AreEqual("Renovated Bed Room", modifiedZone.Name);
-				Assert.AreEqual("Batman", modifiedZone.UserName);
-			}
+			Zone modifiedZone = HttpHelpers.PatchEntities<Zone>(valuesUri, _server.ServerHandler, zoneToPatch, true, HttpStatusCode.Created);
+			Assert.AreEqual(2, modifiedZone.Id);
+			Assert.AreEqual("Renovated Bed Room", modifiedZone.Name);
+			Assert.AreEqual("Batman", modifiedZone.UserName);
 
 			// Get modified Zone and make sure patch has been applied
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
@@ -142,18 +135,11 @@ namespace Auluxa.WebApp.IntegrationTests
 			
 			// Delete it
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "/" + idOfZoneToDelete);
-			HttpRequestMessage request = HttpHelpers.CreateRequest(valuesUri, "application/json", HttpMethod.Delete);
-			using (HttpClient client = new HttpClient(_server.ServerHandler))
-			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
-			{
-				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
-				Assert.AreEqual(HttpStatusCode.OK, httpResponseMessage.StatusCode);
+			Zone deletedZone = HttpHelpers.DeleteEntity<Zone>(valuesUri, _server.ServerHandler);
 
-				Zone deletedZone = JsonConvert.DeserializeObject<Zone>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(idOfZoneToDelete, deletedZone.Id);
-				Assert.AreEqual("Zone1", deletedZone.Name);
-				Assert.IsNull(deletedZone.UserName);
-			}
+			Assert.AreEqual(idOfZoneToDelete, deletedZone.Id);
+			Assert.AreEqual("Zone1", deletedZone.Name);
+			Assert.IsNull(deletedZone.UserName);
 
 			// Make sure the zone can't be retrieved again
 			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + idOfZoneToDelete);
