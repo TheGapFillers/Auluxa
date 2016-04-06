@@ -75,13 +75,20 @@ namespace Auluxa.WebApp.Appliances.Repositories
 			if (applianceToUpdate == null)
 				return null;
 
+			bool updatedModel = false;
 			if (appliance.Model != null)
 			{
 				ApplianceModel usedModel = (await GetApplianceModelsAsync(new[] { appliance.Model.Id })).SingleOrDefault();
 				if (usedModel == null)
 					return null;
 
+				appliance.Model = usedModel;
 				applianceToUpdate.Model = usedModel;
+				updatedModel = true;
+			}
+			else
+			{
+				appliance.Model = (await GetApplianceModelsAsync(new[] { applianceToUpdate.Model.Id })).SingleOrDefault();
 			}
 
 			if (appliance.Zone != null)
@@ -99,6 +106,13 @@ namespace Auluxa.WebApp.Appliances.Repositories
 					throw new Exception("Invalid settings, must follow appliance model");
 
 				applianceToUpdate.CurrentSetting = appliance.CurrentSetting;
+			}
+			else
+			{
+				if(updatedModel)
+				{
+					applianceToUpdate.ApplyDefaultSettings();
+				}
 			}
 			
 			if (appliance.Name != null) applianceToUpdate.Name = appliance.Name;

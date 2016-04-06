@@ -35,7 +35,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zone_GetAllZones()
+		public void Zone_1_GetAllZones()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
 			Zone[] zones = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler);
@@ -53,7 +53,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public void Zone_GetZonesById(string ids, int expectedCount)
+		public void Zone_1_GetZonesById(string ids, int expectedCount)
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + ids);
 			Zone[] zones = HttpHelpers.GetEntities<Zone>(valuesUri, _server.ServerHandler);
@@ -62,7 +62,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zones_GetZonesById_InvalidFormat_MustReturnBadRequest()
+		public void Zones_1_GetZonesById_InvalidFormat_MustReturnBadRequest()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=hahaha");
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
@@ -76,7 +76,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zone_PostZone()
+		public void Zone_2_PostZone()
 		{
 			Zone zoneToAdd = new Zone
 			{
@@ -110,7 +110,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zone_PatchZone()
+		public void Zone_2_PatchZone()
 		{
 			Zone zoneToPatch = new Zone
 			{
@@ -145,7 +145,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Zone_DeleteZone()
+		public void Zone_3_DeleteZone()
 		{
 			int idOfZoneToDelete = 1;
 

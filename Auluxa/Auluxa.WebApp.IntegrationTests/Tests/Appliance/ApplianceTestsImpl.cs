@@ -9,6 +9,7 @@ using System.Net.Http.Formatting;
 using System.Linq;
 using Auluxa.WebApp.Appliances.Models;
 using System.Collections.Generic;
+using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.IntegrationTests
 {
@@ -36,7 +37,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Appliance_GetAllAppliances()
+		public void Appliance_1_GetAllAppliances()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
 			Appliance[] appliances = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler);
@@ -54,7 +55,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public void Appliance_GetApplianceById(string ids, int expectedCount)
+		public void Appliance_1_GetApplianceById(string ids, int expectedCount)
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=" + ids);
 			Appliance[] appliances = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler);
@@ -63,7 +64,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Appliance_GetApplianceById_InvalidFormat_MustReturnBadRequest()
+		public void Appliance_1_GetApplianceById_InvalidFormat_MustReturnBadRequest()
 		{
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=hahaha");
 			using (HttpClient client = new HttpClient(_server.ServerHandler))
@@ -77,7 +78,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Appliance_PostAppliance_UseDefaultSettings()
+		public void Appliance_2_PostAppliance_UseDefaultSettings()
 		{
 			Appliance applianceToAdd = new Appliance
 			{
@@ -100,8 +101,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.AreEqual("New AC", createdAppliance.Name);
 				Assert.AreEqual("Alfred", createdAppliance.UserName);
 				Assert.AreEqual(1, createdAppliance.Model.Id);
-				Assert.AreEqual("FunctionADefaultChoice", createdAppliance.CurrentSetting["functionA"]);	//todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBDefaultChoice", createdAppliance.CurrentSetting["functionB"]);
+				Assert.AreEqual("FunctionADefaultChoice", createdAppliance.CurrentSetting["acFunctionA"]);	//todo for some reason first letter gets lowercased...
+				Assert.AreEqual("FunctionBDefaultChoice", createdAppliance.CurrentSetting["acFunctionB"]);
 
 				createdApplianceId = createdAppliance.Id;
 			}
@@ -113,12 +114,12 @@ namespace Auluxa.WebApp.IntegrationTests
 			Assert.AreEqual("New AC", retrievedAppliancee.Name);
 			Assert.AreEqual("Alfred", retrievedAppliancee.UserName);
 			Assert.AreEqual(1, retrievedAppliancee.Model.Id);
-			Assert.AreEqual("FunctionADefaultChoice", retrievedAppliancee.CurrentSetting["functionA"]);    //todo for some reason first letter gets lowercased...
-			Assert.AreEqual("FunctionBDefaultChoice", retrievedAppliancee.CurrentSetting["functionB"]);
+			Assert.AreEqual("FunctionADefaultChoice", retrievedAppliancee.CurrentSetting["acFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBDefaultChoice", retrievedAppliancee.CurrentSetting["acFunctionB"]);
 		}
 
 		[Test]
-		public void Appliance_PostAppliance_SpecifySettingsManually()
+		public void Appliance_2_PostAppliance_SpecifySettingsManually()
 		{
 			Appliance applianceToAdd = new Appliance
 			{
@@ -127,8 +128,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Model = new ApplianceModel { Id = 1 },
 				CurrentSetting = new Dictionary<string, string>
 				{
-					["FunctionA"] = "FunctionAChoice2",
-					["FunctionB"] = "FunctionBChoice3"
+					["ACFunctionA"] = "FunctionAChoice2",
+					["ACFunctionB"] = "FunctionBChoice2"
 				}
 			};
 			int createdApplianceId;
@@ -145,8 +146,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.AreEqual("New AC", createdAppliance.Name);
 				Assert.AreEqual("Alfred", createdAppliance.UserName);
 				Assert.AreEqual(1, createdAppliance.Model.Id);
-				Assert.AreEqual("FunctionAChoice2", createdAppliance.CurrentSetting["functionA"]);  //todo for some reason first letter gets lowercased...
-				Assert.AreEqual("FunctionBChoice3", createdAppliance.CurrentSetting["functionB"]);
+				Assert.AreEqual("FunctionAChoice2", createdAppliance.CurrentSetting["acFunctionA"]);  //todo for some reason first letter gets lowercased...
+				Assert.AreEqual("FunctionBChoice2", createdAppliance.CurrentSetting["acFunctionB"]);
 
 				createdApplianceId = createdAppliance.Id;
 			}
@@ -158,12 +159,12 @@ namespace Auluxa.WebApp.IntegrationTests
 			Assert.AreEqual("New AC", retrievedAppliancee.Name);
 			Assert.AreEqual("Alfred", retrievedAppliancee.UserName);
 			Assert.AreEqual(1, retrievedAppliancee.Model.Id);
-			Assert.AreEqual("FunctionAChoice2", retrievedAppliancee.CurrentSetting["functionA"]);    //todo for some reason first letter gets lowercased...
-			Assert.AreEqual("FunctionBChoice3", retrievedAppliancee.CurrentSetting["functionB"]);
+			Assert.AreEqual("FunctionAChoice2", retrievedAppliancee.CurrentSetting["acFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBChoice2", retrievedAppliancee.CurrentSetting["acFunctionB"]);
 		}
 
 		[Test]
-		public void Appliance_PostAppliance_SpecifyIncompleteSettingsManually_MustReturnBadRequest()
+		public void Appliance_2_PostAppliance_SpecifyIncompleteSettingsManually_MustReturnBadRequest()
 		{
 			Appliance applianceToAdd = new Appliance
 			{
@@ -172,8 +173,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Model = new ApplianceModel { Id = 1 },
 				CurrentSetting = new Dictionary<string, string>
 				{
-					["FunctionA"] = "FunctionAChoice2",
-					//["FunctionB"] = "FunctionBChoice3" // We skip one setting
+					["ACFunctionA"] = "FunctionAChoice2",
+					//["acFunctionB"] = "FunctionBChoice2" // We skip one setting
 				}
 			};
 
@@ -189,7 +190,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Appliance_PostAppliance_SpecifyWrongSettingsManually_MustReturnBadRequest()
+		public void Appliance_2_PostAppliance_SpecifyWrongSettingsManually_MustReturnBadRequest()
 		{
 			Appliance applianceToAdd = new Appliance
 			{
@@ -198,8 +199,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				Model = new ApplianceModel { Id = 1 },
 				CurrentSetting = new Dictionary<string, string>
 				{
-					["FunctionA"] = "FunctionAChoice2",
-					["FunctionB"] = "AWrongSetting"
+					["ACFunctionA"] = "FunctionAChoice2",
+					["ACFunctionB"] = "AWrongSetting"
 				}
 			};
 
@@ -215,7 +216,7 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Appliance_PostAppliance_NoModelSpecified_MustReturnBadRequest()
+		public void Appliance_2_PostAppliance_NoModelSpecified_MustReturnBadRequest()
 		{
 			Appliance applianceToAdd = new Appliance
 			{
@@ -223,8 +224,8 @@ namespace Auluxa.WebApp.IntegrationTests
 				UserName = "Alfred",
 				CurrentSetting = new Dictionary<string, string>
 				{
-					["FunctionA"] = "FunctionAChoice2",
-					["FunctionB"] = "AWrongSetting"
+					["ACFunctionA"] = "FunctionAChoice2",
+					["ACFunctionB"] = "FunctionBChoice2"
 				}
 			};
 
@@ -240,13 +241,15 @@ namespace Auluxa.WebApp.IntegrationTests
 		}
 
 		[Test]
-		public void Appliance_PatchAppliance()
+		public void Appliance_3_PatchAppliance_CompleteAndUseDefaultSettings()
 		{
 			Appliance applianceToPatch = new Appliance
 			{
 				Id = 2,
 				Name = "Patched AC",
 				UserName = "Batman",
+				Zone = new Zone { Id = 1 },
+				Model = new ApplianceModel { Id = 2 },
 			};
 
 			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
@@ -260,9 +263,15 @@ namespace Auluxa.WebApp.IntegrationTests
 				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
 
 				Appliance modifiedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
-				Assert.AreEqual(2, modifiedAppliance.Id);
-				Assert.AreEqual("Patched AC", modifiedAppliance.Name);
-				Assert.AreEqual("Batman", modifiedAppliance.UserName);
+				Assert.AreEqual(2, modifiedAppliance.Id, "Invalid Id");
+				Assert.AreEqual("Patched AC", modifiedAppliance.Name, "Invalid Name");
+				Assert.AreEqual("Batman", modifiedAppliance.UserName, "Invalid UserName");
+				
+				Assert.AreEqual(2, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+				Assert.AreEqual("FunctionADefaultChoice", modifiedAppliance.CurrentSetting["lightFunctionA"]);    //todo for some reason first letter gets lowercased...
+				Assert.AreEqual("FunctionBDefaultChoice", modifiedAppliance.CurrentSetting["lightFunctionB"]);
+
+				Assert.AreEqual(1, modifiedAppliance.Zone.Id, "Invalid Zone Id");
 			}
 
 			// Get modified Appliance and make sure patch has been applied
@@ -270,17 +279,152 @@ namespace Auluxa.WebApp.IntegrationTests
 			Appliance retrievedAppliancee = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler).SingleOrDefault();
 
 			Assert.IsNotNull(retrievedAppliancee);
-			Assert.AreEqual(2, retrievedAppliancee.Id);
-			Assert.AreEqual("Patched AC", retrievedAppliancee.Name);
-			Assert.AreEqual("Batman", retrievedAppliancee.UserName);
+			Assert.AreEqual(2, retrievedAppliancee.Id, "Invalid Id");
+			Assert.AreEqual("Patched AC", retrievedAppliancee.Name, "Invalid Name");
+			Assert.AreEqual("Batman", retrievedAppliancee.UserName, "Invalid UserName");
+			
+			Assert.AreEqual(2, retrievedAppliancee.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+			Assert.AreEqual("FunctionADefaultChoice", retrievedAppliancee.CurrentSetting["lightFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBDefaultChoice", retrievedAppliancee.CurrentSetting["lightFunctionB"]);
+
+			Assert.AreEqual(1, retrievedAppliancee.Zone.Id, "Invalid Zone Id");
 		}
 
-		//todo setting and model patch
+		[Test]
+		public void Appliance_4_PatchAppliance_SpecifyModelAndSettingsManually()
+		{
+			Appliance applianceToPatch = new Appliance
+			{
+				Id = 2,
+				Model = new ApplianceModel { Id = 3 },
+				CurrentSetting = new Dictionary<string, string>
+				{
+					["SwitchFunctionA"] = "FunctionAChoice2",
+					["SwitchFunctionB"] = "FunctionBChoice2"
+				}
+			};
 
-		//todo zone patch /!\ HAVE ISSUES HERE
+			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
+
+			// Patch and check returned result
+			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
+			using (HttpClient client = new HttpClient(_server.ServerHandler))
+			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
+			{
+				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+
+				Appliance modifiedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+				
+				Assert.AreEqual(3, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+				Assert.AreEqual("FunctionAChoice2", modifiedAppliance.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
+				Assert.AreEqual("FunctionBChoice2", modifiedAppliance.CurrentSetting["switchFunctionB"]);
+			}
+
+			// Get modified Appliance and make sure patch has been applied
+			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
+			Appliance retrievedAppliancee = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler).SingleOrDefault();
+
+			Assert.IsNotNull(retrievedAppliancee);
+			Assert.AreEqual(3, retrievedAppliancee.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+			Assert.AreEqual("FunctionAChoice2", retrievedAppliancee.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBChoice2", retrievedAppliancee.CurrentSetting["switchFunctionB"]);
+		}
 
 		[Test]
-		public void Appliance_DeleteAppliance()
+		public void Appliance_5_PatchAppliance_SpecifySettingsManuallyAndNoModel()
+		{
+			Appliance applianceToPatch = new Appliance
+			{
+				Id = 2,
+				CurrentSetting = new Dictionary<string, string>
+				{
+					["SwitchFunctionA"] = "FunctionAChoice3",
+					["SwitchFunctionB"] = "FunctionBChoice3"
+				}
+			};
+
+			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
+
+			// Patch and check returned result
+			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
+			using (HttpClient client = new HttpClient(_server.ServerHandler))
+			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
+			{
+				Assert.IsTrue(httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(HttpStatusCode.Created, httpResponseMessage.StatusCode);
+
+				Appliance modifiedAppliance = JsonConvert.DeserializeObject<Appliance>(httpResponseMessage.Content.ReadAsStringAsync().Result);
+
+				Assert.AreEqual(3, modifiedAppliance.Model.Id, "Invalid Model Id, test might have been ran in wrong order");
+				Assert.AreEqual("FunctionAChoice3", modifiedAppliance.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
+				Assert.AreEqual("FunctionBChoice3", modifiedAppliance.CurrentSetting["switchFunctionB"]);
+			}
+
+			// Get modified Appliance and make sure patch has been applied
+			valuesUri = new Uri(_server.BaseAddress, relativeUri + "?ids=2");
+			Appliance retrievedAppliancee = HttpHelpers.GetEntities<Appliance>(valuesUri, _server.ServerHandler).SingleOrDefault();
+
+			Assert.IsNotNull(retrievedAppliancee);
+			Assert.AreEqual(3, retrievedAppliancee.Model.Id, "Invalid Model Id");
+			Assert.AreEqual("FunctionAChoice3", retrievedAppliancee.CurrentSetting["switchFunctionA"]);    //todo for some reason first letter gets lowercased...
+			Assert.AreEqual("FunctionBChoice3", retrievedAppliancee.CurrentSetting["switchFunctionB"]);
+		}
+
+		[Test]
+		public void Appliance_5_PatchAppliance_SpecifyIncompleteSettingsManually_MustReturnBadRequest()
+		{
+			Appliance applianceToPatch = new Appliance
+			{
+				Id = 2,
+				CurrentSetting = new Dictionary<string, string>
+				{
+					["SwitchFunctionA"] = "FunctionAChoice3",
+					//["SwitchFunctionB"] = "FunctionBChoice3"
+				}
+			};
+
+			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
+
+			// Patch and check returned result
+			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
+			using (HttpClient client = new HttpClient(_server.ServerHandler))
+			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
+			{
+				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
+				//todo should not be Error 500. Change controller/repo to follow best practices
+			}
+		}
+
+		[Test]
+		public void Appliance_5_PatchAppliance_SpecifyWrongSettingsManually_MustReturnBadRequest()
+		{
+			Appliance applianceToPatch = new Appliance
+			{
+				Id = 2,
+				CurrentSetting = new Dictionary<string, string>
+				{
+					["SwitchFunctionA"] = "FunctionAChoice3",
+					["SwitchFunctionB"] = "WrongChoice"
+				}
+			};
+
+			Uri valuesUri = new Uri(_server.BaseAddress, relativeUri);
+
+			// Patch and check returned result
+			HttpRequestMessage request = HttpHelpers.CreateRequest<Appliance>(valuesUri, "application/json", new HttpMethod("PATCH"), applianceToPatch, new JsonMediaTypeFormatter());
+			using (HttpClient client = new HttpClient(_server.ServerHandler))
+			using (HttpResponseMessage httpResponseMessage = client.SendAsync(request).Result)
+			{
+				Assert.IsFalse(httpResponseMessage.IsSuccessStatusCode);
+				Assert.AreEqual(HttpStatusCode.InternalServerError, httpResponseMessage.StatusCode);
+				//todo should not be Error 500. Change controller/repo to follow best practices
+			}
+		}
+
+		[Test]
+		public void Appliance_6_DeleteAppliance()
 		{
 			int idOfApplianceToDelete = 1;
 
