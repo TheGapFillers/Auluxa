@@ -10,12 +10,6 @@ namespace Auluxa.WebApp.Appliances.Models
 	public class Appliance
 	{
 		public int Id { get; set; }
-		/// <summary>
-		/// Appliance's owner
-		/// </summary>
-		[JsonIgnore]
-		[Required]
-		public string UserName { get; set; }
 
 		/// <summary>
 		/// Appliance's name
@@ -26,7 +20,7 @@ namespace Auluxa.WebApp.Appliances.Models
 		/// <summary>
 		/// Appliance's Zone. When creating or editing Appliance, must give an existing Zone identified by its Id, all other Zone attributes will be ignored.
 		/// </summary>
-		public Zone Zone { get; set; }
+		public IEnumerable<Zone> Zones { get; set; }
 
 		/// <summary>
 		/// Appliance's Model. When creating or editing Appliance, must give an existing ApplianceModel identified by its Id, all other ApplianceModel attributes will be ignored.
@@ -46,11 +40,6 @@ namespace Auluxa.WebApp.Appliances.Models
 
 		[JsonIgnore]
 		public string SerializedSetting { get; set; }
-
-		/// <summary>
-		/// Appliance's Zone's name. When creating or editing Appliance, will be ignored.
-		/// </summary>
-		public string ZoneName => Zone?.Name;
 
 		public void ApplyDefaultSettings()
 		{

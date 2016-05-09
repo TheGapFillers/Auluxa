@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 
@@ -38,7 +41,7 @@ namespace Auluxa.WebApp.Auth
 
             // assign user to specific role
             AuthUser createdUser = await _userManager.FindByEmailAsync(userToCreate.Email);
-            IdentityResult roleResult = await _userManager.AddToRolesAsync(createdUser.Id, "Admin");
+            IdentityResult roleResult = await _userManager.AddToRolesAsync(createdUser.Id, "SuperAdmin");
             if (!roleResult.Succeeded)
             {
                 foreach (string error in result.Errors)
@@ -49,9 +52,29 @@ namespace Auluxa.WebApp.Auth
             return Ok(result);
         }
 
-        [AuluxaAuthorization(Roles = "Admin")]
+        [AuluxaAuthorization(Roles = "SuperAdmin")]
+        [HttpGet]
+        [Route("profiles")]
+        public async Task<IHttpActionResult> GetProfilesAsync()
+        {
+            // Get the parentId
+            AuthUser parentUser = await _userManager.FindByEmailAsync(User.Identity.Name);
+
+            // Get all the child profiles
+            IEnumerable<AuthUser> users = await _userManager.GetUsersFromParentId(parentUser.Id);
+
+            IEnumerable<AuthUserViewModel> userVms = users.Select(u =>
+                new AuthUserViewModel
+                {
+                    Email = u.Email
+                });
+
+            return Ok(userVms);
+        }
+
+        [AuluxaAuthorization(Roles = "SuperAdmin")]
         [HttpPost]
-        [Route("createprofile")]
+        [Route("profiles")]
         public async Task<IHttpActionResult> CreateProfileAsync([FromBody] AuthUserViewModel authUserViewModel)
         {
             // Get the parentId

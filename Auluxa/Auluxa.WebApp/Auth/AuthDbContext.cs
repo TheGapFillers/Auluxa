@@ -17,7 +17,8 @@ namespace Auluxa.WebApp.Auth
         {
             protected override void Seed(AuthDbContext context)
             {
-                // intialize roles
+                // initialize roles
+                context.Roles.Add(new IdentityRole("SuperAdmin"));
                 context.Roles.Add(new IdentityRole("Admin"));
                 context.SaveChanges();
                 base.Seed(context);

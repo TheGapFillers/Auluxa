@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -62,5 +65,8 @@ namespace Auluxa.WebApp.Auth
             }
             return manager;
         }
+
+        public async Task<IEnumerable<AuthUser>> GetUsersFromParentId(string parentId) => 
+            await (Store as AuthUserStore).GetUsersFromParentId(parentId);
     }
 }

@@ -245,6 +245,7 @@
     <Compile Include="Auth\AuthSmsService.cs" />
     <Compile Include="Auth\AuthUser.cs" />
     <Compile Include="Auth\AuthUserManager.cs" />
+    <Compile Include="Auth\AuthUserStore.cs" />
     <Compile Include="Auth\OAuthProvider.cs" />
     <Compile Include="Kranium\Repositories\EfKraniumRepository.cs" />
     <Compile Include="Kranium\Repositories\IKraniumDbContext.cs" />
