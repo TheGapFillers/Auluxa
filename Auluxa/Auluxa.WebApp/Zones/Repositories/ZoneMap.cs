@@ -11,8 +11,6 @@ namespace Auluxa.WebApp.Zones.Repositories
             ToTable("Zones", "Auluxa");
             HasKey(z => z.Id);
             Property(z => z.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
-
-            HasMany(z => z.Appliances).WithOptional(a => a.Zone);
         }
     }
 }

@@ -6,6 +6,7 @@ using Auluxa.WebApp.Appliances.Repositories;
 using NUnit.Framework;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.Tests.ControllersTests
 {
@@ -17,7 +18,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		{
 			base.SetUp();
 			Controller = new ApplianceController(
-				new EfApplianceRepository { Context = Context }
+				new EfApplianceRepository { Context = Context, ZoneContext = Context }
 			);
 			Controller.Request = new System.Net.Http.HttpRequestMessage { RequestUri = new Uri(REQUEST_URI) };
 
@@ -30,6 +31,8 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			// Fill context with required mock data
 			Context.ApplianceModels.Add(GetMockApplianceModel(1));
 			Context.ApplianceModels.Add(GetMockApplianceModel(2));
+			Context.Zones.Add(GetMockZone(1));
+			Context.Zones.Add(GetMockZone(2));
 		}
 
 		[TearDown]
@@ -39,9 +42,9 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		}
 
 		[Test]
-		public async Task ApplianceController_GetTest()
+		public async Task ApplianceController_GetAll()
 		{
-			await ModelController_GetTest();
+			await ModelController_GetAll();
 		}
 
 		[TestCase("", 0)]
@@ -49,25 +52,25 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public async Task ApplianceController_GetByIdTest(string ids, int expectedCount)
+		public async Task ApplianceController_GetById(string ids, int expectedCount)
 		{
-			await ModelController_GetIdTest(ids, expectedCount);
+			await ModelController_GetById(ids, expectedCount);
 		}
 
 		[Test]
-		public void ApplianceController_GetByIdTest_InvalidFormatMustThrow()
+		public void ApplianceController_GetByIdT_InvalidFormatMustThrow()
 		{
-			ModelController_GetByIdTest_InvalidFormatMustThrow();
+			ModelController_GetById_InvalidFormatMustThrow();
 		}
 
 		[Test]
-		public async Task ApplianceController_PostTest()
+		public async Task ApplianceController_Post()
 		{
-			await ModelController_PostTest();
+			await ModelController_Post();
 		}
 
 		[Test]
-		public async Task ApplianceController_PatchTest()
+		public async Task ApplianceController_Patch()
 		{
 			Appliance a = BuildTestModel();
 
@@ -75,17 +78,18 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			//todo test null parameters
 			a.Name = "ApplianceUpdated";
 			a.Model = GetMockApplianceModel(2);
+			a.Zone = GetMockZone(2);
 			a.CurrentSetting = new Dictionary<string, string>
 			{
 				["FunctionA"] = "FunctionADefaultChoice",
 				["FunctionB"] = "FunctionBChoice2"
 			};
 
-			await ModelController_PatchTest(a);
+			await ModelController_Patch(a);
 		}
 
 		[Test]
-		public void ApplianceController_PatchTest_UseInvalidSettings_MustThrow()
+		public void ApplianceController_Patch_UseInvalidSettings_MustThrow()
 		{
 			Appliance a = BuildTestModel();
 
@@ -100,14 +104,14 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				["FunctionB"] = "FunctionBChoice2"
 			};
 
-			var ex = Assert.ThrowsAsync<Exception>(async () => await ModelController_PatchTest(a));
+			var ex = Assert.ThrowsAsync<Exception>(async () => await ModelController_Patch(a));
 			Assert.AreEqual(ex.Message, "Invalid settings, must follow appliance model");
 		}
 
 		[Test]
-		public async Task ApplianceController_DeleteTest()
+		public async Task ApplianceController_Delete()
 		{
-			await ModelController_DeleteTest(am => am.Id);
+			await ModelController_Delete(am => am.Id);
 		}
 
 		protected override Appliance BuildTestModel(int id = 1)
@@ -117,12 +121,14 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				Id = id,
 				Name = "Appliance1",
 				UserName = "Mr. Bean",
+				Zone = GetMockZone(1),
 				Model = GetMockApplianceModel(1),
 				CurrentSetting = new Dictionary<string, string>
 				{
 					["FunctionA"] = "FunctionAChoice2",
 					["FunctionB"] = "FunctionBChoice3"
 				}
+				
 			};
 		}
 
@@ -131,6 +137,7 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 			Assert.AreEqual(expected.Name, actual.Name);
 			Assert.AreEqual(expected.UserName, actual.UserName);
 			Assert.AreEqual(JsonConvert.SerializeObject(expected.Model), JsonConvert.SerializeObject(actual.Model));
+			Assert.AreEqual(JsonConvert.SerializeObject(expected.Zone), JsonConvert.SerializeObject(actual.Zone));
 			Assert.AreEqual(expected.CurrentSetting, actual.CurrentSetting);
 		}
 
@@ -161,6 +168,24 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 					["FunctionA"] = new[] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
 					["FunctionB"] = new[] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
 				}
+			};
+		}
+
+		private Zone GetMockZone(int id)
+		{
+			if (id == 1)
+				return new Zone()
+				{
+					Id = 1,
+					Name = "Bed Room",
+					UserName = "Serge"
+				};
+
+			return new Zone()
+			{
+				Id = 2,
+				Name = "Living Room",
+				UserName = "Marcel"
 			};
 		}
 	}

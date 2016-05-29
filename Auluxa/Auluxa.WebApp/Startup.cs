@@ -1,4 +1,8 @@
-﻿using Auluxa.WebApp;
+﻿using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+using Auluxa.WebApp;
 using Microsoft.Owin;
 using Owin;
 
@@ -10,6 +14,9 @@ namespace Auluxa.WebApp
         public void Configuration(IAppBuilder app)
         {
             ConfigureAuth(app);
+            var config = new HttpConfiguration();
+            WebApiConfig.Register(config);
+            app.UseWebApi(config);
         }
     }
 }

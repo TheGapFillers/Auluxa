@@ -23,7 +23,7 @@ namespace Auluxa.WebApp.Scenes.Repositories
                 .Include(q => q.ApplianceSettings)
                 .Include(q => q.ApplianceSettings.Select(s => s.Appliance))
                 .Include(q => q.ApplianceSettings.Select(s => s.Appliance.Model))
-                .Include(q => q.ApplianceSettings.Select(s => s.Appliance).Select(a => a.Zone))
+                .Include(q => q.ApplianceSettings.Select(s => s.Appliance).Select(a => a.Zones))
                 .Include(q => q.Sequence)
                 .Include(q => q.Schedule)
                 .ToListAsync();

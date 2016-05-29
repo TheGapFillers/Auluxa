@@ -68,5 +68,8 @@ namespace Auluxa.WebApp.Auth
 
         public async Task<IEnumerable<AuthUser>> GetUsersFromParentId(string parentId) => 
             await (Store as AuthUserStore).GetUsersFromParentId(parentId);
+
+        public async Task<AuthUser> GetUserFromParentId(string parentId, string userName) =>
+            await (Store as AuthUserStore).GetUserFromParentId(parentId, userName);
     }
 }

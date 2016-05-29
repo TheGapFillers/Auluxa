@@ -63,7 +63,9 @@ function testAppliances() {
 	
 	$newAppliance = '
 	{
-		"Name": "Lockpad"
+		"Name": "Lockpad",
+		"UserName": "TestUser"
+		
 	}
 	'
 	$newAppliance = Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/appliances/ -Body $newAppliance -ContentType "application/json"
@@ -71,7 +73,8 @@ function testAppliances() {
 	$updatedAppliance = '
 	{
 		"ApplianceId": "5",
-		"Name": "Lockpad-Modified"
+		"Name": "Lockpad-Modified",
+		"UserName": "NewTestUser"
 	}
 	'
 	$noDisplay = Invoke-RestMethod -Method Post -Uri http://localhost:57776/api/appliances/ -Body $updatedAppliance -ContentType "application/json"
@@ -85,6 +88,7 @@ function testAppliances() {
 	assertAreEqual 5 $newAppliance.applianceId
 	assertAreEqual "Lockpad" $newAppliance.name
 	assertAreEqual "Lockpad-Modified" $updatedAppliance.name
+	assertAreEqual "NewTestUser" $updatedAppliance.UserName
 	assertAreEqual 4 $appliancesAfterDelete.count
 }testAppliances
 

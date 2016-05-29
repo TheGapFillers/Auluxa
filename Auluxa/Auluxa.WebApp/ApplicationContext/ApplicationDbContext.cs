@@ -64,8 +64,8 @@ namespace Auluxa.WebApp.ApplicationContext
 						Id = 1,
 						PossibleSettings = new Dictionary<string, string[]>
 						{
-							["FunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
-							["FunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
+							["ACFunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
+							["ACFunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
 						}
 					},
 					new ApplianceModel("Light", "BrandNameA", "Light A")
@@ -73,8 +73,17 @@ namespace Auluxa.WebApp.ApplicationContext
 						Id = 2,
 						PossibleSettings = new Dictionary<string, string[]>
 						{
-							["FunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
-							["FunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
+							["LightFunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
+							["LightFunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
+						}
+					},
+					new ApplianceModel("Switch", "BrandNameA", "Switch A")
+					{
+						Id = 2,
+						PossibleSettings = new Dictionary<string, string[]>
+						{
+							["SwitchFunctionA"] = new [] { "FunctionADefaultChoice", "FunctionAChoice2", "FunctionAChoice3" },
+							["SwitchFunctionB"] = new [] { "FunctionBDefaultChoice", "FunctionBChoice2", "FunctionBChoice3" }
 						}
 					}
 				};
@@ -88,14 +97,20 @@ namespace Auluxa.WebApp.ApplicationContext
 					{
 						Id = 1,
 						Name = "Appliance1",
+						UserName = "Serge",
 						Model = applianceModels.Find(am => am.Id == 1),
 						CurrentSetting =  new Dictionary<string, string>
 						{
-							["FunctionA"] = "FunctionAChoice2",
-							["FunctionB"] = "FunctionBChoice3"
+							["ACFunctionA"] = "FunctionAChoice2",
+							["ACFunctionB"] = "FunctionBChoice3"
 						}
 					},
-					new Appliance { Id = 2, Name = "Appliance2", Model = applianceModels.Find(am => am.Id == 2) },
+					new Appliance {
+						Id = 2,
+						Name = "Appliance2",
+						UserName = "Marcel",
+						Model = applianceModels.Find(am => am.Id == 2)
+					},
 				};
 				context.Appliances.AddRange(appliances);
 				context.SaveChanges();
@@ -136,8 +151,8 @@ namespace Auluxa.WebApp.ApplicationContext
 							{
 								Appliance = appliances.Find(a => a.Id == 1), Setting = new Dictionary<string, string>
 								{
-									["FunctionA"] = "FunctionAChoice1",
-									["FunctionB"] = "FunctionBChoice2"
+									["LightFunctionA"] = "FunctionAChoice1",
+									["LightFunctionB"] = "FunctionBChoice2"
 								}
 							},
 							new ApplianceSetting { Appliance = appliances.Find(a => a.Id == 2) }

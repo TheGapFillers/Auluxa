@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Auluxa.WebApp.Appliances.Models;
+using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.Appliances.Repositories
 {
@@ -13,7 +14,9 @@ namespace Auluxa.WebApp.Appliances.Repositories
             Property(a => a.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
             HasRequired(a => a.Model);
-            HasOptional(a => a.Zone);
+
+            HasMany(a => a.Zones)
+                .WithMany(z => z.Appliances);
         }
     }
 }

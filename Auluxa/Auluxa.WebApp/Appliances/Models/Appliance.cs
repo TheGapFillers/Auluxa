@@ -3,79 +3,74 @@ using System.Collections.Generic;
 using System.Linq;
 using Auluxa.WebApp.Zones.Models;
 using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations;
 
 namespace Auluxa.WebApp.Appliances.Models
 {
-	public class Appliance
-	{
-		public int Id { get; set; }
+    public class Appliance
+    {
+        public int Id { get; set; }
 
-		/// <summary>
-		/// Appliance's name
-		/// </summary>
-		[Required]
-		public string Name { get; set; }
+        /// <summary>
+        /// Required: Appliance's owner
+        /// </summary>
+        public string UserName { get; set; }
 
-		/// <summary>
-		/// Appliance's Zone. When creating or editing Appliance, must give an existing Zone identified by its Id, all other Zone attributes will be ignored.
-		/// </summary>
-		public IEnumerable<Zone> Zones { get; set; }
+        /// <summary>
+        /// Required: Appliance's name
+        /// </summary>
+        public string Name { get; set; }
 
-		/// <summary>
-		/// Appliance's Model. When creating or editing Appliance, must give an existing ApplianceModel identified by its Id, all other ApplianceModel attributes will be ignored.
-		/// </summary>
-		[Required]
-		public ApplianceModel Model { get; set; }
+        /// <summary>
+        /// Appliance's Zone. When creating or editing Appliance, must give an existing Zone identified by its Id, all other Zone attributes will be ignored.
+        /// </summary>
+        public ICollection<Zone> Zones { get; set; }
 
-		/// <summary>
-		/// Appliance's settings. If not set, ApplianceModel's default settings will be applied.
-		/// Of type Dictionary[string, string]
-		/// </summary>
-		public Dictionary<string, string> CurrentSetting	//todo Should not be exposed directly for get. All operations will fail.
-		{
-			get { return SerializedSetting != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(SerializedSetting) : null; }
-			set { SerializedSetting = JsonConvert.SerializeObject(value); }
-		}
+        /// <summary>
+        /// Required: Appliance's Model. When creating or editing Appliance, must give an existing ApplianceModel identified by its Id, all other ApplianceModel attributes will be ignored.
+        /// </summary>
+        public ApplianceModel Model { get; set; }
 
-		[JsonIgnore]
-		public string SerializedSetting { get; set; }
+        /// <summary>
+        /// Appliance's settings. If not set, ApplianceModel's default settings will be applied.
+        /// Format: Dictionary[string, string] where Key is setting's name, and Value is setting's value.
+        /// Warning: Key and Value must exist in ApplianceModel's PossibleSettings
+        /// (e.g. [['Fan', 'Off'], ['AC', 'Auto']])
+        /// </summary>
+        public Dictionary<string, string> CurrentSetting	//todo Should not be exposed directly for get. All operations will fail.
+        {
+            get { return SerializedSetting != null ? JsonConvert.DeserializeObject<Dictionary<string, string>>(SerializedSetting) : null; }
+            set { SerializedSetting = JsonConvert.SerializeObject(value); }
+        }
 
-		public void ApplyDefaultSettings()
-		{
-			if (Model?.PossibleSettings == null)
-				throw new InvalidOperationException("Null or invalid ApplianceModel");
+        [JsonIgnore]
+        public string SerializedSetting { get; set; }
 
-			var tempCurrentSetting = new Dictionary<string, string>();
-			foreach (var kvp in Model.PossibleSettings)
-			{
-				tempCurrentSetting.Add(kvp.Key, kvp.Value[0]);
-			}
-			CurrentSetting = tempCurrentSetting;
-		}
+        public void ApplyDefaultSettings()
+        {
+            if (Model?.PossibleSettings == null)
+                throw new InvalidOperationException("Null or invalid ApplianceModel");
 
-		public bool AreCurrentSettingsValid()
-		{
-			if (Model?.PossibleSettings == null)
-				throw new InvalidOperationException("Null or invalid ApplianceModel");
+            CurrentSetting = Model?.PossibleSettings?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[0]);
+        }
 
-			if (CurrentSetting.Count != Model.PossibleSettings.Count)
-				return false;
+        public bool AreCurrentSettingsValid()
+        {
+            if (Model?.PossibleSettings == null)
+                throw new InvalidOperationException("Null or invalid ApplianceModel");
 
-			foreach(var kvp in CurrentSetting)
-			{
-				if(!Model.PossibleSettings.ContainsKey(kvp.Key))
-					return false;
+            if (CurrentSetting.Count != Model.PossibleSettings.Count)
+                return false;
 
-				if (!Model.PossibleSettings[kvp.Key].Contains(kvp.Value))
-					return false;
-			}
+            foreach(var kvp in CurrentSetting)
+            {
+                if(!Model.PossibleSettings.ContainsKey(kvp.Key))
+                    return false;
 
-			return true;
-		}
+                if (!Model.PossibleSettings[kvp.Key].Contains(kvp.Value))
+                    return false;
+            }
 
-
-
-		public bool ShouldSerializeZones() { return false; }
-	}
+            return true;
+        }
+    }
 }

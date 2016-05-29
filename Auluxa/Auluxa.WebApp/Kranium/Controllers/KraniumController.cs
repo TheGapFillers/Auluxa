@@ -30,7 +30,7 @@ namespace Auluxa.WebApp.Kranium.Controllers
 		[HttpGet]
 		public async Task<IHttpActionResult> Get()
 		{
-            KraniumEntity kranium = (await _repository.GetKraniumAsync());
+			KraniumEntity kranium = (await _repository.GetKraniumAsync());
 			return Ok(kranium);
 		}
 
@@ -46,7 +46,7 @@ namespace Auluxa.WebApp.Kranium.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-            KraniumEntity createdKranium = await _repository.CreateKraniumAsync(kranium);
+			KraniumEntity createdKranium = await _repository.CreateKraniumAsync(kranium);
 			return Created(Request.RequestUri, createdKranium);
 		}
 
@@ -62,7 +62,7 @@ namespace Auluxa.WebApp.Kranium.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
-            KraniumEntity updatedKranium = await _repository.UpdateKraniumAsync(kranium);
+			KraniumEntity updatedKranium = await _repository.UpdateKraniumAsync(kranium);
 			return Created(Request.RequestUri, updatedKranium);
 		}
 

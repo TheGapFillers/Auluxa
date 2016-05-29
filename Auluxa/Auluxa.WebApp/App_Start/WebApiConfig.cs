@@ -76,7 +76,7 @@ namespace Auluxa.WebApp
             // Register all the types to be abstracted / white labeled
             // auth
             builder.RegisterType<AuthDbContext>();
-            builder.RegisterType<AuthUserManager>().AsSelf().InstancePerRequest();
+            builder.Register(c => new AuthUserManager(new AuthUserStore(new AuthDbContext()))).AsSelf().InstancePerRequest();
             builder.RegisterType<AuthSignInManager>().AsSelf().InstancePerRequest();
             builder.Register(c => new AuthUserStore()).AsImplementedInterfaces().InstancePerRequest();
             builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).As<IAuthenticationManager>();

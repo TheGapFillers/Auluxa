@@ -5,6 +5,8 @@ using System.Web.Http;
 using Auluxa.WebApp.Appliances.Models;
 using Auluxa.WebApp.Appliances.Repositories;
 using Auluxa.WebApp.Helpers;
+using Auluxa.WebApp.Zones.Repositories;
+using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.Appliances.Controllers
 {
@@ -15,6 +17,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 	public class ApplianceController : ApiController
 	{
 		private readonly IApplianceRepository _repository;
+		//private readonly IZoneRepository _zoneRepository;
 
 		/// <summary>
 		/// Constructor of the ApplianceController
@@ -28,7 +31,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// <summary>
 		/// Get appliances (all or only requested)
 		/// </summary>
-		/// <param name="ids">comma-separated ids.</param>
+		/// <param name="ids">comma-separated ids. If not specified, will return all available appliances.</param>
 		/// <returns></returns>
 		[Route("")]
 		[HttpGet]
@@ -36,7 +39,16 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		{
 			List<int> idList = null;
 			if (ids != null)
-				idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
+			{
+				try
+				{
+					idList = ids.SplitAndTrim(',').Select(int.Parse).ToList();
+				}
+				catch (System.FormatException)
+				{
+					return BadRequest();
+				}
+			}
 
 			List<Appliance> appliances = (await _repository.GetAppliancesAsync(idList)).ToList();
 			return Ok(appliances);
@@ -45,7 +57,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// <summary>
 		/// Create a new appliance.
 		/// </summary>
-		/// <param name="appliance"></param>
+		/// <param name="appliance">Give an appliance with all required properties. Id will be ignored.</param>
 		/// <returns></returns>
 		[HttpPost]
 		[Route()]
@@ -61,7 +73,7 @@ namespace Auluxa.WebApp.Appliances.Controllers
 		/// <summary>
 		/// Update an existing appliance.
 		/// </summary>
-		/// <param name="appliance"></param>
+		/// <param name="appliance">Must specify the Id of the appliance to be updated, and only properties to change</param>
 		/// <returns></returns>
 		[HttpPatch]
 		[Route()]
@@ -70,7 +82,14 @@ namespace Auluxa.WebApp.Appliances.Controllers
 			if (!ModelState.IsValid)
 				return BadRequest(ModelState);
 
+			//if (appliance.Zone != null)
+			//{
+			//	Zone usedZone = (await _zoneRepository.GetZonesAsync(new List<int> { appliance.Zone.Id })).First();
+			//	appliance.Zone = usedZone;
+			//}
+
 			Appliance updatedAppliance = await _repository.UpdateApplianceAsync(appliance);
+
 			return Created(Request.RequestUri, updatedAppliance);
 		}
 

@@ -30,6 +30,11 @@ namespace Auluxa.WebApp.Auth
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
+            if (!user.EmailConfirmed)
+            {
+                context.SetError("invalid_grant", "The user name or password is incorrect.");
+                return;
+            }
 
             // Validates the ticket
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager);

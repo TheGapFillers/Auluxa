@@ -34,9 +34,9 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		}
 
 		[Test]
-		public async Task ApplianceModelController_GetTest()
+		public async Task ApplianceModelController_Get()
 		{
-			await ModelController_GetTest();
+			await ModelController_GetAll();
 		}
 
 		[TestCase("", 0)]
@@ -44,25 +44,25 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 		[TestCase("1", 1)]
 		[TestCase("1,2", 2)]
 		[TestCase("2,3", 1)]
-		public async Task ApplianceModelController_GetByIdTest(string ids, int expectedCount)
+		public async Task ApplianceModelController_GetById(string ids, int expectedCount)
 		{
-			await ModelController_GetIdTest(ids, expectedCount);
+			await ModelController_GetById(ids, expectedCount);
 		}
 
 		[Test]
-		public void ApplianceModelController_GetByIdTest_InvalidFormatMustThrow()
+		public void ApplianceModelController_GetById_InvalidFormatMustThrow()
 		{
-			ModelController_GetByIdTest_InvalidFormatMustThrow();
+			ModelController_GetById_InvalidFormatMustThrow();
 		}
 
 		[Test]
-		public async Task ApplianceModelController_PostTest()
+		public async Task ApplianceModelController_Post()
 		{
-			await ModelController_PostTest();
+			await ModelController_Post();
 		}
 
 		[Test]
-		public async Task ApplianceModelController_PatchTest()
+		public async Task ApplianceModelController_Patch()
 		{
 			ApplianceModel am = BuildTestModel();
 
@@ -77,13 +77,13 @@ namespace Auluxa.WebApp.Tests.ControllersTests
 				["FunctionD"] = new[] { "FunctionDDefaultChoice", "FunctionDChoice2", "FunctionDChoice3" }
 			};
 
-			await ModelController_PatchTest(am);
+			await ModelController_Patch(am);
 		}
 
 		[Test]
-		public async Task ApplianceModelController_DeleteTest()
+		public async Task ApplianceModelController_Delete()
 		{
-			await ModelController_DeleteTest(am => am.Id);
+			await ModelController_Delete(am => am.Id);
 		}
 
 		protected override ApplianceModel BuildTestModel(int id = 1)

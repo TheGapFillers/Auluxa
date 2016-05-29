@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.WebApp", "Auluxa.Web
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.WebApp.Tests", "Auluxa.WebApp.Tests\Auluxa.WebApp.Tests.csproj", "{C214D4D0-4080-4A31-A37E-D9C816BDFD6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auluxa.WebApp.IntegrationTests", "Auluxa.WebApp.IntegrationTests\Auluxa.WebApp.IntegrationTests.csproj", "{AC713A72-DE89-42D5-A6FC-18803D746A92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C214D4D0-4080-4A31-A37E-D9C816BDFD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C214D4D0-4080-4A31-A37E-D9C816BDFD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C214D4D0-4080-4A31-A37E-D9C816BDFD6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC713A72-DE89-42D5-A6FC-18803D746A92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC713A72-DE89-42D5-A6FC-18803D746A92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC713A72-DE89-42D5-A6FC-18803D746A92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC713A72-DE89-42D5-A6FC-18803D746A92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
