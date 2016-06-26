@@ -1,0 +1,34 @@
+﻿@using Auluxa.WebApp.Controllers
+@model  LoginViewModel
+
+<div class="wrapper login-page">
+
+    <div class="row mtop-100">
+        <div class="col-md-6 col-md-offset-3 clearfix bg--dark">
+
+            <div class="main-logo">
+                Auluxa <span>Login</span>
+                <p>Welcome to the Auluxa Admin Portal</p>
+            </div>
+
+            @using (Html.BeginForm("Login", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="pe-7f-user pe-fw"></i></span>
+                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control form-control-input", placeholder = "Email" })
+                </div>
+                <div class="input-group mtop-25">
+                    <span class="input-group-addon"><i class="pe-7f-lock pe-fw"></i></span>
+                    @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-input", placeholder = "Password" })
+                </div>
+                <div class="clearfix"></div>
+                <input type="submit" value="Log in" class="btn btn-skyblue pull-right" style="width: 100%;" />
+            }
+            <div style="margin-top: 10px">
+                @Html.ActionLink("Forgot your password?", "ForgotPassword")
+            </div>
+        </div>
+    </div>
+</div>
