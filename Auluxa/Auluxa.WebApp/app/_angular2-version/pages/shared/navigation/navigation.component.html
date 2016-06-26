@@ -1,0 +1,57 @@
+<aside class="sidebar">
+    <ul class="main-nav">
+        <li [class]="getClasses('dashboard', false)">
+            <a class="main-nav__link" style="display: flex;" [routerLink]="['Dashboard']" href="">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-home"></i></span> Dashboard
+            </a>
+        </li>
+        <li [class]="getClasses('kranium', false)">
+            <a class="main-nav__link" style="display: flex;" [routerLink]="['Kranium']" href="">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-cogs"></i></span> Kranium
+            </a>
+        </li>
+        <li [class]="getClasses('device-list', true)">
+            <a class="main-nav__link" style="display: flex;">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-cubes"></i></span> Device List
+            </a>
+            <ul class="main-nav__submenu">
+                <li><a [routerLink]="['DeviceList', 'AddAuluxa']"><i class="pe-7s-help1"></i><span>Add Auluxa</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'AddThirdParty']"><i class="pe-7s-help1"></i><span>Add Third Party</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'RecentlyAdded']"><i class="pe-7s-note"></i><span>Recently Added</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'All']"><i class="pe-7s-help1"></i><span>All</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'Lighting']"><i class="pe-7s-note"></i><span>Lighting</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'Shades']"><i class="pe-7s-note"></i><span>Shades</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'Thermos']"><i class="pe-7s-note"></i><span>Thermos</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'AudioVideo']"><i class="pe-7s-note"></i><span>Audio/Video IR</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'Panels']"><i class="pe-7s-note"></i><span>Panels</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'Climate']"><i class="pe-7s-note"></i><span>Climate IR</span></a></li>
+                <li><a [routerLink]="['DeviceList', 'ThirdParty']"><i class="pe-7s-note"></i><span>Third Party</span></a></li>
+            </ul>
+        </li>
+        <li [class]="getClasses('triggers', false)">
+            <a class="main-nav__link" style="display: flex;" [routerLink]="['Triggers']" href="">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-wrench"></i></span> Triggers
+            </a>
+        </li>
+        <li [class]="getClasses('storage', false)">
+            <a class="main-nav__link" style="display: flex;" [routerLink]="['Storage']" href="">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-hdd-o"></i></span> Storage
+            </a>
+        </li>
+        <li [class]="getClasses('users', false)">
+            <a class="main-nav__link" style="display: flex;" [routerLink]="['Users']" href="">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-users"></i></span> Users
+            </a>
+        </li>
+        <li [class]="getClasses('store', true)">
+            <a class="main-nav__link" style="display: flex;">
+                <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-shopping-cart"></i></span> Store
+            </a>
+            <ul class="main-nav__submenu">
+                <li><a [routerLink]="['Store', 'Bill']"><i class="pe-7s-help1"></i><span>Bill</span></a></li>
+                <li><a [routerLink]="['Store', 'License']"><i class="pe-7s-help1"></i><span>License</span></a></li>
+                <li><a [routerLink]="['Store', 'Storage']"><i class="pe-7s-note"></i><span>Storage</span></a></li>
+            </ul>
+        </li>
+    </ul>
+</aside>
