@@ -225,7 +225,7 @@ namespace Auluxa.WebApp.IntegrationTests
                     token.token_type,
                     token.access_token);
                 response = await httpClient.PutAsJsonAsync(
-                    ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices",
+                    ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices/settings",
                     deviceToUpdate);
             }
 
