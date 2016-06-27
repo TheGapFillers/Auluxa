@@ -1,0 +1,149 @@
+<header class="main-header clearfix">
+  <h1 class="main-header__title">
+    <i class="icon fa fa-money"></i>
+    Bill
+  </h1>
+  <ul class="main-header__breadcrumb" style="margin-top: 3px;">
+    <li><span class="page-title-parent-level">Store</span></li>
+  </ul>
+</header>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <div class="widget__content">
+        <header class="widget__header">
+          <h3 class="widget__title">Bill Profile</h3>
+        </header>
+        <table class="table">
+          <thead>
+            <tr>
+              <th colspan="4">Auluxa Services</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <p class="bolder">Account Type</p>
+              </td>
+              <td>Free</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Purchase</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="bolder">Storage</p>
+              </td>
+              <td>8 GB</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Purchase</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <div class="widget__content">
+        <header class="widget__header">
+          <h3 class="widget__title">Bill History</h3>
+          <ul class="main-header__breadcrumb" style="float: right;">
+            <li><a [routerLink]="['/Users', 'Bill_App']" href="" class="addColor">App</a></li>
+            <li><a [routerLink]="['/Users', 'Bill_Storage']" href="" class="addColor">Storage</a></li>
+            <li><a [routerLink]="['/Users', 'Bill_Product']" href="" class="addColor">Product</a></li>
+          </ul>
+        </header>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Invoice</th>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Amount</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>AAP00123</td>
+              <td>1 Jan 2016</td>
+              <td>App Premiun</td>
+              <td>US5$</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Details</button>
+              </td>
+            </tr>
+            <tr>
+              <td>AAP00123</td>
+              <td>1 Jan 2016</td>
+              <td>App Premiun</td>
+              <td>US5$</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Details</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <article class="widget">
+      <div class="widget__content">
+        <header class="widget__header">
+          <h3 class="widget__title">Credit Card Details</h3>
+        </header>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Card Type</th>
+              <th>Number</th>
+              <th>Expiration</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>VISA</td>
+              <td>XXXXXXXXXXXXXXXX1798</td>
+              <td>Jan 2020</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Edit</button>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>VISA</td>
+              <td>XXXXXXXXXXXXXXXX1798</td>
+              <td>Jan 2020</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Edit</button>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>VISA</td>
+              <td>XXXXXXXXXXXXXXXX1798</td>
+              <td>Jan 2020</td>
+              <td>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Edit</button>
+                <button type="button" class="btn btn-light btn-sm" style="float:right">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-light btn-sm">Add Credit Card</button>
+      </div>
+    </article>
+  </div>
+</div>

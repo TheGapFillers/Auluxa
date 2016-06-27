@@ -1,0 +1,115 @@
+﻿<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-route.min.js"></script>
+
+<script src="~/app/app.js"></script>
+<script src="~/app/main/main.js"></script>
+<script src="~/app/dashboard/dashboard.js"></script>
+<script src="~/app/store/store.js"></script>
+<script src="~/app/users/users.js"></script>
+
+<body ng-app="auluxa" ng-controller="mainCtrl">
+
+    <!--the header-->
+    <header class="top-bar">
+        <div class="mobile-nav">
+            <ul class="profile nav-profile" style="position: initial;">
+                <li>
+                    <a style="margin-top: -11px;" class="dropdown-toggle profile__user" data-toggle="dropdown" href="#" onclick="return false;">
+                        <span class="">
+                            <i class="pe-7s-menu"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu pull-right" style="width: 100%; right: initial; margin-top: -25px;">
+                        <li><a href="/Admin/LogOut"><i class="icon pe-7s-close-circle pe-fw"></i> Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="main-logo">Auluxa <span> ver {{version}}</span></div>
+
+        <div class="main-search" style="padding-left: 38px;">
+            <ul class="profile" style="position: initial; line-height: 30px;">
+                <li>
+                    <span class="profile__name">
+                        Account Type: <span> {{accountType}}</span>
+                    </span>
+                </li>
+                <li style="margin-left: 52px;">
+                    <span class="profile__name">
+                        Account Status: <span> {{accountStatus}}</span>
+                    </span>
+                </li>
+                <li style="margin-left: 52px;">
+                    <span class="profile__name">
+                        Coupon Code: <span> {{couponCode}}</span>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <ul class="profile">
+            <li>
+                <a class="dropdown-toggle profile__user" data-toggle="dropdown" href="#" onclick="return false;">
+                    <span class="profile__name">
+                        {{firstName}} <span>{{lastName}}</span>
+
+                        <i class="pe-7s-angle-down"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu pull-right" style="width: 100%;">
+                    <li><a href="/Admin/LogOut"><i class="icon pe-7s-close-circle pe-fw"></i> Log Out</a></li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+
+    <!--the main content-->
+    <div class="wrapper">
+        <!--the left sidebar with the navigation-->
+        <aside class="sidebar">
+            <ul class="main-nav">
+                <li [class]="getClasses('dashboard', false)">
+                    <a class="main-nav__link" style="display: flex;" href="#!/dashboard">
+                        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-home"></i></span> Dashboard
+                    </a>
+                </li>
+                <li [class]="getClasses('users', false)">
+                    <a class="main-nav__link" style="display: flex;" href="#!/users">
+                        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-users"></i></span> Users
+                    </a>
+                </li>
+                <li [class]="getClasses('store', false)">
+                    <a class="main-nav__link" style="display: flex;" href="#!/store">
+                        <span class="main-nav__icon" style="display: list-item;"><i class="icon fa fa-shopping-cart"></i></span> Store
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <section class="content">
+            <!--the content comming from the angular router-->
+            <div ng-view></div>
+
+            <!--the footer-->
+            <footer class="main-footer"></footer>
+        </section>
+    </div>
+</body>
+
+
+<!--the header-->
+<header></header>
+
+<!--the main content-->
+<div class="wrapper">
+    <!--the left sidebar with the navigation-->
+    <navigation></navigation>
+
+    <section class="content">
+        <!--the content comming from the angular router-->
+        <router-outlet></router-outlet>
+
+        <!--the footer-->
+        <footer></footer>
+    </section>
+</div>
