@@ -1,6 +1,7 @@
 ﻿// Declare app level module which depends on views, and components
 angular.module('auluxa', [
   'ngRoute',
+  'auluxa.proxy',
   'auluxa.dashboard',
   'auluxa.store',
   'auluxa.users',

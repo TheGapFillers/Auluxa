@@ -7,7 +7,10 @@
     });
 }])
 
-.controller('DashboardCtrl', ['$scope',
-    function ($scope) {
+.controller('DashboardCtrl', ['$scope', 'proxy',
+    function ($scope, proxy) {
+        debugger
+        proxy.getToken();
+
         $scope.name = 'Hello community';
     }]);

@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Auluxa.WebApp.Auth;
+using Microsoft.AspNet.Identity.Owin;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace Auluxa.WebApp.Controllers
 {
@@ -25,7 +27,13 @@ namespace Auluxa.WebApp.Controllers
         public async Task<ActionResult> Login(LoginViewModel model)
         {
             // Requests the bearer from oAuthToken.
-            FormsAuthentication.SetAuthCookie("username", true);
+            AuthSignInManager signInManager = HttpContext.GetOwinContext().Get<AuthSignInManager>();
+            var userManager = HttpContext.GetOwinContext().GetUserManager<AuthUserManager>();
+
+            AuthUser authUser = await userManager.FindAsync("valter.santos.matos@gmail.com", "qweqweqwe");
+            await signInManager.SignInAsync(authUser, true, true);
+
+
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Admin");
@@ -56,26 +64,5 @@ namespace Auluxa.WebApp.Controllers
             // Send email.
             return Index();
         }
-    }
-
-    public class LoginViewModel
-    {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-    }
-
-    public class ForgotPasswordModel
-    {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
     }
 }

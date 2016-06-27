@@ -57,6 +57,10 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc4.3.1.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Autofac.Integration.WebApi, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
@@ -252,6 +256,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Models.cs" />
     <Compile Include="Kranium\Repositories\EfKraniumRepository.cs" />
     <Compile Include="Kranium\Repositories\IKraniumDbContext.cs" />
     <Compile Include="Kranium\Repositories\IKraniumRepository.cs" />
@@ -310,6 +315,7 @@
   <ItemGroup>
     <EmbeddedResource Include="onComplete.js" />
     <Content Include="app\main\main.js" />
+    <Content Include="app\shared\proxy.service.js" />
     <Content Include="app\_angular2-version\app.component.html" />
     <Content Include="app\_angular2-version\pages\dashboard\dashboard.component.html" />
     <Content Include="app\_angular2-version\pages\device-list\add-auluxa\add-auluxa.component.html" />

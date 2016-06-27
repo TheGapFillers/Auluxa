@@ -20,6 +20,7 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Autofac.Integration.Mvc;
 
 namespace Auluxa.WebApp
 {
@@ -72,6 +73,7 @@ namespace Auluxa.WebApp
 
             // Register all the ApiController belonging to this assembly.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
             // Register all the types to be abstracted / white labeled
             // auth
