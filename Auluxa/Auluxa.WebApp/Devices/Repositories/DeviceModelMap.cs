@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Auluxa.WebApp.Appliances.Models;
+using Auluxa.WebApp.Devices.Models;
 
-namespace Auluxa.WebApp.Appliances.Repositories
+namespace Auluxa.WebApp.Devices.Repositories
 {
-    public class ApplianceModelMap : EntityTypeConfiguration<ApplianceModel>
+    public class DeviceModelMap : EntityTypeConfiguration<DeviceModel>
     {
-        public ApplianceModelMap()
+        public DeviceModelMap()
         {
-            ToTable("ApplianceModels", "Auluxa");
+            ToTable("DeviceModels", "Auluxa");
             HasKey(a => a.Id);
             Property(a => a.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);         
         }

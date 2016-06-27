@@ -1,11 +1,14 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Configuration;
+using System.IO;
+using System.Reflection;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.ExceptionHandling;
-using Auluxa.WebApp.Appliances.Repositories;
 using Auluxa.WebApp.ApplicationContext;
 using Auluxa.WebApp.Auth;
+using Auluxa.WebApp.Devices.Repositories;
 using Auluxa.WebApp.ErrorHandling;
 using Auluxa.WebApp.Kranium.Repositories;
 using Auluxa.WebApp.Scenes.Repositories;
@@ -21,6 +24,7 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Autofac.Integration.Mvc;
+using Swashbuckle.Application;
 
 namespace Auluxa.WebApp
 {
@@ -59,6 +63,35 @@ namespace Auluxa.WebApp
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            // Swagger
+            config.EnableSwagger(c =>
+            {
+                // Manage title and versioning
+                c.SingleApiVersion("v1", ConfigurationManager.AppSettings["ServiceName"]);
+
+                // Automatically gets the generated XML doc of the controllers and inject them in swagger
+                string baseDirectory = AppDomain.CurrentDomain.RelativeSearchPath ?? AppDomain.CurrentDomain.BaseDirectory;
+
+                // Include XmlComments
+                string commentFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
+                c.IncludeXmlComments(Path.Combine(baseDirectory, commentFileName));
+            })
+            .EnableSwaggerUi("help/{*assetPath}", c =>
+            {
+                // Inject auth URL as 'realm'. Could do better
+                c.EnableOAuth2Support(
+                    "web",
+                    "nosecret",
+                    ConfigurationManager.AppSettings["auluxa-auth:Url"],
+                    "auluxa-auth");
+
+                // Deactivate validator
+                c.DisableValidator();
+
+                // Inject login form javascript
+                c.InjectJavaScript(Assembly.GetExecutingAssembly(), "Auluxa.WebApp.onComplete.js");
+            });
+
             // Ensure initialization is correct
             config.EnsureInitialized();
         }
@@ -92,13 +125,13 @@ namespace Auluxa.WebApp
 
             // Scene repository
             builder.RegisterType<ApplicationDbContext>().As<IApplicationDbContext>();
-            builder.RegisterType<ApplicationDbContext>().As<IApplianceDbContext>();
+            builder.RegisterType<ApplicationDbContext>().As<IDeviceDbContext>();
             builder.RegisterType<ApplicationDbContext>().As<IKraniumDbContext>();
             builder.RegisterType<ApplicationDbContext>().As<ISceneDbContext>();
             builder.RegisterType<ApplicationDbContext>().As<IZoneDbContext>();
             builder.RegisterType<ApplicationDbContext>().As<IUserSettingsDbContext>();
 
-            builder.RegisterType<EfApplianceRepository>().As<IApplianceRepository>().PropertiesAutowired();
+            builder.RegisterType<EfDeviceRepository>().As<IDeviceRepository>().PropertiesAutowired();
             builder.RegisterType<EfKraniumRepository>().As<IKraniumRepository>().PropertiesAutowired();
             builder.RegisterType<EfSceneRepository>().As<ISceneRepository>().PropertiesAutowired();
             builder.RegisterType<EfUserSettingsRepository>().As<IUserSettingsRepository>().PropertiesAutowired();

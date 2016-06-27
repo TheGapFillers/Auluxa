@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.Owin.Hosting;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Auluxa.WebApp.Auth;
+using Auluxa.WebApp.Devices.Models;
 using Auluxa.WebApp.IntegrationTests.Fakes;
 using Xunit;
 
@@ -32,8 +31,8 @@ namespace Auluxa.WebApp.IntegrationTests
         public void Dispose()
         {
             //delete the user if he wasn't deleted
-            string email = "androiddev@8securities.com";
-            string password = "Aszd1234";
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
             try
             {
 
@@ -51,7 +50,7 @@ namespace Auluxa.WebApp.IntegrationTests
     }
 
     [TestCaseOrderer("Auluxa.WebApp.IntegrationTests.Fakes.PriorityOrderer", "Auluxa.WebApp.IntegrationTests")]
-    public class AuluxaIntegrationTests : TestServerFixture
+    public class AuluxaIntegrationTests : IClassFixture<TestServerFixture>
     {
         [Fact, TestPriority(0)]
         public async Task test_get_token_valid_user()
@@ -114,13 +113,166 @@ namespace Auluxa.WebApp.IntegrationTests
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
                     token.token_type,
                     token.access_token);
-                response = await httpClient.GetAsync(ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/users/profiles");
+                response =
+                    await
+                        httpClient.GetAsync(ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/users/profiles");
             }
 
             //assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             IEnumerable<AuthUserViewModel> users = await response.Content.ReadAsAsync<IEnumerable<AuthUserViewModel>>();
             Assert.Equal(users.First().Email, email);
+        }
+
+        /// <summary>
+        /// GET /api/devices
+        /// </summary>
+        /// <returns></returns>
+        [Fact, TestPriority(3)]
+        public async Task test_get_all_devices()
+        {
+            // arrange
+            HttpResponseMessage response;
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
+            OAuthToken token = await AuthProxy.LoginAsync(email, password);
+
+            // act
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response =
+                    await httpClient.GetAsync(ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices");
+            }
+
+            //assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            IEnumerable<Device> devices = await response.Content.ReadAsAsync<IEnumerable<Device>>();
+            Assert.Equal(2, devices.Count());
+        }
+
+        /// <summary>
+        /// POST /api/devices
+        /// </summary>
+        /// <returns></returns>
+        [Fact, TestPriority(4)]
+        public async Task test_create_device()
+        {
+            // arrange
+            HttpResponseMessage response;
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
+            OAuthToken token = await AuthProxy.LoginAsync(email, password);
+            var deviceToCreate = new CreateDeviceViewModel {DeviceModelId = 1};
+
+            // act
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response = await httpClient.PostAsJsonAsync(
+                    ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices",
+                    deviceToCreate);
+            }
+
+            //assert
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Device createdDevice = await response.Content.ReadAsAsync<Device>();
+            Assert.NotNull(createdDevice);
+        }
+
+        /// <summary>
+        /// PUT /api/devices
+        /// </summary>
+        /// <returns></returns>
+        [Fact, TestPriority(5)]
+        public async Task test_update_device_settings()
+        {
+            // arrange
+            HttpResponseMessage response;
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
+            OAuthToken token = await AuthProxy.LoginAsync(email, password);
+
+            // get latest created device
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response =
+                    await httpClient.GetAsync(ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices");
+            }
+            Device latestDevice = (await response.Content.ReadAsAsync<IEnumerable<Device>>()).Last();
+
+            var deviceToUpdate = new UpdateDeviceSettingsViewModel
+            {
+                DeviceId = latestDevice.Id,
+                Settings = new Dictionary<string, string>
+                {
+                    ["ACFunctionA"] = "FunctionAChoice2",
+                    ["ACFunctionB"] = "FunctionBChoice3"
+                }
+            };
+
+            // act
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response = await httpClient.PutAsJsonAsync(
+                    ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices/settings",
+                    deviceToUpdate);
+            }
+
+            //assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Device createdDevice = await response.Content.ReadAsAsync<Device>();
+            Assert.NotNull(createdDevice);
+        }
+
+        /// <summary>
+        /// DELETE /api/devices
+        /// </summary>
+        /// <returns></returns>
+        [Fact, TestPriority(6)]
+        public async Task test_delete_device()
+        {
+            // arrange
+            HttpResponseMessage response;
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
+            OAuthToken token = await AuthProxy.LoginAsync(email, password);
+
+            // get latest created device
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response =
+                    await httpClient.GetAsync(ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices");
+            }
+            Device latestDevice = (await response.Content.ReadAsAsync<IEnumerable<Device>>()).Last();
+
+            // act
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response = await httpClient.DeleteAsync(
+                    ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/devices/" + latestDevice.Id);
+            }
+
+            //assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Device createdDevice = await response.Content.ReadAsAsync<Device>();
+            Assert.NotNull(createdDevice);
         }
     }
 }

@@ -11,25 +11,41 @@ namespace Auluxa.WebApp.Scenes.Repositories
     {
         public ISceneDbContext Context { get; set; }
 
-        public async Task<IEnumerable<Scene>> GetScenesAsync(IEnumerable<int> ids = null)
+        public async Task<IEnumerable<Scene>> GetScenesAsync(string userName)
         {
-            List<int> idList = ids?.ToList();
-
-            IQueryable<Scene> query = idList == null ?
-                Context.Scenes :
-                Context.Scenes.Where(s => idList.Contains(s.Id));
+            IQueryable<Scene> query = Context.Scenes
+                .Where(s => s.UserName == userName);
 
             IEnumerable<Scene> scenes = await query
-                .Include(q => q.ApplianceSettings)
-                .Include(q => q.ApplianceSettings.Select(s => s.Appliance))
-                .Include(q => q.ApplianceSettings.Select(s => s.Appliance.Model))
-                .Include(q => q.ApplianceSettings.Select(s => s.Appliance).Select(a => a.Zones))
+                .Include(q => q.DeviceSettings)
+                .Include(q => q.DeviceSettings.Select(s => s.Device))
+                .Include(q => q.DeviceSettings.Select(s => s.Device.Model))
+                .Include(q => q.DeviceSettings.Select(s => s.Device).Select(a => a.Zones))
                 .Include(q => q.Sequence)
                 .Include(q => q.Schedule)
                 .ToListAsync();
 
             return scenes;
         }
+
+        public async Task<IEnumerable<Scene>> GetScenesAsync(string userName, IEnumerable<int> ids)
+        {
+            IQueryable<Scene> query = Context.Scenes.Where(s => s.UserName == userName && ids.Contains(s.Id));
+
+            IEnumerable<Scene> scenes = await query
+                .Include(q => q.DeviceSettings)
+                .Include(q => q.DeviceSettings.Select(s => s.Device))
+                .Include(q => q.DeviceSettings.Select(s => s.Device.Model))
+                .Include(q => q.DeviceSettings.Select(s => s.Device).Select(a => a.Zones))
+                .Include(q => q.Sequence)
+                .Include(q => q.Schedule)
+                .ToListAsync();
+
+            return scenes;
+        }
+
+        public async Task<Scene> GetSceneAsync(string userName, int id) =>
+            (await GetScenesAsync(userName, new[] {id})).SingleOrDefault();
 
         public async Task<Scene> CreateSceneAsync(Scene scene)
         {
@@ -43,11 +59,12 @@ namespace Auluxa.WebApp.Scenes.Repositories
 
         public async Task<Scene> UpdateSceneAsync(Scene scene)
         {
-            Scene sceneToUpdate = (await GetScenesAsync(new List<int> { scene.Id })).SingleOrDefault();
+            Scene sceneToUpdate = await GetSceneAsync(scene.UserName, scene.Id);
             if (sceneToUpdate == null)
                 return null;
 
-           if (scene.Name != null) sceneToUpdate.Name = scene.Name;
+            if (scene.Name != null) sceneToUpdate.Name = scene.Name;
+            if (scene.DeviceSettings != null) sceneToUpdate.DeviceSettings = scene.DeviceSettings;
             if (scene.Schedule != null) sceneToUpdate.Schedule = scene.Schedule;
             if (scene.Sequence != null) sceneToUpdate.Sequence = scene.Sequence;
 
@@ -55,10 +72,9 @@ namespace Auluxa.WebApp.Scenes.Repositories
             return sceneToUpdate;
         }
 
-        
-        public async Task<Scene> DeleteSceneAsync(int id)
+        public async Task<Scene> DeleteSceneAsync(string userName, int id)
         {
-            Scene alreadyExistsScene = (await GetScenesAsync(new List<int> { id })).SingleOrDefault();
+            Scene alreadyExistsScene = await GetSceneAsync(userName, id);
             if (alreadyExistsScene == null)
                 return null;
 

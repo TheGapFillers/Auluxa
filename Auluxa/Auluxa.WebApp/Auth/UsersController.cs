@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Microsoft.AspNet.Identity;
 
@@ -64,6 +67,9 @@ namespace Auluxa.WebApp.Auth
                 return BadRequest(ModelState);
             }
 
+            // send the confirm email
+            await SendConfirmEmailAsync(createdUser.Id);
+
             return Ok(result);
         }
 
@@ -90,7 +96,7 @@ namespace Auluxa.WebApp.Auth
         }
 
         [AuluxaAuthorization(Roles = "Admin")]
-        [HttpDelete]
+        [HttpPost]
         [Route("profiles")]
         public async Task<IHttpActionResult> CreateProfileAsync([FromBody] AuthUserViewModel authUserViewModel)
         {
@@ -118,6 +124,9 @@ namespace Auluxa.WebApp.Auth
                     ModelState.AddModelError(error, error);
                 return BadRequest(ModelState);
             }
+
+            // send the confirm email
+            await SendConfirmEmailAsync(userToCreate.Id);
 
             return Ok(result);
         }
@@ -157,6 +166,55 @@ namespace Auluxa.WebApp.Auth
             }
 
             return Ok(result);
+        }
+
+        [Route("forgotpassword")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> ForgotPasswordAsync(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // GetUserAsync the user, check that his email is confirmed
+            AuthUser user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !await _userManager.IsEmailConfirmedAsync(user.Id))
+            {
+                // Don't reveal that the user does not exist or is not confirmed
+                return Ok();
+            }
+
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            string code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
+            code = HttpUtility.UrlEncode(code);
+
+            // Create a callback Url for ionic application with the code inside
+            string callbackUrl = $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}Account/ResetPassword?userId={user.Id}&code={code}";
+
+            // Generate email body from the html file
+            string emailBody = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, @"ForgotPassword\", "ForgotPasswordEmail.html"));
+            emailBody = emailBody.Replace("{displayedName}", user.Email);
+            emailBody = emailBody.Replace("{callbackUrl}", callbackUrl);
+
+            // Send the email
+            await _userManager.SendEmailAsync(user.Id, "Forgot Password", emailBody);
+
+            return Ok();
+        }
+
+        private async Task SendConfirmEmailAsync(string userId)
+        {
+            string code = await _userManager.GenerateEmailConfirmationTokenAsync(userId);
+            code = HttpUtility.UrlEncode(code);
+
+            // Create a callback Url with the code inside
+            string callbackUrl =
+                $"{ConfigurationManager.AppSettings["8sec-auth:Url"]}Account/ConfirmEmail?userId={userId}&code={code}";
+
+            // Send an email with the callback Url
+            await _userManager.SendEmailAsync(userId, "Confirm your account",
+                    "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
         }
     }
 }

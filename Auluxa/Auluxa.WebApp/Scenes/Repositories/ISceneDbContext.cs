@@ -9,6 +9,6 @@ namespace Auluxa.WebApp.Scenes.Repositories
         DbSet<Scene> Scenes { get; set; }
         DbSet<Sequence> Sequences { get; set; }
         DbSet<Schedule> Schedules { get; set; }
-        DbSet<Trigger> Triggers { get; set; }
+        //DbSet<Trigger> Triggers { get; set; }
     }
 }

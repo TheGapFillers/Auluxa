@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -7,73 +8,86 @@ using Auluxa.WebApp.Zones.Models;
 
 namespace Auluxa.WebApp.Zones.Repositories
 {
-	public class EfZoneRepository : IZoneRepository
-	{
-		public IZoneDbContext Context { get; set; }
+    public class EfZoneRepository : IZoneRepository
+    {
+        public IZoneDbContext Context { get; set; }
 
-		public async Task<IEnumerable<Zone>> GetZonesAsync(IEnumerable<int> ids = null)
-		{
-			List<int> idList = ids?.ToList();
-			IQueryable<Zone> query = Context.Zones;
+        public async Task<IEnumerable<Zone>> GetZonesAsync(string userName)
+        {
+            IQueryable<Zone> query = Context.Zones.Where(z => z.UserName == userName);
 
-			if (idList != null)
-				query = Context.Zones.Where(z => idList.Contains(z.Id));
+            IEnumerable<Zone> zones = await query
+                .Include(z => z.Devices)
+                .ToListAsync();
 
-			IEnumerable<Zone> zones = await query
-				.Include(z => z.Appliances)
-				.ToListAsync();
+            return zones;
+        }
 
-			return zones;
-		}
+        public async Task<IEnumerable<Zone>> GetZonesAsync(string userName, IEnumerable<int> ids)
+        {
+            IQueryable<Zone> query = Context.Zones.Where(z => 
+                z.UserName == userName &&
+                ids.Contains(z.Id)); 
 
-		public async Task<Zone> CreateZoneAsync(Zone zone)
-		{
-			Zone zoneToCreate = Context.Zones.Add(zone);
+            IEnumerable<Zone> zones = await query
+                .Include(z => z.Devices)
+                .ToListAsync();
 
-			await SaveAsync();
-			return zoneToCreate;
-		}
+            return zones;
+        }
 
-		public async Task<Zone> UpdateZoneAsync(Zone zone)
-		{
-			Zone zoneToUpdate = (await GetZonesAsync(new List<int> { zone.Id })).SingleOrDefault();
-			if (zoneToUpdate == null)
-				return null;
+        public async Task<Zone> GetZoneAsync(string userName, int zoneId) =>
+            (await GetZonesAsync(userName, new[] {zoneId})).FirstOrDefault();
 
-			if (zone.Name != null) zoneToUpdate.Name = zone.Name;
-			if (zone.UserName != null) zoneToUpdate.UserName = zone.UserName;
 
-			await SaveAsync();
-			return zoneToUpdate;
-		}
 
-		public async Task<Zone> DeleteZoneAsync(int id)
-		{
-			Zone alreadExistsZone = (await GetZonesAsync(new List<int> { id })).SingleOrDefault();
-			if (alreadExistsZone == null)
-				return null;
+        public async Task<Zone> CreateZoneAsync(string userName, string name)
+        {
+            Zone zoneToCreate = Context.Zones.Add(new Zone {UserName = userName, Name = name} );
 
-			Zone deletedZone = Context.Zones.Remove(alreadExistsZone);
-			await SaveAsync();
-			return deletedZone;
-		}
+            await SaveAsync();
+            return zoneToCreate;
+        }
 
-		public async Task<int> SaveAsync()
-		{
-			int count = await Context.SaveChangesAsync();
-			return count;
-		}
+        public async Task<Zone> UpdateZoneAsync(string userName, int id, string name)
+        {
+            Zone zoneToUpdate = await GetZoneAsync(userName, id);
+            if (zoneToUpdate == null)
+                return null;
 
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
+            zoneToUpdate.Name = name;
 
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-				Context?.Dispose();
-		}
-	}
+            await SaveAsync();
+            return zoneToUpdate;
+        }
+
+        public async Task<Zone> DeleteZoneAsync(string userName, int id)
+        {
+            Zone alreadExistsZone = await GetZoneAsync(userName, id);
+            if (alreadExistsZone == null)
+                return null;
+
+            Zone deletedZone = Context.Zones.Remove(alreadExistsZone);
+            await SaveAsync();
+            return deletedZone;
+        }
+
+        public async Task<int> SaveAsync()
+        {
+            int count = await Context.SaveChangesAsync();
+            return count;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Context?.Dispose();
+        }
+    }
 }

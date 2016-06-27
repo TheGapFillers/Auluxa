@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Auluxa.WebApp.Appliances.Models
+namespace Auluxa.WebApp.Devices.Models
 {
-	public class ApplianceSetting
+	public class DeviceSetting
 	{
 		public int Id { get; set; }
-		public string ApplianceName => Appliance?.Name;
 
 		/// <summary>
-		/// Required: Appliance these settings apply to
+		/// Required: Device these settings apply to
 		/// Format: Dictionary [string, string[]] where Key is setting's name, and value is an array of possible values for this setting, the first one being the default one.
 		/// (e.g. [['Fan', ['Off', 'Low', 'Medium', 'High']], ['AC', ['Off', 'Auto', 'Max']]])
 		/// </summary>
-		public Appliance Appliance { get; set; }
+		[JsonIgnore]
+		public Device Device { get; set; }
+
+		public int DeviceId => Device.Id;
 
 		/// <summary>
-		/// Required: Appliance's available settings. 
+		/// Required: Device's available settings. 
 		/// Format: Dictionary [string, string[]] where Key is setting's name, and Value is an array of possible values for this setting, the first one being the default one.
 		/// (e.g. [['Fan', ['Off', 'Low', 'Medium', 'High']], ['AC', ['Off', 'Auto', 'Max']]])
 		/// </summary>
@@ -33,18 +35,18 @@ namespace Auluxa.WebApp.Appliances.Models
 
 		public bool IsValid()
 		{
-			if (Appliance?.Model?.PossibleSettings == null)
-				throw new InvalidOperationException("Null or invalid Appliance or ApplianceModel");
+			if (Device?.Model?.PossibleSettings == null)
+				throw new InvalidOperationException("Null or invalid Device or DeviceModel");
 
-			if (Setting.Count != Appliance.Model.PossibleSettings.Count)
+			if (Setting.Count != Device.Model.PossibleSettings.Count)
 				return false;
 
-			foreach (var kvp in Setting)
+			foreach (KeyValuePair<string, string> kvp in Setting)
 			{
-				if (!Appliance.Model.PossibleSettings.ContainsKey(kvp.Key))
+				if (!Device.Model.PossibleSettings.ContainsKey(kvp.Key))
 					return false;
 
-				if (!Appliance.Model.PossibleSettings[kvp.Key].Contains(kvp.Value))
+				if (!Device.Model.PossibleSettings[kvp.Key].Contains(kvp.Value))
 					return false;
 			}
 

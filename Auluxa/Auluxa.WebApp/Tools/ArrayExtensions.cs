@@ -9,11 +9,11 @@ namespace Auluxa.WebApp.Tools
         public static IEnumerable<string> SplitAndTrim(this string stringToSplit, params char[] separator) =>
             stringToSplit?
             .Split(separator, StringSplitOptions.RemoveEmptyEntries)
-            .Select(s => s.Trim()) ?? new List<string>().AsEnumerable();
+            .Select(s => s.Trim()) ?? Enumerable.Empty<string>();
 
         public static IEnumerable<string> SplitAndTrim(this string stringToSplit, params string[] separator) =>
             stringToSplit?
             .Split(separator, StringSplitOptions.RemoveEmptyEntries)
-            .Select(s => s.Trim()) ?? new List<string>().AsEnumerable();
+            .Select(s => s.Trim()) ?? Enumerable.Empty<string>();
     }
 }
