@@ -17,15 +17,15 @@ namespace Auluxa.WebApp.Scenes.Repositories
             HasRequired(s => s.Sequence)
                 .WithRequiredPrincipal(s => s.Scene);
 
-            HasMany(s => s.ApplianceSettings);
+            HasMany(s => s.DeviceSettings);
 
-            //HasMany(s => s.ApplianceSettings)
+            //HasMany(s => s.DeviceSettings)
             //    .WithMany()
             //    .Map(m =>
             //    {
-            //        m.ToTable("SceneApplianceSettings", "Auluxa");
+            //        m.ToTable("SceneDeviceSettings", "Auluxa");
             //        m.MapLeftKey("SceneId");
-            //        m.MapRightKey("ApplianceSettingId");
+            //        m.MapRightKey("DeviceSettingId");
             //    });
         }
     }

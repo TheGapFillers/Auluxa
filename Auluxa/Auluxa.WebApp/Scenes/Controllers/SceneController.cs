@@ -3,31 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using Auluxa.WebApp.Appliances.Models;
-using Auluxa.WebApp.Appliances.Repositories;
-using Auluxa.WebApp.Helpers;
+using Auluxa.WebApp.Devices.Models;
+using Auluxa.WebApp.Devices.Repositories;
 using Auluxa.WebApp.Scenes.Models;
 using Auluxa.WebApp.Scenes.Repositories;
+using Auluxa.WebApp.Tools;
 
 namespace Auluxa.WebApp.Scenes.Controllers
 {
     /// <summary>
     /// Scenes Api Controller
     /// </summary>
+    [Authorize]
     [RoutePrefix("api/scenes")]
     public class SceneController : ApiController
     {
-        private readonly ISceneRepository _repository;
-        private readonly IApplianceRepository _applianceRepository;
+        private readonly ISceneRepository _sceneRepository;
+        private readonly IDeviceRepository _deviceRepository;
 
         /// <summary>
         /// Constructor of the SceneController
         /// </summary>
-        /// <param name="respository">Injected by DI</param>
-        public SceneController(ISceneRepository respository, IApplianceRepository applianceRepository)
+        /// <param name="sceneRepository">Injected by DI</param>
+        /// <param name="deviceRepository"></param>
+        public SceneController(ISceneRepository sceneRepository, IDeviceRepository deviceRepository)
         {
-            _repository = respository;
-            _applianceRepository = applianceRepository;
+            _sceneRepository = sceneRepository;
+            _deviceRepository = deviceRepository;
         }
 
         /// <summary>
@@ -39,11 +41,15 @@ namespace Auluxa.WebApp.Scenes.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> Get(string ids = null)
         {
-            List<int> idList = null;
-            if (ids != null)
-                idList = ids.SplitAndTrim(',').Select(int.Parse).ToList(); 
+            List<int> idList = ids?.SplitAndTrim(',').Select(int.Parse).ToList();
+            IEnumerable<Scene> scenes;
+            if (idList != null)
+                scenes = await _sceneRepository.GetScenesAsync(
+                    User.Identity.Name,
+                    ids.SplitAndTrim(',').Select(int.Parse));
+            else
+                scenes = await _sceneRepository.GetScenesAsync(User.Identity.Name);
 
-            List<Scene> scenes = (await _repository.GetScenesAsync(idList)).ToList();
             return Ok(scenes);
         }
 
@@ -59,9 +65,8 @@ namespace Auluxa.WebApp.Scenes.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await BindSceneSettingsToAppliances(scene);
 
-            Scene createdScene = await _repository.CreateSceneAsync(scene);
+            Scene createdScene = await _sceneRepository.CreateSceneAsync(scene);
             return Created(Request.RequestUri, createdScene);
         }
 
@@ -77,13 +82,13 @@ namespace Auluxa.WebApp.Scenes.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (scene.ApplianceSettings != null)
+            if (scene.DeviceSettings != null)
             {
-                await BindSceneSettingsToAppliances(scene);
-                scene.ApplianceSettings = scene.ApplianceSettings;
+                //await BindSceneSettingsToDevices(scene);
+                scene.DeviceSettings = scene.DeviceSettings;
             }
 
-            Scene updatedScene = await _repository.UpdateSceneAsync(scene);
+            Scene updatedScene = await _sceneRepository.UpdateSceneAsync(scene);
             return Created(Request.RequestUri, updatedScene);
         }
 
@@ -96,21 +101,21 @@ namespace Auluxa.WebApp.Scenes.Controllers
         [Route("{id}")]
         public async Task<IHttpActionResult> Delete(int id)
         {
-            Scene deletedScene = await _repository.DeleteSceneAsync(id);
+            Scene deletedScene = await _sceneRepository.DeleteSceneAsync(User.Identity.Name, id);
             return Ok(deletedScene);
         }
 
-        private async Task BindSceneSettingsToAppliances(Scene scene)
+        private async Task BindSceneSettingsToDevices(Scene scene)
         {
-            List<Appliance> usedAppliances =
-                (await _applianceRepository.GetAppliancesAsync(scene.ApplianceSettings.Select(s => s.Appliance.Id))).ToList();
+            List<Device> usedDevices =
+                (await _deviceRepository.GetDevicesAsync(User.Identity.Name, scene.DeviceSettings.Select(s => s.Device.Id))).ToList();
 
-            foreach (ApplianceSetting setting in scene.ApplianceSettings)
+            foreach (DeviceSetting setting in scene.DeviceSettings)
             {
-                setting.Appliance = usedAppliances.SingleOrDefault(a => a.Id == setting.Appliance.Id);
+                setting.Device = usedDevices.SingleOrDefault(a => a.Id == setting.Device.Id);
                 if (!setting.IsValid())
                 {
-                    throw new Exception($"Invalid setting for appliance {setting.Appliance.Id}");
+                    throw new Exception($"Invalid setting for device {setting.Device.Id}");
                 }
             }
         }

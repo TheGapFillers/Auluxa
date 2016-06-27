@@ -4,36 +4,41 @@ using System.Linq;
 using Auluxa.WebApp.Zones.Models;
 using Newtonsoft.Json;
 
-namespace Auluxa.WebApp.Appliances.Models
+namespace Auluxa.WebApp.Devices.Models
 {
-    public class Appliance
+    public class Device
     {
         public int Id { get; set; }
 
         /// <summary>
-        /// Required: Appliance's owner
+        /// A collection of child devices
+        /// </summary>
+        public ICollection<Device> ChildDevices { get; set; }
+
+        /// <summary>
+        /// Required: Device's owner
         /// </summary>
         public string UserName { get; set; }
 
         /// <summary>
-        /// Required: Appliance's name
+        /// Required: Device's name
         /// </summary>
         public string Name { get; set; }
 
         /// <summary>
-        /// Appliance's Zone. When creating or editing Appliance, must give an existing Zone identified by its Id, all other Zone attributes will be ignored.
+        /// Device's Zone. When creating or editing Device, must give an existing Zone identified by its Id, all other Zone attributes will be ignored.
         /// </summary>
         public ICollection<Zone> Zones { get; set; }
 
         /// <summary>
-        /// Required: Appliance's Model. When creating or editing Appliance, must give an existing ApplianceModel identified by its Id, all other ApplianceModel attributes will be ignored.
+        /// Required: Device's Model. When creating or editing Device, must give an existing DeviceModel identified by its Id, all other DeviceModel attributes will be ignored.
         /// </summary>
-        public ApplianceModel Model { get; set; }
+        public DeviceModel Model { get; set; }
 
         /// <summary>
-        /// Appliance's settings. If not set, ApplianceModel's default settings will be applied.
+        /// Device's settings. If not set, DeviceModel's default settings will be applied.
         /// Format: Dictionary[string, string] where Key is setting's name, and Value is setting's value.
-        /// Warning: Key and Value must exist in ApplianceModel's PossibleSettings
+        /// Warning: Key and Value must exist in DeviceModel's PossibleSettings
         /// (e.g. [['Fan', 'Off'], ['AC', 'Auto']])
         /// </summary>
         public Dictionary<string, string> CurrentSetting	//todo Should not be exposed directly for get. All operations will fail.
@@ -48,7 +53,7 @@ namespace Auluxa.WebApp.Appliances.Models
         public void ApplyDefaultSettings()
         {
             if (Model?.PossibleSettings == null)
-                throw new InvalidOperationException("Null or invalid ApplianceModel");
+                throw new InvalidOperationException("Null or invalid DeviceModel");
 
             CurrentSetting = Model?.PossibleSettings?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value[0]);
         }
@@ -56,7 +61,7 @@ namespace Auluxa.WebApp.Appliances.Models
         public bool AreCurrentSettingsValid()
         {
             if (Model?.PossibleSettings == null)
-                throw new InvalidOperationException("Null or invalid ApplianceModel");
+                throw new InvalidOperationException("Null or invalid DeviceModel");
 
             if (CurrentSetting.Count != Model.PossibleSettings.Count)
                 return false;

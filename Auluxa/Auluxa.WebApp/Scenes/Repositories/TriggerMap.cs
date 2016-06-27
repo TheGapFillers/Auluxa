@@ -12,7 +12,7 @@ namespace Auluxa.WebApp.Scenes.Repositories
             HasKey(t => t.Id);
             Property(t => t.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
 
-            HasRequired(t => t.Appliance);
+            HasRequired(t => t.Device);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -61,8 +61,8 @@
       <HintPath>..\packages\Autofac.WebApi2.3.4.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ChargeBee, Version=1.5.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ChargeBee.1.5.7.0\lib\net30\ChargeBee.dll</HintPath>
+    <Reference Include="ChargeBee, Version=2.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ChargeBee.2.0.5.0\lib\net30\ChargeBee.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -143,7 +143,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Swashbuckle.Core.5.2.2\lib\net40\Swashbuckle.Core.dll</HintPath>
+      <HintPath>..\packages\Swashbuckle.Core.5.3.2\lib\net40\Swashbuckle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -220,7 +220,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -229,9 +229,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Appliances\Repositories\EfApplianceRepository.cs" />
-    <Compile Include="Appliances\Repositories\IApplianceDbContext.cs" />
-    <Compile Include="Appliances\Repositories\IApplianceRepository.cs" />
+    <Compile Include="Auth\ForgotPasswordViewModel.cs" />
+    <Compile Include="Devices\Models\DeviceViewModels.cs" />
+    <Compile Include="Devices\Repositories\EfDeviceRepository.cs" />
+    <Compile Include="Devices\Repositories\IDeviceDbContext.cs" />
+    <Compile Include="Devices\Repositories\IDeviceRepository.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
@@ -261,8 +263,8 @@
     <Compile Include="Subscription\SubscriptionController.cs" />
     <Compile Include="Subscription\SubscriptionRepository.cs" />
     <Compile Include="Subscription\SubscriptionType.cs" />
-    <Compile Include="Appliances\Controllers\ApplianceController.cs" />
-    <Compile Include="Appliances\Controllers\ApplianceModelController.cs" />
+    <Compile Include="Devices\Controllers\DeviceController.cs" />
+    <Compile Include="Devices\Controllers\DeviceModelController.cs" />
     <Compile Include="Scenes\Controllers\SceneController.cs" />
     <Compile Include="Kranium\Controllers\KraniumController.cs" />
     <Compile Include="Tools\ArrayExtensions.cs" />
@@ -275,12 +277,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\ArrayExtensions.cs" />
     <Compile Include="UserSettings\Models\UserSetting.cs" />
     <Compile Include="Kranium\Models\Kranium.cs" />
-    <Compile Include="Appliances\Models\Appliance.cs" />
-    <Compile Include="Appliances\Models\ApplianceModel.cs" />
-    <Compile Include="Appliances\Models\ApplianceSetting.cs" />
+    <Compile Include="Devices\Models\Device.cs" />
+    <Compile Include="Devices\Models\DeviceModel.cs" />
+    <Compile Include="Devices\Models\DeviceSetting.cs" />
     <Compile Include="Scenes\Models\Scene.cs" />
     <Compile Include="Scenes\Models\Schedule.cs" />
     <Compile Include="Scenes\Models\Sequence.cs" />
@@ -289,15 +290,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ApplicationContext\ApplicationDbContext.cs" />
     <Compile Include="ApplicationContext\IApplicationDbContext.cs" />
-    <Compile Include="Appliances\Repositories\ApplianceMap.cs" />
-    <Compile Include="Appliances\Repositories\ApplianceModelMap.cs" />
-    <Compile Include="Appliances\Repositories\ApplianceSettingMap.cs" />
+    <Compile Include="Devices\Repositories\DeviceMap.cs" />
+    <Compile Include="Devices\Repositories\DeviceModelMap.cs" />
+    <Compile Include="Devices\Repositories\DeviceSettingMap.cs" />
     <Compile Include="UserSettings\Repositories\UserSettingsMap.cs" />
     <Compile Include="Kranium\Repositories\KraniumMap.cs" />
     <Compile Include="Scenes\Repositories\SceneMap.cs" />
     <Compile Include="Scenes\Repositories\ScheduleMap.cs" />
     <Compile Include="Scenes\Repositories\SequenceMap.cs" />
     <Compile Include="Scenes\Repositories\TriggerMap.cs" />
+    <Compile Include="Zones\Models\ZoneViewModels.cs" />
     <Compile Include="Zones\Repositories\EfZoneRepository.cs" />
     <Compile Include="Zones\Repositories\IZoneDbContext.cs" />
     <Compile Include="Zones\Repositories\ZoneMap.cs" />
@@ -308,6 +310,9 @@
     <EmbeddedResource Include="onComplete.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <None Include="Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="Scripts\jquery-2.2.3.js" />
+    <Content Include="Scripts\jquery-2.2.3.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -325,6 +330,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+    <Content Include="Scripts\jquery-2.2.3.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -377,8 +383,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.1.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
