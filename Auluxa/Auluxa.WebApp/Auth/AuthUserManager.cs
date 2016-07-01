@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace Auluxa.WebApp.Auth
 {
@@ -15,6 +16,48 @@ namespace Auluxa.WebApp.Auth
         public AuthUserManager(IUserStore<AuthUser> store)
             : base(store)
         {
+        }
+
+        public AuthUserManager(IUserStore<AuthUser> store, IDataProtectionProvider dataProtectionProvider)
+            : base(store)
+        {
+            // Configure validation logic for usernames
+            UserValidator = new UserValidator<AuthUser, string>(this)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = true
+            };
+
+            // Configure validation logic for passwords
+            PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 8,
+                RequireNonLetterOrDigit = false,
+                RequireDigit = false,
+                RequireLowercase = false,
+                RequireUppercase = false,
+            };
+
+            // Configure user lockout defaults
+            UserLockoutEnabledByDefault = true;
+            DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            MaxFailedAccessAttemptsBeforeLockout = 5;
+
+            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
+            // You can write your own provider and plug it in here.
+            RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<AuthUser, string>
+            {
+                MessageFormat = "Your security code is {0}"
+            });
+            RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<AuthUser, string>
+            {
+                Subject = "Security Code",
+                BodyFormat = "Your security code is {0}"
+            });
+            EmailService = new AuthEmailService();
+            SmsService = new AuthSmsService();
+
+            UserTokenProvider = new DataProtectorTokenProvider<AuthUser, string>(dataProtectionProvider.Create("ASP.NET Identity"));
         }
 
         public static AuthUserManager Create(

@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auth\ForgotPasswordViewModel.cs" />
+    <Compile Include="Auth\MachineKeyProtectionProvider.cs" />
     <Compile Include="Devices\Models\DeviceViewModels.cs" />
     <Compile Include="Devices\Repositories\EfDeviceRepository.cs" />
     <Compile Include="Devices\Repositories\IDeviceDbContext.cs" />

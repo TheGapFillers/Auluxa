@@ -3,7 +3,7 @@ using System.Web.Mvc;
 
 namespace Auluxa.WebApp.Controllers
 {
-//    [Authorize]
+    [Authorize]
     public class AdminController : Controller
     {
         // GET: Admin

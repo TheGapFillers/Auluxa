@@ -17,13 +17,14 @@ using Auluxa.WebApp.UserSettings.Repositories;
 using Auluxa.WebApp.Zones.Repositories;
 using Autofac;
 using Autofac.Integration.WebApi;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataProtection;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Autofac.Integration.Mvc;
 using Swashbuckle.Application;
 
 namespace Auluxa.WebApp
@@ -106,19 +107,21 @@ namespace Auluxa.WebApp
 
             // Register all the ApiController belonging to this assembly.
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
-            builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
             // Register all the types to be abstracted / white labeled
             // auth
-            builder.RegisterType<AuthDbContext>();
-            builder.Register(c => new AuthUserManager(new AuthUserStore(new AuthDbContext()))).AsSelf().InstancePerRequest();
+            builder.RegisterType<AuthDbContext>().As<IdentityDbContext<AuthUser>>();
+            builder.RegisterType<AuthUserManager>().InstancePerRequest();
             builder.RegisterType<AuthSignInManager>().AsSelf().InstancePerRequest();
-            builder.Register(c => new AuthUserStore()).AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterType<AuthUserStore>().As<IUserStore<AuthUser>>();
+
+            //builder.Register(c => new AuthUserStore()).AsImplementedInterfaces().InstancePerRequest();
             builder.Register(c => HttpContext.Current.GetOwinContext().Authentication).As<IAuthenticationManager>();
-            builder.Register(c => new IdentityFactoryOptions<AuthUserManager>
-            {
-                DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("Application​")
-            });
+            //builder.Register(c => new IdentityFactoryOptions<AuthUserManager>
+            //{
+            //    DataProtectionProvider = new Microsoft.Owin.Security.DataProtection.DpapiDataProtectionProvider("Application​")
+            //});
+            builder.RegisterType<MachineKeyProtectionProvider>().As<IDataProtectionProvider>();
 
             // subscription 
             builder.RegisterType<ChargebeeSubscriptionRepository>().As<ISubscriptionRepository>();

@@ -14,7 +14,7 @@ namespace Auluxa.WebApp.Auth
             
         }
 
-        public AuthUserStore(DbContext dbContext) 
+        public AuthUserStore(IdentityDbContext<AuthUser> dbContext) 
             : base(dbContext)
         {
             

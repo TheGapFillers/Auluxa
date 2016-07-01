@@ -210,7 +210,7 @@ namespace Auluxa.WebApp.Auth
 
             // Create a callback Url with the code inside
             string callbackUrl =
-                $"{ConfigurationManager.AppSettings["8sec-auth:Url"]}Account/ConfirmEmail?userId={userId}&code={code}";
+                $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}Home/ConfirmEmail?userId={userId}&code={code}";
 
             // Send an email with the callback Url
             await _userManager.SendEmailAsync(userId, "Confirm your account",
