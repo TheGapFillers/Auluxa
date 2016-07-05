@@ -45,42 +45,64 @@ namespace Auluxa.WebApp.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginViewModel model)
-        {
-            // Requests the bearer from oAuthToken.
-            AuthSignInManager signInManager = HttpContext.GetOwinContext().Get<AuthSignInManager>();
-            var userManager = HttpContext.GetOwinContext().GetUserManager<AuthUserManager>();
+        //[HttpPost, ValidateAntiForgeryToken]
+        //public async Task<ActionResult> Login(LoginViewModel model)
+        //{
+        //    // Requests the bearer from oAuthToken.
+        //    AuthSignInManager signInManager = HttpContext.GetOwinContext().Get<AuthSignInManager>();
+        //    var userManager = HttpContext.GetOwinContext().GetUserManager<AuthUserManager>();
 
-            AuthUser authUser = await userManager.FindAsync("valter.santos.matos@gmail.com", "qweqweqwe");
-            await signInManager.SignInAsync(authUser, true, true);
+        //    AuthUser authUser = await userManager.FindAsync("valter.santos.matos@gmail.com", "qweqweqwe");
+        //    await signInManager.SignInAsync(authUser, true, true);
 
 
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Index", "Admin");
-            }
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return RedirectToAction("Index", "Admin");
+        //    }
 
-            return RedirectToAction("Index", "Admin");
-        }
+        //    return RedirectToAction("Index", "Admin");
+        //}
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            return RedirectToAction("Index", "Admin");
+
+
+
             if (!ModelState.IsValid)
                 return View(model);
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, true, shouldLockout: false);
+
+
+            //    // Requests the bearer from oAuthToken.
+            //AuthSignInManager signInManager = HttpContext.GetOwinContext().Get<AuthSignInManager>();
+            //var userManager = HttpContext.GetOwinContext().GetUserManager<AuthUserManager>();
+
+            //AuthUser authUser = await userManager.FindAsync(model.Email, model.Password);
+            //await signInManager.SignInAsync(authUser, true, true);
+
+
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        OAuthToken oAuthToken = await AuthProxy.LoginAsync("valter.santos.matos@gmail.com", "qweqweqwe");
-                        return RedirectToAction("Index", "Admin");
+                        OAuthToken oAuthToken = await AuthProxy.LoginAsync(model.Email, model.Password);
+                        if (oAuthToken != null && !string.IsNullOrEmpty(oAuthToken.access_token))
+                        {
+                            return RedirectToAction("Index", "Admin");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Invalid login attempt.");
+                            return View(model);
+                        }
                     }
 
                 default:

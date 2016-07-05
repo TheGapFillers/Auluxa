@@ -1,14 +1,16 @@
 ﻿using Auluxa.WebApp.Auth;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Auluxa.WebApp.Controllers
 {
-    [Authorize]
     public class AdminController : Controller
     {
         // GET: Admin
         public ActionResult Index(object abs)
         {
+            var c = HttpContext.User.Identity.IsAuthenticated;
+
             ////OAuthToken oAuthToken = await AuthProxy.LoginAsync("valter.santos.matos@gmail.com", "qweqweqwe");
 
 
