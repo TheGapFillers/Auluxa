@@ -71,8 +71,6 @@ namespace Auluxa.WebApp.Controllers
         {
             return RedirectToAction("Index", "Admin");
 
-
-
             if (!ModelState.IsValid)
                 return View(model);
 

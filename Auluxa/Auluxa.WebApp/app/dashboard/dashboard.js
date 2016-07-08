@@ -9,8 +9,7 @@
 
 .controller('DashboardCtrl', ['$scope', 'proxy',
     function ($scope, proxy) {
-        debugger
-        proxy.getToken();
+        //proxy.getUsers();
 
         $scope.name = 'Hello community';
     }]);

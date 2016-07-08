@@ -1,18 +1,19 @@
 ﻿angular.module('auluxa.proxy', [])
 
-.service('proxy', ['$http', function($http) {
+.service('proxy', ['bearer', '$http', function (bearer, $http) {
+    var basePath = "http://auluxawebapp-prod.ap-southeast-1.elasticbeanstalk.com";
+    var basePath = "http://localhost:57776";
 
-    this.getToken = function () {
-        debugger;
+    // Adds the bearer.
+    $http.defaults.headers.common['Authorization'] = "Bearer " + bearer;
 
-        
-        $http.get("http://auluxawebapp-prod.ap-southeast-1.elasticbeanstalk.com/token").then(function (response) {
-            debugger;
-            var a = 100;
-
+    this.getUsers = function () {
+        $http.get("/api/users").then(function (response) {
         });
-
     };
 
-
+    this.createUsers = function (model) {
+        $http.post("/api/users", model).then(function (response) {
+        });
+    };
 }]);

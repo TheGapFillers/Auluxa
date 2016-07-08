@@ -32,5 +32,69 @@
                 </table>
             </div>
         </article>
+
+        <!--<article class="widget">
+            <div class="widget__content">
+                <header class="widget__header">
+                    <h3 class="widget__title">Add new user</h3>
+                </header>
+
+                <form novalidate class="simple-form">
+                    Name: <input type="text" ng-model="user.name" /><br />
+                    E-mail: <input type="email" ng-model="user.email" /><br />
+                    <input type="radio" ng-model="user.gender" value="male" />admin
+                    <input type="radio" ng-model="user.gender" value="female" />normal<br />
+
+
+                    <button type="submit" class="btn btn-light btn-sm" ng-click="update(user)">Save</button>
+                </form>
+
+            </div>
+        </article>-->
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <article class="widget">
+            <header class="widget__header">
+                <h3 class="widget__title">Add new user</h3>
+            </header>
+
+            <div class="widget__content">
+                <dl class="dl-horizontal dl-input-spacing">
+                    <dt>
+                        <span style="color: #9a9a9a; font-size: 14px; line-height: 22px;">Email:</span>
+                    </dt>
+                    <dd>
+                        <p>
+                            <input required type="email" style="line-height: 19px; width: 200px;" placeholder="email">
+                        </p>
+                    </dd>
+                </dl>
+                <dl class="dl-horizontal dl-input-spacing">
+                    <dt>
+                        <span style="color: #9a9a9a; font-size: 14px; line-height: 22px;">Type:</span>
+                    </dt>
+                    <dd>
+                        <p>
+                            <select name="cars" style="border-color: silver; width: 200px;">
+                                <option value="volvo">Admin</option>
+                                <option value="saab">Normal</option>
+                            </select>
+                        </p>
+                    </dd>
+                </dl>
+
+
+                <dl class="dl-horizontal dl-input-spacing">
+                    <dt></dt>
+                    <dd>
+                        <button type="button" disabled class="btn btn-light btn-sm" style="margin-left: 0;">Save</button>
+                    </dd>
+                </dl>
+            </div>
+        </article>
     </div>
 </div>
