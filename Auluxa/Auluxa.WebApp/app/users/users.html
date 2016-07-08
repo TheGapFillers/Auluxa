@@ -1,7 +1,7 @@
 ﻿<header class="main-header clearfix">
     <h1 class="main-header__title">
         <i class="icon fa fa-user"></i>
-        User
+        Users
     </h1>
 </header>
 
@@ -21,36 +21,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Ambroise Cousin</td>
-                            <td>Admin</td>
+                        <tr ng-repeat="u in users">
+                            <td>{{u.email}}</td>
+                            <td >
+                                <span ng-show="!u.isToEdit">{{u.role}}</span>
+                                <select ng-model="u.role" ng-show="u.isToEdit" name="cars" style="border-color: silver; width: 100px;">
+                                    <option value="Admin" selected>Admin</option>
+                                    <option value="Normal">Normal</option>
+                                </select>
+                            </td>
                             <td style="text-align: center;">
-                                <a href="" class="addColor" style="margin-right: 0px;">Edit</a>
+                                <a ng-show="!u.isToEdit" ng-click="u.isToEdit = !u.isToEdit" href="" class="addColor">Edit</a>
+
+                                <a ng-show="u.isToEdit" ng-click="u.isToEdit = !u.isToEdit" href="" class="addColor">Cancel</a>
+                                <a ng-show="u.isToEdit" href="" class="addColor " style="margin-left: 15px;color: #55c69e!important">Save</a>
+                                <a ng-show="u.isToEdit" href="" class="addColor" style="margin-left: 15px;color: #f35958!important">Delete</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </article>
-
-        <!--<article class="widget">
-            <div class="widget__content">
-                <header class="widget__header">
-                    <h3 class="widget__title">Add new user</h3>
-                </header>
-
-                <form novalidate class="simple-form">
-                    Name: <input type="text" ng-model="user.name" /><br />
-                    E-mail: <input type="email" ng-model="user.email" /><br />
-                    <input type="radio" ng-model="user.gender" value="male" />admin
-                    <input type="radio" ng-model="user.gender" value="female" />normal<br />
-
-
-                    <button type="submit" class="btn btn-light btn-sm" ng-click="update(user)">Save</button>
-                </form>
-
-            </div>
-        </article>-->
     </div>
 </div>
 
@@ -69,7 +60,7 @@
                     </dt>
                     <dd>
                         <p>
-                            <input required type="email" style="line-height: 19px; width: 200px;" placeholder="email">
+                            <input ng-change="emailChange()" ng-model="email" required type="email" style="line-height: 19px; width: 200px;" placeholder="email">
                         </p>
                     </dd>
                 </dl>
@@ -79,9 +70,9 @@
                     </dt>
                     <dd>
                         <p>
-                            <select name="cars" style="border-color: silver; width: 200px;">
-                                <option value="volvo">Admin</option>
-                                <option value="saab">Normal</option>
+                            <select ng-model="role" name="cars" style="border-color: silver; width: 200px;">
+                                <option value="Admin" selected>Admin</option>
+                                <option value="Normal">Normal</option>
                             </select>
                         </p>
                     </dd>
@@ -91,7 +82,7 @@
                 <dl class="dl-horizontal dl-input-spacing">
                     <dt></dt>
                     <dd>
-                        <button type="button" disabled class="btn btn-light btn-sm" style="margin-left: 0;">Save</button>
+                        <button ng-click="saveUser()" ng-disabled="!enableSave" class="btn btn-light btn-sm" style="margin-left: 0;">Save</button>
                     </dd>
                 </dl>
             </div>

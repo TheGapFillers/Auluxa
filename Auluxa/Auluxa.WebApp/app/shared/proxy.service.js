@@ -7,13 +7,16 @@
     // Adds the bearer.
     $http.defaults.headers.common['Authorization'] = "Bearer " + bearer;
 
+    // Gets the users.
     this.getUsers = function () {
-        $http.get("/api/users").then(function (response) {
+        return $http.get("/api/users").then(function (response) {
+            return response.data;
         });
     };
-
-    this.createUsers = function (model) {
-        $http.post("/api/users", model).then(function (response) {
+    // Saves a users.
+    this.saveUser = function (model) {
+        return $http.post("/api/users", model).then(function (response) {
+            return response.data;
         });
     };
 }]);
