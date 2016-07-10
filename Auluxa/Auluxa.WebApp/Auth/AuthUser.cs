@@ -35,5 +35,6 @@ namespace Auluxa.WebApp.Auth
     public class ProfileViewModel
     {
         public string Email { get; set; }
+        public string Role { get; set; }
     }
 }
