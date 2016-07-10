@@ -210,27 +210,22 @@ namespace Auluxa.WebApp.Controllers
             return View();
         }
 
-
-
-
-
-
-        ///// <summary>
-        ///// Confirms the email or a user.
-        ///// </summary>
-        ///// <param name="userId"></param>
-        ///// <param name="code"></param>
-        ///// <returns></returns>
-        //[HttpGet]
-        //public async Task<ActionResult> ConfirmEmail(string userId, string code)
-        //{
-        //    if (userId == null || code == null)
-        //    {
-        //        return View("Error");
-        //    }
-        //    var result = await UserManager.ConfirmEmailAsync(userId, code);
-        //    return RedirectToAction("Index", "Admin");
-        //}
+        /// <summary>
+        /// Confirms the email or a user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            return View("ConfirmEmailConfirmation");
+        }
 
         protected override void Dispose(bool disposing)
         {

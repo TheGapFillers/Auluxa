@@ -1291,6 +1291,7 @@
     <Content Include="Views\Home\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Home\ResetPassword.cshtml" />
     <Content Include="Views\Home\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Home\ConfirmEmailConfirmation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
