@@ -13,9 +13,9 @@ namespace Auluxa.WebApp
     {
         public void Configuration(IAppBuilder app)
         {
-            ConfigureAuth(app);
             var config = new HttpConfiguration();
             WebApiConfig.Register(config);
+            ConfigureAuth(app);
             app.UseWebApi(config);
         }
     }

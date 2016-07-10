@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -22,8 +23,11 @@ namespace Auluxa.WebApp.Auth
                 context.Roles.Add(new IdentityRole("Admin"));
 
                 var userManager = new AuthUserManager(new UserStore<AuthUser>(context));
+                string guid = Guid.NewGuid().ToString();
                 userManager.Create(new AuthUser
                 {
+                    Id = guid,
+                    ParentUserId = guid,
                     UserName = "ambroise.couissin@gmail.com",
                     Email = "ambroise.couissin@gmail.com",
                     EmailConfirmed = true,

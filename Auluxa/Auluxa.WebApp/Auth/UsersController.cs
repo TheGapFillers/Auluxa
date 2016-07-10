@@ -27,7 +27,7 @@ namespace Auluxa.WebApp.Auth
         {
             AuthUser user = await _userManager.FindByNameAsync(User.Identity.Name);
 
-            var userVm = new AuthUserViewModel
+            var userVm = new UserViewModel
             {
                 Email = user.Email,
                 Role = user.Roles.Any() ? "Admin" : null
@@ -39,17 +39,20 @@ namespace Auluxa.WebApp.Auth
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
-        public async Task<IHttpActionResult> RegisterAsync([FromBody]AuthUserViewModel authUserViewModel)
+        public async Task<IHttpActionResult> RegisterAsync([FromBody]UserViewModel userViewModel)
         {
             // transform view model to model
+            string guid = Guid.NewGuid().ToString();
             var userToCreate = new AuthUser
             {
-                UserName = authUserViewModel.Email,
-                Email = authUserViewModel.Email,
+                Id = guid,
+                ParentUserId = guid,
+                UserName = userViewModel.Email,
+                Email = userViewModel.Email,
             };
 
             // create the user
-            IdentityResult result = await _userManager.CreateAsync(userToCreate, authUserViewModel.Password);
+            IdentityResult result = await _userManager.CreateAsync(userToCreate, userViewModel.Password);
             if (!result.Succeeded)
             {
                 foreach (string error in result.Errors)
@@ -85,8 +88,8 @@ namespace Auluxa.WebApp.Auth
             IEnumerable<AuthUser> users = await _userManager.GetUsersFromParentId(parentUser.Id);
 
             // Get all the roles
-            IEnumerable<AuthUserViewModel> userVms = users.Concat(new[] { parentUser }).Select(u =>
-               new AuthUserViewModel
+            IEnumerable<UserViewModel> userVms = users.Select(u =>
+               new UserViewModel
                {
                    Email = u.Email,
                    Role = u.Roles.Any() ? "Admin" : null
@@ -98,7 +101,7 @@ namespace Auluxa.WebApp.Auth
         [AuluxaAuthorization(Roles = "Admin")]
         [HttpPost]
         [Route("profiles")]
-        public async Task<IHttpActionResult> CreateProfileAsync([FromBody] AuthUserViewModel authUserViewModel)
+        public async Task<IHttpActionResult> CreateProfileAsync([FromBody] ProfileViewModel userViewModel)
         {
             // Get the parentId
             AuthUser parentUser = await _userManager.FindByEmailAsync(User.Identity.Name);
@@ -111,13 +114,13 @@ namespace Auluxa.WebApp.Auth
             // transform view model to model
             var userToCreate = new AuthUser
             {
-                UserName = authUserViewModel.Email,
-                Email = authUserViewModel.Email,
+                UserName = userViewModel.Email,
+                Email = userViewModel.Email,
                 ParentUserId = parentUser.Id
             };
 
             // create the user
-            IdentityResult result = await _userManager.CreateAsync(userToCreate, authUserViewModel.Password);
+            IdentityResult result = await _userManager.CreateAsync(userToCreate);
             if (!result.Succeeded)
             {
                 foreach (string error in result.Errors)
@@ -126,7 +129,7 @@ namespace Auluxa.WebApp.Auth
             }
 
             // send the confirm email
-            await SendConfirmEmailAsync(userToCreate.Id);
+            await SendConfirmPasswordAsync(userToCreate.Id);
 
             return Ok(result);
         }
@@ -201,6 +204,20 @@ namespace Auluxa.WebApp.Auth
             await _userManager.SendEmailAsync(user.Id, "Forgot Password", emailBody);
 
             return Ok();
+        }
+
+        private async Task SendConfirmPasswordAsync(string userId)
+        {
+            string code = await _userManager.GenerateEmailConfirmationTokenAsync(userId);
+            code = HttpUtility.UrlEncode(code);
+
+            // Create a callback Url with the code inside
+            string callbackUrl =
+                $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}Home/ConfirmPassword?userId={userId}&code={code}";
+
+            // Send an email with the callback Url
+            await _userManager.SendEmailAsync(userId, "Confirm your account",
+                    "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
         }
 
         private async Task SendConfirmEmailAsync(string userId)

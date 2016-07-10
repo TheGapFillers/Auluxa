@@ -8,6 +8,7 @@ namespace Auluxa.WebApp.Controllers
     public class AdminController : Controller
     {
         // GET: Admin
+        [Authorize]
         public async Task<ActionResult> Index(object abs)
         {            
             OAuthToken oAuthToken = await AuthProxy.LoginAsync("ambroise.couissin@gmail.com", "aaaa1111");

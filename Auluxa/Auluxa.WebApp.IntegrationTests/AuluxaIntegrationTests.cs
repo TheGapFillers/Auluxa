@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Auluxa.WebApp.Auth;
 using Auluxa.WebApp.Devices.Models;
 using Auluxa.WebApp.IntegrationTests.Fakes;
+using Microsoft.AspNet.Identity;
 using Xunit;
 
 namespace Auluxa.WebApp.IntegrationTests
@@ -90,15 +91,44 @@ namespace Auluxa.WebApp.IntegrationTests
 
             //assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            AuthUserViewModel user = await response.Content.ReadAsAsync<AuthUserViewModel>();
+            UserViewModel user = await response.Content.ReadAsAsync<UserViewModel>();
             Assert.Equal(user.Email, email);
+        }
+
+        /// <summary>
+        /// POST /api/users/profiles
+        /// </summary>
+        /// <returns></returns>
+        [Fact, TestPriority(1)]
+        public async Task test_create_profile_works()
+        {
+            // arrange
+            HttpResponseMessage response;
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
+            OAuthToken token = await AuthProxy.LoginAsync(email, password);
+            var profile = new ProfileViewModel { Email = "profile1@gmail.com" };
+
+            // act
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response = await httpClient.PostAsJsonAsync(
+                    ConfigurationManager.AppSettings["auluxa-auth:Url"] + "api/users/profiles",
+                    profile);
+            }
+
+            //assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         /// <summary>
         /// GET /api/users/profiles
         /// </summary>
         /// <returns></returns>
-        [Fact, TestPriority(2)]
+        [Fact, TestPriority(3)]
         public async Task test_get_profiles_are_valid()
         {
             // arrange
@@ -120,15 +150,16 @@ namespace Auluxa.WebApp.IntegrationTests
 
             //assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            IEnumerable<AuthUserViewModel> users = await response.Content.ReadAsAsync<IEnumerable<AuthUserViewModel>>();
-            Assert.Equal(users.First().Email, email);
+            List<UserViewModel> users = (await response.Content.ReadAsAsync<IEnumerable<UserViewModel>>()).ToList();
+            Assert.Equal(users.Count, 2);
+            Assert.Equal(users[0].Email, email);
         }
 
         /// <summary>
         /// GET /api/devices
         /// </summary>
         /// <returns></returns>
-        [Fact, TestPriority(3)]
+        [Fact, TestPriority(4)]
         public async Task test_get_all_devices()
         {
             // arrange
@@ -157,7 +188,7 @@ namespace Auluxa.WebApp.IntegrationTests
         /// POST /api/devices
         /// </summary>
         /// <returns></returns>
-        [Fact, TestPriority(4)]
+        [Fact, TestPriority(5)]
         public async Task test_create_device()
         {
             // arrange
@@ -188,7 +219,7 @@ namespace Auluxa.WebApp.IntegrationTests
         /// PUT /api/devices
         /// </summary>
         /// <returns></returns>
-        [Fact, TestPriority(5)]
+        [Fact, TestPriority(6)]
         public async Task test_update_device_settings()
         {
             // arrange
@@ -239,7 +270,7 @@ namespace Auluxa.WebApp.IntegrationTests
         /// DELETE /api/devices
         /// </summary>
         /// <returns></returns>
-        [Fact, TestPriority(6)]
+        [Fact, TestPriority(7)]
         public async Task test_delete_device()
         {
             // arrange
@@ -273,6 +304,34 @@ namespace Auluxa.WebApp.IntegrationTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Device createdDevice = await response.Content.ReadAsAsync<Device>();
             Assert.NotNull(createdDevice);
+        }
+
+        /// <summary>
+        /// DELETE /api/users/profiles
+        /// </summary>
+        /// <returns></returns>
+        [Fact, TestPriority(8)]
+        public async Task test_delete_profile_works()
+        {
+            // arrange
+            HttpResponseMessage response;
+            string email = "ambroise.couissin@gmail.com";
+            string password = "aaaa1111";
+            OAuthToken token = await AuthProxy.LoginAsync(email, password);
+            string emailToDelete = "profile1@gmail.com";
+
+            // act
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                    token.token_type,
+                    token.access_token);
+                response = await httpClient.DeleteAsync(
+                    $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}api/users/profiles?email={emailToDelete}");
+            }
+
+            // assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

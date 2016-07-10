@@ -17,11 +17,6 @@ namespace Auluxa.WebApp.Controllers
 
         }
 
-        public HomeController(AuthUserManager userManager, AuthSignInManager signInManager)
-        {
-
-        }
-
         public AuthSignInManager SignInManager
         {
             get { return _signInManager ?? HttpContext.GetOwinContext().Get<AuthSignInManager>(); }
@@ -69,7 +64,7 @@ namespace Auluxa.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            return RedirectToAction("Index", "Admin");
+            
 
             if (!ModelState.IsValid)
                 return View(model);
@@ -92,15 +87,13 @@ namespace Auluxa.WebApp.Controllers
                 case SignInStatus.Success:
                     {
                         OAuthToken oAuthToken = await AuthProxy.LoginAsync(model.Email, model.Password);
-                        if (oAuthToken != null && !string.IsNullOrEmpty(oAuthToken.access_token))
+                        if (!string.IsNullOrEmpty(oAuthToken?.access_token))
                         {
                             return RedirectToAction("Index", "Admin");
                         }
-                        else
-                        {
-                            ModelState.AddModelError("", "Invalid login attempt.");
-                            return View(model);
-                        }
+
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
                     }
 
                 default:
