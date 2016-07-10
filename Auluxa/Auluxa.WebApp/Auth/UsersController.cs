@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using Auluxa.WebApp.Controllers;
 using Microsoft.AspNet.Identity;
 
 namespace Auluxa.WebApp.Auth
@@ -174,7 +175,7 @@ namespace Auluxa.WebApp.Auth
         [Route("forgotpassword")]
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IHttpActionResult> ForgotPasswordAsync(ForgotPasswordViewModel model)
+        public async Task<IHttpActionResult> ForgotPasswordAsync(ForgotPasswordModel model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -187,21 +188,7 @@ namespace Auluxa.WebApp.Auth
                 return Ok();
             }
 
-            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-            // Send an email with this link
-            string code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
-            code = HttpUtility.UrlEncode(code);
-
-            // Create a callback Url for ionic application with the code inside
-            string callbackUrl = $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}Account/ResetPassword?userId={user.Id}&code={code}";
-
-            // Generate email body from the html file
-            string emailBody = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.RelativeSearchPath, @"ForgotPassword\", "ForgotPasswordEmail.html"));
-            emailBody = emailBody.Replace("{displayedName}", user.Email);
-            emailBody = emailBody.Replace("{callbackUrl}", callbackUrl);
-
-            // Send the email
-            await _userManager.SendEmailAsync(user.Id, "Forgot Password", emailBody);
+            await SendResetPasswordEmailAsync(user.Id);
 
             return Ok();
         }
@@ -232,6 +219,19 @@ namespace Auluxa.WebApp.Auth
             // Send an email with the callback Url
             await _userManager.SendEmailAsync(userId, "Confirm your account",
                     "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+        }
+
+        private async Task SendResetPasswordEmailAsync(string userId)
+        {
+            string code = await _userManager.GeneratePasswordResetTokenAsync(userId);
+            code = HttpUtility.UrlEncode(code);
+
+            // Create a callback Url for ionic application with the code inside
+            string callbackUrl = $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}Home/ResetPassword?userId={userId}&code={code}";
+
+            // Send the email
+            await _userManager.SendEmailAsync(userId, "Forgot Password",
+                "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
         }
     }
 }

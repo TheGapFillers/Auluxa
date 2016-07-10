@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -98,10 +99,8 @@ namespace Auluxa.WebApp.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult> ForgotPassword()
-        {
-            return View("ForgotPassword");
-        }
+        public async Task<ActionResult> ForgotPassword() => 
+            View("ForgotPassword");
 
         /// <summary>
         /// POST: /Home/ForgotPassword
@@ -111,43 +110,23 @@ namespace Auluxa.WebApp.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<ActionResult> ForgotPassword(ForgotPasswordModel model)
         {
-            // BAMBI redo this to call ur forgot password API, you have the email int he model.
-            // BAMBI redo this to call ur forgot password API, you have the email int he model.
-            // BAMBI redo this to call ur forgot password API, you have the email int he model.
-            // BAMBI redo this to call ur forgot password API, you have the email int he model.
-            
-            // If it goes well :)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // GetUserAsync the user, check that his email is confirmed
+            AuthUser user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null || !await UserManager.IsEmailConfirmedAsync(user.Id))
+                // Don't reveal that the user does not exist or is not confirmed
+                return View("ForgotPassword");
+
+            await SendConfirmPasswordAsync(user.Id);
+
             return RedirectToAction("ForgotPasswordConfirmation");
-
-
-            // Template CODE
-            // Template CODE
-            // Template CODE
-            // Template CODE
-
-            //if (!ModelState.IsValid)
-            //    return View(model);
-
-            //var user = await UserManager.FindByNameAsync(model.Email);
-            //if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
-            //{
-            //    // Don't reveal that the user does not exist or is not confirmed
-            //    return View("ForgotPassword");
-            //}
-
-            //// For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-            //// Send an email with this link
-            //// string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-            //// var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-            //// await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
-            //return RedirectToAction("ForgotPasswordConfirmation");
         }
 
         [HttpGet]
-        public async Task<ActionResult> ForgotPasswordConfirmation()
-        {
-            return View("ForgotPasswordConfirmation");
-        }
+        public async Task<ActionResult> ForgotPasswordConfirmation() => 
+            View("ForgotPasswordConfirmation");
 
 
         [HttpGet]
@@ -155,60 +134,34 @@ namespace Auluxa.WebApp.Controllers
         {
             // http://localhost:57776/home/ResetPassword?code=codecodecode&email=asd@asd.com
             if (code == null)
-            {
                 return View("Error");
-            }
-            else
-            {
-                ViewBag.code = code;
-                ViewBag.email = email;
-                return View("ResetPassword");
-            }
+
+            ViewBag.code = code;
+            ViewBag.email = email;
+            return View("ResetPassword");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            // BAMBI redo this to call ur reset password API.
-            // BAMBI redo this to call ur reset password API.
-            // BAMBI redo this to call ur reset password API.
-            // BAMBI redo this to call ur reset password API.
+            if (!ModelState.IsValid)
+                return View(model);
 
-            // If all goes well
-            return RedirectToAction("ResetPasswordConfirmation", "Home");
+            AuthUser user = await UserManager.FindByNameAsync(model.Email);
+            if (user == null)
+                // Don't reveal that the user does not exist
+                return RedirectToAction("ResetPasswordConfirmation", "Home");
 
+            IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            if (result.Succeeded)
+                return RedirectToAction("ResetPasswordConfirmation", "Home");
 
-
-            // Template CODE
-            // Template CODE
-            // Template CODE
-            // Template CODE
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(model);
-            //}
-            //var user = await UserManager.FindByNameAsync(model.Email);
-            //if (user == null)
-            //{
-            //    // Don't reveal that the user does not exist
-            //    return RedirectToAction("ResetPasswordConfirmation", "Home");
-            //}
-            //var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            //if (result.Succeeded)
-            //{
-            //    return RedirectToAction("ResetPasswordConfirmation", "Home");
-            //}
-
-            //return View();
+            return View();
         }
 
         [HttpGet]
-        public ActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
+        public ActionResult ResetPasswordConfirmation() => View();
 
         /// <summary>
         /// Confirms the email or a user.
@@ -225,6 +178,20 @@ namespace Auluxa.WebApp.Controllers
             }
             var result = await UserManager.ConfirmEmailAsync(userId, code);
             return View("ConfirmEmailConfirmation");
+        }
+
+        private async Task SendConfirmPasswordAsync(string userId)
+        {
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
+            code = HttpUtility.UrlEncode(code);
+
+            // Create a callback Url with the code inside
+            string callbackUrl =
+                $"{ConfigurationManager.AppSettings["auluxa-auth:Url"]}Home/ResetPassword?userId={userId}&code={code}";
+
+            // Send an email with the callback Url
+            await UserManager.SendEmailAsync(userId, "Confirm your password",
+                    "Please confirm your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
         }
 
         protected override void Dispose(bool disposing)
