@@ -15,8 +15,9 @@ namespace Auluxa.WebApp.Controllers
         /// Returns the main page.
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Index(string token)
+        public async Task<ActionResult> Index()
         {
+            string token = Session["token"] as string;
             ViewBag.token = token;
             ViewBag.user = HttpContext.User.Identity.Name;
             return View();

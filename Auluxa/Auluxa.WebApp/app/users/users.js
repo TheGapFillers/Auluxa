@@ -7,9 +7,9 @@
     });
 }])
 
-.controller('UsersCtrl', ['$scope', 'proxy', function ($scope, proxy) {
+.controller('UsersCtrl', ['$scope', 'currentUser', 'proxy', function ($scope, currentUser, proxy) {
+    $scope.currentUser = currentUser;
     $scope.users = [];
-
     $scope.email = '';
     $scope.role = 'Admin';
     $scope.enableSave = false;
@@ -20,7 +20,8 @@
         $scope.users = response;
         $scope.users.map(function (u) {
             u.isToEdit = false;
-        })
+            u.role = '' ? 'Normal' : u.role;
+        });
     })
 
     // Checks for a change in the new user email.
@@ -52,6 +53,15 @@
             $scope.role = 'Admin';
             $scope.enableSave = false;
             $scope.showNewUserMessage = true;
+        })
+    }
+
+    $scope.deleteUser = function (user) {
+        proxy.deleteUser(user.email).then(function (response) {
+            // Gets all the users to re-populate the grid
+            proxy.getUsers().then(function (response) {
+                $scope.users = response;
+            });
         })
     }
 }]);

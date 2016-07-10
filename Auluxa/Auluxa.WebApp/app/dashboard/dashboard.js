@@ -7,9 +7,11 @@
     });
 }])
 
-.controller('DashboardCtrl', ['$scope', 'proxy',
-    function ($scope, proxy) {
-        //proxy.getUsers();
+.controller('DashboardCtrl', ['$scope', 'proxy', function ($scope, proxy) {
+    $scope.numberOfUsers = 0;
 
-        $scope.name = 'Hello community';
-    }]);
+    // Gets the users;
+    proxy.getUsers().then(function (response) {
+        $scope.numberOfUsers = response.length;
+    })
+}]);

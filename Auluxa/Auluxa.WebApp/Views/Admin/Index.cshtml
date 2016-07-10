@@ -14,6 +14,7 @@
 <script>
     //Passes the bearer to the angular app as a value
     angular.module('auluxa.proxy').value('bearer', '@ViewBag.token');
+    angular.module('auluxa.proxy').value('currentUser', '@ViewBag.user');
 </script>
 
 <body ng-app="auluxa" ng-controller="mainCtrl">
@@ -41,19 +42,14 @@
             <ul class="profile" style="position: initial; line-height: 30px;">
                 <li>
                     <span class="profile__name">
-                        Account Type: <span> {{accountType}}</span>
+                        Account Type: <span> {{user.role}}</span>
                     </span>
                 </li>
                 <li style="margin-left: 52px;">
                     <span class="profile__name">
-                        Account Status: <span> {{accountStatus}}</span>
+                        Account Status: <span> {{subscription.subscriptionType}}</span>
                     </span>
                 </li>
-                <li style="margin-left: 52px;">
-                    @*<span class="profile__name">
-                        Coupon Code: <span> {{couponCode}}</span>
-                    </span>
-                </li>*@
             </ul>
         </div>
         <ul class="profile">

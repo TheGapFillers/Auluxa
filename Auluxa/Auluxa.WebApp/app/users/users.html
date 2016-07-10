@@ -24,18 +24,14 @@
                         <tr ng-repeat="u in users">
                             <td>{{u.email}}</td>
                             <td >
-                                <span ng-show="!u.isToEdit">{{u.role}}</span>
-                                <select ng-model="u.role" ng-show="u.isToEdit" name="cars" style="border-color: silver; width: 100px;">
-                                    <option value="Admin" selected>Admin</option>
-                                    <option value="Normal">Normal</option>
-                                </select>
+                                <span>{{u.role}}</span>
                             </td>
                             <td style="text-align: center;">
-                                <a ng-show="!u.isToEdit" ng-click="u.isToEdit = !u.isToEdit" href="" class="addColor">Edit</a>
+                                <a ng-show="u.role != 'Admin' && currentUser != u.email" ng-click="u.isToEdit = !u.isToEdit" href="" class="addColor">Edit</a>
 
                                 <a ng-show="u.isToEdit" ng-click="u.isToEdit = !u.isToEdit" href="" class="addColor">Cancel</a>
-                                <a ng-show="u.isToEdit" href="" class="addColor " style="margin-left: 15px;color: #55c69e!important">Save</a>
-                                <a ng-show="u.isToEdit" href="" class="addColor" style="margin-left: 15px;color: #f35958!important">Delete</a>
+                                <!--<a ng-show="u.isToEdit" href="" class="addColor " style="margin-left: 15px;color: #55c69e!important">Save</a>-->
+                                <a ng-show="u.isToEdit" ng-click="$parent.deleteUser(u)" href="" class="addColor" style="margin-left: 15px;color: #f35958!important">Delete</a>
                             </td>
                         </tr>
                     </tbody>

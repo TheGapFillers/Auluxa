@@ -36,7 +36,8 @@ namespace Auluxa.WebApp.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
+            var token = Session["token"] as string;
+            if (HttpContext.User.Identity.IsAuthenticated && !string.IsNullOrEmpty(token))
             {
                 return RedirectToAction("Index", "Admin");
             }
@@ -74,7 +75,9 @@ namespace Auluxa.WebApp.Controllers
             {
                 case SignInStatus.Success:
                     {
-                        return RedirectToAction("Index", "Admin", new { token = oAuthToken.access_token });
+                        // Passes the access_token.
+                        Session["token"] = oAuthToken.access_token;
+                        return RedirectToAction("Index", "Admin");
                     }
 
                 default:
@@ -86,6 +89,10 @@ namespace Auluxa.WebApp.Controllers
         [HttpGet]
         public ActionResult Logout()
         {
+            // Deletes the token from the session.
+            Session["token"] = null;
+
+            // Signs out the user.
             SignInManager.AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
             // Log out the user.
