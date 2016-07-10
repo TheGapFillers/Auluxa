@@ -129,6 +129,17 @@ namespace Auluxa.WebApp.Auth
                 return BadRequest(ModelState);
             }
 
+            if (userViewModel.Role == "Admin")
+            {
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(userToCreate.Id, "Admin");
+                if (!roleResult.Succeeded)
+                {
+                    foreach (string error in result.Errors)
+                        ModelState.AddModelError(error, error);
+                    return BadRequest(ModelState);
+                }
+            }
+
             // send the confirm email
             await SendConfirmPasswordAsync(userToCreate.Id);
 
