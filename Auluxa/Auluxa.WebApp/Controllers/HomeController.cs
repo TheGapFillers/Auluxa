@@ -72,7 +72,7 @@ namespace Auluxa.WebApp.Controllers
                         OAuthToken oAuthToken = await AuthProxy.LoginAsync(model.Email, model.Password);
                         if (!string.IsNullOrEmpty(oAuthToken?.access_token))
                         {
-                            return RedirectToAction("Index", "Admin");
+                            return RedirectToAction("Index", "Admin", new { token = oAuthToken.access_token });
                         }
 
                         ModelState.AddModelError("", "Invalid login attempt.");
@@ -161,6 +161,8 @@ namespace Auluxa.WebApp.Controllers
                 return RedirectToAction("ResetPasswordConfirmation", "Home");
 
             IdentityResult result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+
+            //await UserManager.GeneratePasswordResetTokenAsync
             if (result.Succeeded)
                 return RedirectToAction("ResetPasswordConfirmation", "Home");
 

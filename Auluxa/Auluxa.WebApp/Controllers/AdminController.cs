@@ -15,10 +15,10 @@ namespace Auluxa.WebApp.Controllers
         /// Returns the main page.
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string token)
         {
-            OAuthToken oAuthToken = await AuthProxy.LoginAsync("ambroise.couissin@gmail.com", "aaaa1111");
-            ViewBag.token = oAuthToken.access_token;
+            ViewBag.token = token;
+            ViewBag.user = HttpContext.User.Identity.Name;
             return View();
         }
     }

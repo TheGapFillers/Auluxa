@@ -206,7 +206,7 @@ namespace Auluxa.WebApp.Auth
 
         private async Task SendConfirmPasswordAsync(string userId)
         {
-            string code = await _userManager.GenerateEmailConfirmationTokenAsync(userId);
+            string code = await _userManager.GeneratePasswordResetTokenAsync(userId);
             code = HttpUtility.UrlEncode(code);
 
             // Create a callback Url with the code inside
