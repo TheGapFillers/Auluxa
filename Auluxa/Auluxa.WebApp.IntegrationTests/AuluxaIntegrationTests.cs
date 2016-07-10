@@ -152,7 +152,6 @@ namespace Auluxa.WebApp.IntegrationTests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             List<UserViewModel> users = (await response.Content.ReadAsAsync<IEnumerable<UserViewModel>>()).ToList();
             Assert.Equal(users.Count, 2);
-            Assert.Equal(users[0].Email, email);
         }
 
         /// <summary>

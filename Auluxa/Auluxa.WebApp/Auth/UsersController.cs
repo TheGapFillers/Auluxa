@@ -82,11 +82,11 @@ namespace Auluxa.WebApp.Auth
         [Route("profiles")]
         public async Task<IHttpActionResult> GetProfilesAsync()
         {
-            // Get the parentId
-            AuthUser parentUser = await _userManager.FindByEmailAsync(User.Identity.Name);
+            // Get user
+            AuthUser user = await _userManager.FindByEmailAsync(User.Identity.Name);
 
             // Get all the child profiles
-            IEnumerable<AuthUser> users = await _userManager.GetUsersFromParentId(parentUser.Id);
+            IEnumerable<AuthUser> users = await _userManager.GetUsersFromParentId(user.ParentUserId);
 
             // Get all the roles
             IEnumerable<UserViewModel> userVms = users.Select(u =>
@@ -117,7 +117,8 @@ namespace Auluxa.WebApp.Auth
             {
                 UserName = userViewModel.Email,
                 Email = userViewModel.Email,
-                ParentUserId = parentUser.Id
+                ParentUserId = parentUser.Id,
+                EmailConfirmed = true
             };
 
             // create the user
