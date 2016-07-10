@@ -15,7 +15,7 @@
     };
     // Saves a users.
     this.saveUser = function (model) {
-        return $http.post("/api/users", model).then(function (response) {
+        return $http.post("/api/users/profiles", model).then(function (response) {
             return response.data;
         });
     };

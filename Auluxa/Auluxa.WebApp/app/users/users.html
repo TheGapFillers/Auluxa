@@ -60,7 +60,7 @@
                     </dt>
                     <dd>
                         <p>
-                            <input ng-change="emailChange()" ng-model="email" required type="email" style="line-height: 19px; width: 200px;" placeholder="email">
+                            <input ng-change="emailChange()" ng-model="email" required type="email" style="line-height: 19px; width: 300px;" placeholder="email">
                         </p>
                     </dd>
                 </dl>
@@ -70,7 +70,7 @@
                     </dt>
                     <dd>
                         <p>
-                            <select ng-model="role" name="cars" style="border-color: silver; width: 200px;">
+                            <select ng-model="role" name="cars" style="border-color: silver; width: 300px;">
                                 <option value="Admin" selected>Admin</option>
                                 <option value="Normal">Normal</option>
                             </select>
@@ -82,7 +82,9 @@
                 <dl class="dl-horizontal dl-input-spacing">
                     <dt></dt>
                     <dd>
-                        <button ng-click="saveUser()" ng-disabled="!enableSave" class="btn btn-light btn-sm" style="margin-left: 0;">Save</button>
+                        <button ng-click="saveUser()" disabled ng-show="!enableSave" class="btn btn-light" style="margin-left: 0;">Save</button>
+                        <button ng-click="saveUser()" ng-show="enableSave" class="btn btn-green" style="margin-left: 0;">Save</button>
+                        <p ng-show="showNewUserMessage">User has been saved.</p>
                     </dd>
                 </dl>
             </div>

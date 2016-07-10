@@ -13,6 +13,7 @@
     $scope.email = '';
     $scope.role = 'Admin';
     $scope.enableSave = false;
+    $scope.showNewUserMessage = false;
 
     // Gets the users;
     proxy.getUsers().then(function (response) {
@@ -27,8 +28,10 @@
         var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (regex.test($scope.email)) {
             $scope.enableSave = true;
+            $scope.showNewUserMessage = false;
         } else {
             $scope.enableSave = false;
+            $scope.showNewUserMessage = false;
         }
     };
 
@@ -43,7 +46,12 @@
             // Gets all the users to re-populate the grid
             proxy.getUsers().then(function (response) {
                 $scope.users = [response];
-            })
+            });
+
+            $scope.email = '';
+            $scope.role = 'Admin';
+            $scope.enableSave = false;
+            $scope.showNewUserMessage = true;
         })
     }
 }]);

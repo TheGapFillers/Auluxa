@@ -99,7 +99,7 @@ namespace Auluxa.WebApp.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult> ForgotPassword() => 
+        public async Task<ActionResult> ForgotPassword() =>
             View("ForgotPassword");
 
         /// <summary>
@@ -125,20 +125,27 @@ namespace Auluxa.WebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> ForgotPasswordConfirmation() => 
+        public async Task<ActionResult> ForgotPasswordConfirmation() =>
             View("ForgotPasswordConfirmation");
 
 
         [HttpGet]
-        public ActionResult ResetPassword(string code, string email)
+        public async Task<ActionResult> ResetPassword(string userId, string code)
         {
-            // http://localhost:57776/home/ResetPassword?code=codecodecode&email=asd@asd.com
-            if (code == null)
+            if (string.IsNullOrEmpty(code) || string.IsNullOrEmpty(userId))
                 return View("Error");
 
-            ViewBag.code = code;
-            ViewBag.email = email;
-            return View("ResetPassword");
+            AuthUser user = await UserManager.FindByIdAsync(userId);
+            if (user == null)
+                return View("Error");
+
+            ViewBag.email = user.Email;
+
+            ResetPasswordViewModel ResetPasswordViewModel = new ResetPasswordViewModel();
+            ResetPasswordViewModel.Code = code;
+            ResetPasswordViewModel.Email = user.Email;
+
+            return View("ResetPassword", ResetPasswordViewModel);
         }
 
         [HttpPost]
@@ -157,6 +164,7 @@ namespace Auluxa.WebApp.Controllers
             if (result.Succeeded)
                 return RedirectToAction("ResetPasswordConfirmation", "Home");
 
+            ModelState.AddModelError("", "Failed to reset the account.");
             return View();
         }
 
