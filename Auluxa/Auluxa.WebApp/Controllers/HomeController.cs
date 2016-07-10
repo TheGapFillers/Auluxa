@@ -35,8 +35,6 @@ namespace Auluxa.WebApp.Controllers
         /// </summary>
         /// <returns></returns>
         public ActionResult Index()
-
-
         {
             if (HttpContext.User.Identity.IsAuthenticated)
             {
@@ -61,22 +59,22 @@ namespace Auluxa.WebApp.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            // Tries to get the Auth token.
+            OAuthToken oAuthToken = await AuthProxy.LoginAsync(model.Email, model.Password);
+            if (string.IsNullOrEmpty(oAuthToken?.access_token))
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                return View(model);
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             SignInStatus result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, true, shouldLockout: false);
-
             switch (result)
             {
                 case SignInStatus.Success:
                     {
-                        OAuthToken oAuthToken = await AuthProxy.LoginAsync(model.Email, model.Password);
-                        if (!string.IsNullOrEmpty(oAuthToken?.access_token))
-                        {
-                            return RedirectToAction("Index", "Admin", new { token = oAuthToken.access_token });
-                        }
-
-                        ModelState.AddModelError("", "Invalid login attempt.");
-                        return View(model);
+                        return RedirectToAction("Index", "Admin", new { token = oAuthToken.access_token });
                     }
 
                 default:

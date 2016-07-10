@@ -9,7 +9,7 @@
 
     // Gets the users.
     this.getUsers = function () {
-        return $http.get("/api/users").then(function (response) {
+        return $http.get("/api/users/profiles").then(function (response) {
             return response.data;
         });
     };
