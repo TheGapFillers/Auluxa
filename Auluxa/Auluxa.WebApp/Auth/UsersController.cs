@@ -148,6 +148,28 @@ namespace Auluxa.WebApp.Auth
         }
 
         [AuluxaAuthorization(Roles = "Admin")]
+        [HttpPut]
+        [Route("profiles/roles")]
+        public async Task<IHttpActionResult> ChangeProfileRoleAsync([FromBody] ProfileViewModel userViewModel)
+        {
+            // Check that the parent user is not the one being changed
+            AuthUser profileToUpdate = await _userManager.FindByEmailAsync(userViewModel.Email);
+            if (profileToUpdate.ParentUserId == profileToUpdate.Id)
+            {
+                ModelState.AddModelError("", "You cannot change the role of the parent profile.");
+                return BadRequest(ModelState);
+            }
+
+            // Update the role of the profile
+            if (profileToUpdate.Roles.Select(r => r.RoleId).Contains("Admin") && userViewModel.Role != "Admin")
+                await _userManager.RemoveFromRoleAsync(profileToUpdate.Id, "Admin");
+            else if (!profileToUpdate.Roles.Any() && userViewModel.Role == "Admin")
+                await _userManager.AddToRoleAsync(profileToUpdate.Id, "Admin");
+
+            return Ok();
+        }
+
+        [AuluxaAuthorization(Roles = "Admin")]
         [HttpDelete]
         [Route("profiles")]
         public async Task<IHttpActionResult> DeleteProfileAsync(string email)
